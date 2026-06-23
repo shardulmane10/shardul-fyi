@@ -73,9 +73,10 @@
   .lane.wave{background:var(--write-bg);border:.5px solid var(--write);border-radius:3px;align-items:center;gap:1px;padding:0 6px;overflow:hidden}
   .lane.wave span{width:2px;background:var(--write-tx);flex:0 0 2px}
 
-  .playhead{position:absolute;top:0;bottom:8px;width:2px;background:var(--play);z-index:8;pointer-events:none}
+  .playhead{position:absolute;top:0;bottom:8px;width:2px;background:var(--play);z-index:6;pointer-events:none}
   .playhead::before{content:"";position:absolute;top:-2px;left:-5px;width:12px;height:9px;background:var(--play);clip-path:polygon(0 0,100% 0,50% 100%)}
-  .scrubzone{position:absolute;left:66px;right:14px;top:34px;bottom:14px;z-index:7;cursor:ew-resize}
+  .scrubzone{position:absolute;left:66px;right:14px;top:8px;height:24px;z-index:7;cursor:ew-resize}
+  .scrubzone:hover{background:rgba(255,255,255,.03)}
 
   .hint{position:absolute;right:16px;bottom:16px;font-family:var(--mono);font-size:10px;color:#3b4250}
 
