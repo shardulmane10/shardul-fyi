@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>shardul.fyi</title>
+<meta name="description" content="Shardul Mane — films, growth, stories. Scrub the timeline." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✶</text></svg>" />
+<style>
+  :root{
+    --bg:#0e1013; --panel:#16181c; --panel2:#101216; --line:rgba(255,255,255,.08);
+    --txt:#f3f4f6; --mut:#8a8f98; --dim:#6b7280;
+    --films:#d85a30; --films-bg:#3a2419; --films-tx:#f0997b;
+    --growth:#378add; --growth-bg:#16273a; --growth-tx:#85b7eb;
+    --write:#1d9e75; --write-bg:#13241f; --write-tx:#5dcaa5;
+    --play:#ff5f57;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:#000;color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+
+  /* boot */
+  #boot{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .6s ease}
+  #boot.hide{opacity:0;pointer-events:none}
+  #boot .name{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:500;letter-spacing:-.03em}
+  #boot .status{font-family:var(--mono);font-size:.85rem;color:var(--dim)}
+  .dots::after{content:"";animation:dots 1.4s steps(4,end) infinite}
+  @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}100%{content:""}}
+
+  #app{display:flex;flex-direction:column;height:100vh;height:100dvh;opacity:0;transition:opacity .6s ease}
+  #app.show{opacity:1}
+
+  /* top */
+  .topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--panel);border-bottom:.5px solid var(--line);flex:0 0 auto}
+  .topbar .brand{font-weight:500;letter-spacing:-.02em}
+  .topbar .meta{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--dim)}
+
+  .stage{flex:1;display:flex;min-height:0}
+  .viewer{flex:2;display:flex;flex-direction:column;padding:16px;min-width:0}
+  .monitor{flex:1;background:#000;border:.5px solid var(--line);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .monitor iframe{width:100%;height:100%;border:0;display:block}
+  .monitor .placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--dim)}
+  .monitor .pbtn{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+  .transport{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--dim)}
+  .transport .ctr{display:flex;gap:18px;color:#9aa0aa;font-size:16px;cursor:pointer}
+  .transport .ctr span:hover{color:#fff}
+
+  .inspector{flex:1;min-width:230px;max-width:320px;background:var(--panel);border-left:.5px solid var(--line);padding:16px 18px;overflow:auto}
+  .insp-label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+  .insp-title{font-size:16px;font-weight:500;margin-bottom:3px}
+  .insp-sub{font-size:13px;color:var(--mut);margin-bottom:14px}
+  .insp-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:#9aa0aa}
+  .insp-row .k{color:var(--dim)}
+  .insp-desc{margin-top:14px;font-size:13px;color:var(--mut);line-height:1.7}
+  .insp-links{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .insp-links a{font-family:var(--mono);font-size:12px;color:var(--txt);text-decoration:none;border:.5px solid var(--line);border-radius:6px;padding:5px 9px}
+  .insp-links a:hover{background:rgba(255,255,255,.06)}
+
+  /* timeline */
+  .timeline{flex:0 0 auto;background:var(--panel2);border-top:.5px solid var(--line);padding:10px 14px 16px;position:relative;user-select:none}
+  .ruler{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:#4b5563;padding-left:66px;margin-bottom:8px}
+  .tracks{position:relative}
+  .track{display:flex;align-items:center;gap:10px;margin-bottom:6px;height:30px}
+  .track .lbl{width:56px;flex:0 0 56px;font-family:var(--mono);font-size:10px}
+  .track .lane{flex:1;display:flex;gap:4px;height:100%}
+  .clip{border-radius:3px;padding:0 8px;font-size:11px;display:flex;align-items:center;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .15s,transform .15s;border:.5px solid}
+  .clip:hover{filter:brightness(1.35)}
+  .clip.sel{outline:2px solid #fff;outline-offset:-1px}
+  .clip.films{background:var(--films-bg);border-color:var(--films);color:var(--films-tx)}
+  .clip.growth{background:var(--growth-bg);border-color:var(--growth);color:var(--growth-tx)}
+  .lane.wave{background:var(--write-bg);border:.5px solid var(--write);border-radius:3px;align-items:center;gap:1px;padding:0 6px;overflow:hidden}
+  .lane.wave span{width:2px;background:var(--write-tx);flex:0 0 2px}
+
+  .playhead{position:absolute;top:0;bottom:8px;width:2px;background:var(--play);z-index:8;pointer-events:none}
+  .playhead::before{content:"";position:absolute;top:-2px;left:-5px;width:12px;height:9px;background:var(--play);clip-path:polygon(0 0,100% 0,50% 100%)}
+  .scrubzone{position:absolute;left:66px;right:14px;top:34px;bottom:14px;z-index:7;cursor:ew-resize}
+
+  .hint{position:absolute;right:16px;bottom:16px;font-family:var(--mono);font-size:10px;color:#3b4250}
+
+  @media (max-width:760px){
+    body{overflow:auto}
+    #app{height:auto;min-height:100dvh}
+    .stage{flex-direction:column}
+    .inspector{max-width:none;border-left:0;border-top:.5px solid var(--line)}
+    .timeline{order:-1}
+    .scrubzone{display:none}
+    .clip{padding:6px 8px}
+    .track{height:auto}
+    .track .lane{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="name">shardul.fyi</div>
+  <div class="status">loading stories<span class="dots"></span></div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <span class="brand">shardul.fyi</span>
+    <span class="meta" id="tc">01:00:00:00</span>
+  </div>
+
+  <div class="stage">
+    <div class="viewer">
+      <div class="monitor" id="monitor">
+        <div class="placeholder">
+          <div class="pbtn">▶</div>
+          <div style="font-family:var(--mono);font-size:12px">select a clip — or press space to play</div>
+        </div>
+      </div>
+      <div class="transport">
+        <span id="tc-in">00:00:00:00</span>
+        <span class="ctr"><span id="prev">⏮</span><span id="play">⏯</span><span id="next">⏭</span></span>
+        <span id="tc-out">—</span>
+      </div>
+    </div>
+
+    <div class="inspector" id="inspector">
+      <div class="insp-label">inspector</div>
+      <div class="insp-title">Shardul Mane</div>
+      <div class="insp-sub">films · growth · stories</div>
+      <div class="insp-desc">Founding growth @ supermemory, San Francisco. I make films and I make things grow. Scrub the timeline to watch the work — or hit space and let it play.</div>
+      <div class="insp-links">
+        <a href="https://x.com/shardul_mane" target="_blank" rel="noopener">twitter</a>
+        <a href="https://github.com/shardulmane10" target="_blank" rel="noopener">github</a>
+        <a href="mailto:shardulmane10@gmail.com">email</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="ruler" id="ruler"></div>
+    <div class="tracks" id="tracks"></div>
+    <div class="playhead" id="playhead" style="left:66px"></div>
+    <div class="scrubzone" id="scrubzone"></div>
+    <div class="hint">drag the playhead · space = play · ←/→ = prev/next</div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   YOUR CONTENT — edit this list. Each clip is one piece of work.
+   track: "films" (V1) | "growth" (V2)
+   embed: a YouTube/Vimeo embed URL, or "" for none yet
+   ============================================================ */
+const CLIPS = [
+  {track:"films",  year:2022, title:"Homecoming.", role:"director, editor", runtime:"3:10", span:2, embed:"", links:[]},
+  {track:"films",  year:2024, title:"Excuses.",    role:"director, writer, editor", runtime:"4:32", span:3, embed:"", links:[{label:"watch",url:"#"}]},
+  {track:"films",  year:2025, title:"Escape.",     role:"director, editor", runtime:"5:01", span:2, embed:"", links:[]},
+  {track:"growth", year:2023, title:"supermemory launch film", role:"concept, edit", runtime:"1:20", span:2, embed:"", links:[]},
+  {track:"growth", year:2024, title:"product demos", role:"writer, editor", runtime:"series", span:1, embed:"", links:[]},
+  {track:"growth", year:2025, title:"growth ads",    role:"director, editor", runtime:"series", span:3, embed:"", links:[]},
+];
+const ABOUT = {
+  title:"Shardul Mane", sub:"films · growth · stories",
+  desc:"Founding growth @ supermemory, San Francisco. I make films and I make things grow. Scrub the timeline to watch the work — or hit space and let it play.",
+};
+
+/* ---------- build timeline ---------- */
+const YEARS=[2021,2022,2023,2024,2025,"now"];
+document.getElementById("ruler").innerHTML=YEARS.map(y=>`<span>${y}</span>`).join("");
+
+const tracks=document.getElementById("tracks");
+function lane(name,cls){
+  const row=document.createElement("div");row.className="track";
+  row.innerHTML=`<div class="lbl" style="color:var(--${cls==='films'?'films':cls==='growth'?'growth':'write'})">${name}</div>`;
+  const l=document.createElement("div");l.className="lane";row.appendChild(l);tracks.appendChild(row);return l;
+}
+const laneFilms=lane("V1 films","films");
+const laneGrowth=lane("V2 growth","growth");
+
+let order=[];
+function addClips(lane,track){
+  CLIPS.filter(c=>c.track===track).forEach(c=>{
+    const el=document.createElement("div");
+    el.className="clip "+track;el.style.flex=c.span;el.textContent=c.title;
+    el.addEventListener("click",()=>select(c,el));
+    el.addEventListener("mouseenter",()=>{if(!current) preview(c,false);});
+    lane.appendChild(el);c._el=el;order.push(c);
+  });
+}
+addClips(laneFilms,"films");addClips(laneGrowth,"growth");
+
+/* A1 writing waveform lane */
+(function(){
+  const row=document.createElement("div");row.className="track";
+  row.innerHTML=`<div class="lbl" style="color:var(--write)">A1 writing</div>`;
+  const l=document.createElement("div");l.className="lane wave";
+  for(let i=0;i<60;i++){const s=document.createElement("span");s.style.height=(20+Math.abs(Math.sin(i*1.7))*70)+"%";l.appendChild(s);}
+  row.appendChild(l);tracks.appendChild(row);
+})();
+
+/* ---------- selection + preview ---------- */
+const monitor=document.getElementById("monitor");
+const insp=document.getElementById("inspector");
+let current=null;
+
+function preview(c){
+  document.querySelectorAll(".clip").forEach(e=>e.classList.remove("sel"));
+  if(c._el)c._el.classList.add("sel");
+  if(c.embed){
+    monitor.innerHTML=`<iframe src="${c.embed}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  }else{
+    monitor.innerHTML=`<div class="placeholder"><div class="pbtn">▶</div><div style="font-family:var(--mono);font-size:12px">${c.title} — embed coming soon</div></div>`;
+  }
+  const trackName=c.track==="films"?"V1 · films":"V2 · growth";
+  const trackColor=c.track==="films"?"var(--films)":"var(--growth)";
+  insp.innerHTML=`
+    <div class="insp-label">inspector</div>
+    <div class="insp-title">${c.title}</div>
+    <div class="insp-sub">${c.role} · ${c.year}</div>
+    <div class="insp-row"><span class="k">runtime</span><span>${c.runtime}</span></div>
+    <div class="insp-row"><span class="k">year</span><span>${c.year}</span></div>
+    <div class="insp-row"><span class="k">track</span><span style="color:${trackColor}">${trackName}</span></div>
+    ${c.links&&c.links.length?`<div class="insp-links">${c.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join("")}</div>`:""}
+    <div class="insp-desc" style="border-top:.5px solid var(--line);padding-top:14px;margin-top:16px">${ABOUT.title} · ${ABOUT.sub}</div>`;
+}
+function select(c,el){current=c;preview(c);movePlayheadToClip(el);}
+function showAbout(){
+  current=null;
+  insp.innerHTML=`<div class="insp-label">inspector</div><div class="insp-title">${ABOUT.title}</div><div class="insp-sub">${ABOUT.sub}</div><div class="insp-desc">${ABOUT.desc}</div>
+  <div class="insp-links"><a href="https://x.com/shardul_mane" target="_blank" rel="noopener">twitter</a><a href="https://github.com/shardulmane10" target="_blank" rel="noopener">github</a><a href="mailto:shardulmane10@gmail.com">email</a></div>`;
+}
+
+/* ---------- playhead scrubbing ---------- */
+const playhead=document.getElementById("playhead");
+const scrub=document.getElementById("scrubzone");
+function setPlayhead(px){
+  const r=scrub.getBoundingClientRect();
+  const x=Math.max(0,Math.min(px,r.width));
+  playhead.style.left=(66+x)+"px";
+  const pct=x/r.width;
+  const tot=4*60*60+32; // fake total frames-ish for the timecode flavor
+  const f=Math.floor(pct*tot);
+  const hh=String(1+Math.floor(f/3600)).padStart(2,"0");
+  const mm=String(Math.floor((f%3600)/60)).padStart(2,"0");
+  const ss=String(f%60).padStart(2,"0");
+  document.getElementById("tc").textContent=`${hh}:${mm}:${ss}:00`;
+}
+function movePlayheadToClip(el){
+  const r=scrub.getBoundingClientRect();const er=el.getBoundingClientRect();
+  setPlayhead(er.left+er.width/2-r.left);
+}
+let dragging=false;
+scrub.addEventListener("mousedown",e=>{dragging=true;setPlayhead(e.clientX-scrub.getBoundingClientRect().left);});
+window.addEventListener("mousemove",e=>{if(dragging)setPlayhead(e.clientX-scrub.getBoundingClientRect().left);});
+window.addEventListener("mouseup",()=>dragging=false);
+
+/* ---------- keyboard + auto-play tour ---------- */
+let idx=-1,touring=false,timer=null;
+function go(n){idx=(n+order.length)%order.length;const c=order[idx];select(c,c._el);}
+function tour(){
+  if(touring){clearInterval(timer);touring=false;return;}
+  touring=true;go(idx+1);
+  timer=setInterval(()=>{idx++;if(idx>=order.length){clearInterval(timer);touring=false;return;}go(idx);},2600);
+}
+window.addEventListener("keydown",e=>{
+  if(e.code==="Space"){e.preventDefault();tour();}
+  if(e.code==="ArrowRight"){e.preventDefault();go(idx+1);}
+  if(e.code==="ArrowLeft"){e.preventDefault();go(idx-1);}
+  if(e.code==="Escape"){showAbout();}
+});
+
+/* ---------- boot ---------- */
+window.addEventListener("load",()=>{
+  setTimeout(()=>{
+    document.getElementById("boot").classList.add("hide");
+    document.getElementById("app").classList.add("show");
+    setPlayhead(0);
+  },1600);
+});
+</script>
+</body>
+</html>
