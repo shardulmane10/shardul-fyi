@@ -21,18 +21,28 @@
   html,body{height:100%}
   body{background:#000;color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
 
-  /* boot */
-  #boot{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .6s ease}
+  /* ===== splash ===== */
+  #boot{position:fixed;inset:0;background:#0b0c0e;z-index:50;display:flex;transition:opacity .7s ease}
   #boot.hide{opacity:0;pointer-events:none}
-  #boot .name{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:500;letter-spacing:-.03em}
-  #boot .status{font-family:var(--mono);font-size:.85rem;color:var(--dim)}
+  .splash{display:flex;width:100%;height:100%}
+  .splash-left{flex:1;display:flex;flex-direction:column;justify-content:center;padding:6vw 5vw;max-width:680px;z-index:2}
+  .splash-name{font-size:clamp(2.4rem,7vw,4.6rem);font-weight:500;letter-spacing:-.04em;line-height:1}
+  .splash-sub{font-size:clamp(1rem,2.4vw,1.6rem);letter-spacing:.42em;color:var(--mut);margin-top:14px;font-weight:400}
+  .splash-ver{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--mut);margin-top:8vh}
+  .splash-copy{font-family:var(--mono);font-size:10.5px;line-height:1.65;color:#5b606b;margin-top:14px;max-width:520px}
+  .splash-copy .marks{color:#43474f;display:block;margin-top:10px;word-spacing:2px}
+  .splash-load{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:5vh}
   .dots::after{content:"";animation:dots 1.4s steps(4,end) infinite}
   @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}100%{content:""}}
+  .splash-right{flex:1.1;position:relative;overflow:hidden}
+  .splash-right img{width:100%;height:100%;object-fit:cover;object-position:center}
+  .splash-right .fade{position:absolute;inset:0;background:linear-gradient(90deg,#0b0c0e 0%,rgba(11,12,14,.55) 22%,rgba(11,12,14,0) 55%)}
+  .splash-right.noimg{background:linear-gradient(135deg,#1a1d22,#0b0c0e)}
+  .splash-right.noimg::after{content:"drop your photo at me.jpg";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:#3b4250}
 
   #app{display:flex;flex-direction:column;height:100vh;height:100dvh;opacity:0;transition:opacity .6s ease}
   #app.show{opacity:1}
 
-  /* top */
   .topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--panel);border-bottom:.5px solid var(--line);flex:0 0 auto}
   .topbar .brand{font-weight:500;letter-spacing:-.02em}
   .topbar .meta{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--dim)}
@@ -44,7 +54,8 @@
   .monitor .placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--dim)}
   .monitor .pbtn{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
   .transport{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--dim)}
-  .transport .ctr{display:flex;gap:18px;color:#9aa0aa;font-size:16px;cursor:pointer}
+  .transport .ctr{display:flex;gap:18px;color:#9aa0aa;font-size:16px}
+  .transport .ctr span{cursor:pointer}
   .transport .ctr span:hover{color:#fff}
 
   .inspector{flex:1;min-width:230px;max-width:320px;background:var(--panel);border-left:.5px solid var(--line);padding:16px 18px;overflow:auto}
@@ -58,15 +69,15 @@
   .insp-links a{font-family:var(--mono);font-size:12px;color:var(--txt);text-decoration:none;border:.5px solid var(--line);border-radius:6px;padding:5px 9px}
   .insp-links a:hover{background:rgba(255,255,255,.06)}
 
-  /* timeline */
-  .timeline{flex:0 0 auto;background:var(--panel2);border-top:.5px solid var(--line);padding:10px 14px 16px;position:relative;user-select:none}
-  .ruler{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:#4b5563;padding-left:66px;margin-bottom:8px}
+  .timeline{flex:0 0 auto;background:var(--panel2);border-top:.5px solid var(--line);padding:0 14px 16px;position:relative;user-select:none}
+  .ruler{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:#4b5563;padding:10px 0 8px 66px;margin-bottom:0;cursor:ew-resize}
+  .ruler:hover{color:#6b7280}
   .tracks{position:relative}
   .track{display:flex;align-items:center;gap:10px;margin-bottom:6px;height:30px}
   .track .lbl{width:56px;flex:0 0 56px;font-family:var(--mono);font-size:10px}
   .track .lane{flex:1;display:flex;gap:4px;height:100%}
-  .clip{border-radius:3px;padding:0 8px;font-size:11px;display:flex;align-items:center;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .15s,transform .15s;border:.5px solid}
-  .clip:hover{filter:brightness(1.35)}
+  .clip{border-radius:3px;padding:0 8px;font-size:11px;display:flex;align-items:center;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .15s;border:.5px solid}
+  .clip:hover{filter:brightness(1.4)}
   .clip.sel{outline:2px solid #fff;outline-offset:-1px}
   .clip.films{background:var(--films-bg);border-color:var(--films);color:var(--films-tx)}
   .clip.growth{background:var(--growth-bg);border-color:var(--growth);color:var(--growth-tx)}
@@ -74,19 +85,21 @@
   .lane.wave span{width:2px;background:var(--write-tx);flex:0 0 2px}
 
   .playhead{position:absolute;top:0;bottom:8px;width:2px;background:var(--play);z-index:6;pointer-events:none}
-  .playhead::before{content:"";position:absolute;top:-2px;left:-5px;width:12px;height:9px;background:var(--play);clip-path:polygon(0 0,100% 0,50% 100%)}
-  .scrubzone{position:absolute;left:66px;right:14px;top:8px;height:24px;z-index:7;cursor:ew-resize}
-  .scrubzone:hover{background:rgba(255,255,255,.03)}
+  .phandle{position:absolute;top:-26px;left:-9px;width:20px;height:24px;cursor:ew-resize;pointer-events:auto;z-index:7}
+  .phandle::before{content:"";position:absolute;bottom:0;left:4px;width:12px;height:9px;background:var(--play);clip-path:polygon(0 0,100% 0,50% 100%)}
 
   .hint{position:absolute;right:16px;bottom:16px;font-family:var(--mono);font-size:10px;color:#3b4250}
 
   @media (max-width:760px){
     body{overflow:auto}
+    .splash{flex-direction:column}
+    .splash-right{flex:0 0 38vh;order:-1}
+    .splash-right .fade{background:linear-gradient(0deg,#0b0c0e 0%,rgba(11,12,14,0) 60%)}
+    .splash-left{padding:8vw 7vw}
     #app{height:auto;min-height:100dvh}
     .stage{flex-direction:column}
     .inspector{max-width:none;border-left:0;border-top:.5px solid var(--line)}
     .timeline{order:-1}
-    .scrubzone{display:none}
     .clip{padding:6px 8px}
     .track{height:auto}
     .track .lane{flex-wrap:wrap}
@@ -96,8 +109,24 @@
 <body>
 
 <div id="boot">
-  <div class="name">shardul.fyi</div>
-  <div class="status">loading stories<span class="dots"></span></div>
+  <div class="splash">
+    <div class="splash-left">
+      <div class="splash-name">Shardul Mane</div>
+      <div class="splash-sub">FILMS&nbsp;&middot;&nbsp;GROWTH</div>
+      <div class="splash-ver" id="ver">VERSION 2026</div>
+      <div class="splash-copy">
+        &copy; <span id="yr">2026</span> Shardul Mane. All rights reserved.<br>
+        Films, growth, and stories — made in San Francisco. Founding growth @ supermemory.
+        Director, writer, editor. Shot on location, cut on the timeline you're about to scrub.
+        <span class="marks">EXCUSES. HOMECOMING. ESCAPE. SUPERMEMORY. LAUNCH FILM. PRODUCT DEMOS. GROWTH ADS. ESSAYS. THREADS.</span>
+      </div>
+      <div class="splash-load">loading stories<span class="dots"></span></div>
+    </div>
+    <div class="splash-right" id="splash-right">
+      <img src="me.jpg" alt="Shardul Mane" id="splash-img" />
+      <div class="fade"></div>
+    </div>
+  </div>
 </div>
 
 <div id="app">
@@ -110,36 +139,25 @@
     <div class="viewer">
       <div class="monitor" id="monitor">
         <div class="placeholder">
-          <div class="pbtn">▶</div>
+          <div class="pbtn">&#9654;</div>
           <div style="font-family:var(--mono);font-size:12px">select a clip — or press space to play</div>
         </div>
       </div>
       <div class="transport">
-        <span id="tc-in">00:00:00:00</span>
-        <span class="ctr"><span id="prev">⏮</span><span id="play">⏯</span><span id="next">⏭</span></span>
-        <span id="tc-out">—</span>
+        <span id="tc-in">scrub the timeline</span>
+        <span class="ctr"><span id="prev">&#9198;</span><span id="play">&#9199;</span><span id="next">&#9197;</span></span>
+        <span id="tc-out">space&nbsp;=&nbsp;play</span>
       </div>
     </div>
 
-    <div class="inspector" id="inspector">
-      <div class="insp-label">inspector</div>
-      <div class="insp-title">Shardul Mane</div>
-      <div class="insp-sub">films · growth · stories</div>
-      <div class="insp-desc">Founding growth @ supermemory, San Francisco. I make films and I make things grow. Scrub the timeline to watch the work — or hit space and let it play.</div>
-      <div class="insp-links">
-        <a href="https://x.com/shardul_mane" target="_blank" rel="noopener">twitter</a>
-        <a href="https://github.com/shardulmane10" target="_blank" rel="noopener">github</a>
-        <a href="mailto:shardulmane10@gmail.com">email</a>
-      </div>
-    </div>
+    <div class="inspector" id="inspector"></div>
   </div>
 
   <div class="timeline">
     <div class="ruler" id="ruler"></div>
     <div class="tracks" id="tracks"></div>
-    <div class="playhead" id="playhead" style="left:66px"></div>
-    <div class="scrubzone" id="scrubzone"></div>
-    <div class="hint">drag the playhead · space = play · ←/→ = prev/next</div>
+    <div class="playhead" id="playhead" style="left:66px"><div class="phandle" id="phandle"></div></div>
+    <div class="hint">drag the playhead / ruler &middot; click a clip &middot; space = play &middot; &larr;/&rarr; = step</div>
   </div>
 </div>
 
@@ -151,7 +169,7 @@
    ============================================================ */
 const CLIPS = [
   {track:"films",  year:2022, title:"Homecoming.", role:"director, editor", runtime:"3:10", span:2, embed:"", links:[]},
-  {track:"films",  year:2024, title:"Excuses.",    role:"director, writer, editor", runtime:"4:32", span:3, embed:"", links:[{label:"watch",url:"#"}]},
+  {track:"films",  year:2024, title:"Excuses.",    role:"director, writer, editor", runtime:"4:32", span:3, embed:"", links:[]},
   {track:"films",  year:2025, title:"Escape.",     role:"director, editor", runtime:"5:01", span:2, embed:"", links:[]},
   {track:"growth", year:2023, title:"supermemory launch film", role:"concept, edit", runtime:"1:20", span:2, embed:"", links:[]},
   {track:"growth", year:2024, title:"product demos", role:"writer, editor", runtime:"series", span:1, embed:"", links:[]},
@@ -161,15 +179,30 @@ const ABOUT = {
   title:"Shardul Mane", sub:"films · growth · stories",
   desc:"Founding growth @ supermemory, San Francisco. I make films and I make things grow. Scrub the timeline to watch the work — or hit space and let it play.",
 };
+const LINKS = `<div class="insp-links">
+  <a href="https://x.com/shardul_mane" target="_blank" rel="noopener">twitter</a>
+  <a href="https://github.com/shardulmane10" target="_blank" rel="noopener">github</a>
+  <a href="mailto:shardulmane10@gmail.com">email</a></div>`;
+
+/* dynamic year on splash */
+const Y = new Date().getFullYear();
+document.getElementById("ver").textContent = "VERSION " + Y;
+document.getElementById("yr").textContent = Y;
+
+/* missing-image fallback */
+document.getElementById("splash-img").addEventListener("error", function(){
+  this.remove();
+  document.getElementById("splash-right").classList.add("noimg");
+});
 
 /* ---------- build timeline ---------- */
 const YEARS=[2021,2022,2023,2024,2025,"now"];
 document.getElementById("ruler").innerHTML=YEARS.map(y=>`<span>${y}</span>`).join("");
 
 const tracks=document.getElementById("tracks");
-function lane(name,cls){
+function lane(name,colorVar){
   const row=document.createElement("div");row.className="track";
-  row.innerHTML=`<div class="lbl" style="color:var(--${cls==='films'?'films':cls==='growth'?'growth':'write'})">${name}</div>`;
+  row.innerHTML=`<div class="lbl" style="color:var(--${colorVar})">${name}</div>`;
   const l=document.createElement("div");l.className="lane";row.appendChild(l);tracks.appendChild(row);return l;
 }
 const laneFilms=lane("V1 films","films");
@@ -180,8 +213,7 @@ function addClips(lane,track){
   CLIPS.filter(c=>c.track===track).forEach(c=>{
     const el=document.createElement("div");
     el.className="clip "+track;el.style.flex=c.span;el.textContent=c.title;
-    el.addEventListener("click",()=>select(c,el));
-    el.addEventListener("mouseenter",()=>{if(!current) preview(c,false);});
+    el.addEventListener("click",()=>select(c));
     lane.appendChild(el);c._el=el;order.push(c);
   });
 }
@@ -201,13 +233,23 @@ const monitor=document.getElementById("monitor");
 const insp=document.getElementById("inspector");
 let current=null;
 
-function preview(c){
+function renderAbout(){
+  current=null;
+  document.querySelectorAll(".clip").forEach(e=>e.classList.remove("sel"));
+  insp.innerHTML=`<div class="insp-label">inspector</div>
+    <div class="insp-title">${ABOUT.title}</div>
+    <div class="insp-sub">${ABOUT.sub}</div>
+    <div class="insp-desc">${ABOUT.desc}</div>${LINKS}`;
+}
+
+function select(c){
+  current=c;
   document.querySelectorAll(".clip").forEach(e=>e.classList.remove("sel"));
   if(c._el)c._el.classList.add("sel");
   if(c.embed){
-    monitor.innerHTML=`<iframe src="${c.embed}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    monitor.innerHTML=`<iframe src="${c.embed}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
   }else{
-    monitor.innerHTML=`<div class="placeholder"><div class="pbtn">▶</div><div style="font-family:var(--mono);font-size:12px">${c.title} — embed coming soon</div></div>`;
+    monitor.innerHTML=`<div class="placeholder"><div class="pbtn">&#9654;</div><div style="font-family:var(--mono);font-size:12px">${c.title} — embed coming soon</div></div>`;
   }
   const trackName=c.track==="films"?"V1 · films":"V2 · growth";
   const trackColor=c.track==="films"?"var(--films)":"var(--growth)";
@@ -220,60 +262,72 @@ function preview(c){
     <div class="insp-row"><span class="k">track</span><span style="color:${trackColor}">${trackName}</span></div>
     ${c.links&&c.links.length?`<div class="insp-links">${c.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join("")}</div>`:""}
     <div class="insp-desc" style="border-top:.5px solid var(--line);padding-top:14px;margin-top:16px">${ABOUT.title} · ${ABOUT.sub}</div>`;
-}
-function select(c,el){current=c;preview(c);movePlayheadToClip(el);}
-function showAbout(){
-  current=null;
-  insp.innerHTML=`<div class="insp-label">inspector</div><div class="insp-title">${ABOUT.title}</div><div class="insp-sub">${ABOUT.sub}</div><div class="insp-desc">${ABOUT.desc}</div>
-  <div class="insp-links"><a href="https://x.com/shardul_mane" target="_blank" rel="noopener">twitter</a><a href="https://github.com/shardulmane10" target="_blank" rel="noopener">github</a><a href="mailto:shardulmane10@gmail.com">email</a></div>`;
+  movePlayheadToClip(c._el);
+  idx=order.indexOf(c);
 }
 
-/* ---------- playhead scrubbing ---------- */
+/* ---------- playhead positioning (relative to the clip lane) ---------- */
 const playhead=document.getElementById("playhead");
-const scrub=document.getElementById("scrubzone");
-function setPlayhead(px){
-  const r=scrub.getBoundingClientRect();
-  const x=Math.max(0,Math.min(px,r.width));
-  playhead.style.left=(66+x)+"px";
-  const pct=x/r.width;
-  const tot=4*60*60+32; // fake total frames-ish for the timecode flavor
-  const f=Math.floor(pct*tot);
+const timelineEl=document.querySelector(".timeline");
+function laneRect(){return laneFilms.getBoundingClientRect();}
+
+function setPlayheadClientX(clientX){
+  const lr=laneRect(), tl=timelineEl.getBoundingClientRect();
+  const x=Math.max(0,Math.min(clientX-lr.left,lr.width));
+  playhead.style.left=((lr.left-tl.left)+x)+"px";
+  const pct=lr.width? x/lr.width : 0;
+  const f=Math.floor(pct*(4*60*60));
   const hh=String(1+Math.floor(f/3600)).padStart(2,"0");
   const mm=String(Math.floor((f%3600)/60)).padStart(2,"0");
   const ss=String(f%60).padStart(2,"0");
   document.getElementById("tc").textContent=`${hh}:${mm}:${ss}:00`;
 }
 function movePlayheadToClip(el){
-  const r=scrub.getBoundingClientRect();const er=el.getBoundingClientRect();
-  setPlayhead(er.left+er.width/2-r.left);
+  if(!el)return;const r=el.getBoundingClientRect();
+  setPlayheadClientX(r.left+r.width/2);
 }
-let dragging=false;
-scrub.addEventListener("mousedown",e=>{dragging=true;setPlayhead(e.clientX-scrub.getBoundingClientRect().left);});
-window.addEventListener("mousemove",e=>{if(dragging)setPlayhead(e.clientX-scrub.getBoundingClientRect().left);});
-window.addEventListener("mouseup",()=>dragging=false);
 
-/* ---------- keyboard + auto-play tour ---------- */
+/* drag: ruler + playhead handle both scrub */
+let dragging=false;
+function startDrag(e){dragging=true;setPlayheadClientX((e.touches?e.touches[0]:e).clientX);e.preventDefault();}
+function moveDrag(e){if(dragging)setPlayheadClientX((e.touches?e.touches[0]:e).clientX);}
+function endDrag(){dragging=false;}
+document.getElementById("ruler").addEventListener("mousedown",startDrag);
+document.getElementById("phandle").addEventListener("mousedown",startDrag);
+window.addEventListener("mousemove",moveDrag);
+window.addEventListener("mouseup",endDrag);
+document.getElementById("ruler").addEventListener("touchstart",startDrag,{passive:false});
+document.getElementById("phandle").addEventListener("touchstart",startDrag,{passive:false});
+window.addEventListener("touchmove",moveDrag,{passive:false});
+window.addEventListener("touchend",endDrag);
+
+/* ---------- transport + keyboard + auto-tour ---------- */
 let idx=-1,touring=false,timer=null;
-function go(n){idx=(n+order.length)%order.length;const c=order[idx];select(c,c._el);}
+function go(n){idx=(n+order.length)%order.length;select(order[idx]);}
+function stopTour(){if(timer)clearInterval(timer);touring=false;}
 function tour(){
-  if(touring){clearInterval(timer);touring=false;return;}
+  if(touring){stopTour();return;}
   touring=true;go(idx+1);
-  timer=setInterval(()=>{idx++;if(idx>=order.length){clearInterval(timer);touring=false;return;}go(idx);},2600);
+  timer=setInterval(()=>{if(idx+1>=order.length){stopTour();return;}go(idx+1);},2800);
 }
+document.getElementById("play").addEventListener("click",tour);
+document.getElementById("next").addEventListener("click",()=>go(idx+1));
+document.getElementById("prev").addEventListener("click",()=>go(idx-1));
 window.addEventListener("keydown",e=>{
   if(e.code==="Space"){e.preventDefault();tour();}
-  if(e.code==="ArrowRight"){e.preventDefault();go(idx+1);}
-  if(e.code==="ArrowLeft"){e.preventDefault();go(idx-1);}
-  if(e.code==="Escape"){showAbout();}
+  else if(e.code==="ArrowRight"){e.preventDefault();stopTour();go(idx+1);}
+  else if(e.code==="ArrowLeft"){e.preventDefault();stopTour();go(idx-1);}
+  else if(e.code==="Escape"){stopTour();renderAbout();}
 });
 
 /* ---------- boot ---------- */
+renderAbout();
 window.addEventListener("load",()=>{
   setTimeout(()=>{
     document.getElementById("boot").classList.add("hide");
     document.getElementById("app").classList.add("show");
-    setPlayhead(0);
-  },1600);
+    setPlayheadClientX(laneRect().left);
+  },2600);
 });
 </script>
 </body>
