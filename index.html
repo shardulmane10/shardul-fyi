@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shardul.fyi</title>
+  <meta name="description" content="shardul.fyi — coming soon." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✶</text></svg>" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --fg: #ededed;
+      --muted: #6b6b6b;
+    }
+    @media (prefers-color-scheme: light) {
+      :root { --bg: #fafafa; --fg: #111111; --muted: #999999; }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Menlo", monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em;
+    }
+    main {
+      text-align: center;
+      animation: fade 1.1s ease-out both;
+      padding: 2rem;
+    }
+    .name {
+      font-size: clamp(1.6rem, 6vw, 2.6rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+    .status {
+      margin-top: 1rem;
+      font-size: clamp(0.85rem, 3vw, 1rem);
+      color: var(--muted);
+    }
+    .dots::after {
+      content: "";
+      animation: dots 1.6s steps(4, end) infinite;
+    }
+    @keyframes dots {
+      0%   { content: ""; }
+      25%  { content: "."; }
+      50%  { content: ".."; }
+      75%  { content: "..."; }
+      100% { content: ""; }
+    }
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="name">shardul.fyi</div>
+    <div class="status">loading stories<span class="dots"></span></div>
+  </main>
+</body>
+</html>
