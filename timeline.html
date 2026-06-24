@@ -56,6 +56,7 @@
   .t-safari{background:#1a86e0}
   .t-editor{background:#16161a}
   .t-mail{background:#1f7ce8}
+  .t-contacts{background:#f1ede6}
   .t-sm{background:#0b0f14}
 
   /* ===== dock ===== */
@@ -204,6 +205,21 @@
   .mail-field label{color:#8a8f98;width:60px;flex:0 0 60px}
   .mail-field input{flex:1;background:transparent;border:0;color:#e7e9ea;font-size:14px;font-family:var(--sans);outline:none}
   .mail-body textarea{flex:1;background:transparent;border:0;color:#e7e9ea;padding:16px;font-size:15px;line-height:1.7;font-family:var(--sans);resize:none;outline:none}
+
+  /* ===== Contacts app ===== */
+  #win-contacts{width:min(440px,92vw);height:min(580px,84vh);left:50%;top:50%;transform:translate(-50%,-50%)}
+  #win-contacts .titlebar{background:#2a2c30}
+  .contacts-body{flex:1;overflow:auto;background:#1c1d21;display:flex;flex-direction:column;align-items:center;padding:34px 24px 24px}
+  .contact-av{width:104px;height:104px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.12);background:#333}
+  .contact-name{font-size:22px;font-weight:600;margin-top:16px;color:#f3f4f6}
+  .contact-title{font-size:13px;color:#8a8f98;margin-top:5px;text-align:center;line-height:1.5}
+  .contact-rows{width:100%;margin-top:24px;display:flex;flex-direction:column;gap:2px}
+  .contact-row{display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:10px;text-decoration:none;cursor:pointer}
+  .contact-row:hover{background:rgba(255,255,255,.06)}
+  .contact-ic{width:34px;height:34px;flex:0 0 34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;letter-spacing:-.02em}
+  .contact-meta{min-width:0}
+  .contact-lbl{font-size:11px;color:#8a8f98;text-transform:uppercase;letter-spacing:.04em}
+  .contact-val{font-size:14px;color:#4aa3ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   @media (max-width:760px){
     body{overflow:auto}
@@ -368,12 +384,29 @@
   </div>
 </div>
 
+<!-- ===== CONTACTS WINDOW ===== -->
+<div class="appwin" id="win-contacts">
+  <div class="titlebar" data-drag="win-contacts">
+    <div class="lights"><span class="l-red" data-close="contacts"></span><span class="l-yellow"></span><span class="l-green"></span></div>
+    <div class="title">Contacts</div>
+  </div>
+  <div class="winbody">
+    <div class="contacts-body">
+      <img class="contact-av" src="me.jpg" alt="Shardul Mane" onerror="this.style.display='none'">
+      <div class="contact-name">Shardul Mane</div>
+      <div class="contact-title">Founding growth @ supermemory &middot; San Francisco<br>films &middot; growth &middot; stories</div>
+      <div class="contact-rows" id="contact-rows"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== DOCK ===== -->
 <div class="dock">
   <div class="dock-app t-notes" data-open="notes" data-label="Notes" id="art-notes"></div>
   <div class="dock-app t-safari" data-open="browser" data-label="Browser" id="art-safari"></div>
   <div class="dock-app t-editor" data-open="editor" data-label="Editor" id="art-editor"></div>
   <div class="dock-app t-mail" data-open="mail" data-label="Mail" id="art-mail"></div>
+  <div class="dock-app t-contacts" data-open="contacts" data-label="Contacts" id="art-contacts"></div>
   <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="supermemory.svg" alt="Supermemory"></div>
 </div>
 
@@ -422,8 +455,9 @@ const ART={
   safari:`<svg viewBox="0 0 24 24"><defs><linearGradient id="sf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2cc0fb"/><stop offset="1" stop-color="#0f6fe0"/></linearGradient><radialGradient id="sfd" cx="50%" cy="42%" r="62%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dde6ec"/></radialGradient></defs><rect width="24" height="24" rx="5.4" fill="url(#sf)"/><circle cx="12" cy="12" r="8.8" fill="url(#sfd)"/>${Array.from({length:48},(_,i)=>{const a=i*7.5*Math.PI/180,card=i%12===0,r1=8.4,r2=card?6.7:(i%4===0?7.2:7.8),col=card?"#f5403a":"#a9b6c1",w=card?.8:.45;return `<line x1="${(12+r2*Math.cos(a)).toFixed(2)}" y1="${(12+r2*Math.sin(a)).toFixed(2)}" x2="${(12+r1*Math.cos(a)).toFixed(2)}" y2="${(12+r1*Math.sin(a)).toFixed(2)}" stroke="${col}" stroke-width="${w}"/>`}).join("")}<polygon points="12,12 16.9,7.1 13.0,10.9" fill="#f5403a"/><polygon points="12,12 7.1,16.9 11.0,13.1" fill="#ced7de"/><circle cx="12" cy="12" r="1" fill="#fff" stroke="#9aa4ad" stroke-width=".4"/></svg>`,
   editor:`<svg viewBox="0 0 24 24"><defs><linearGradient id="ed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a40"/><stop offset="1" stop-color="#101012"/></linearGradient></defs><rect width="24" height="24" rx="5.4" fill="url(#ed)"/><rect x="4.5" y="6" width="9" height="3" rx="1.2" fill="#d85a30"/><rect x="9" y="10.5" width="10.5" height="3" rx="1.2" fill="#378add"/><rect x="4.5" y="15" width="12.5" height="3" rx="1.2" fill="#1d9e75"/><line x1="12" y1="4.6" x2="12" y2="19.4" stroke="#ff5f57" stroke-width="1.1"/><circle cx="12" cy="4.8" r="1.1" fill="#ff5f57"/></svg>`,
   mail:`<svg viewBox="0 0 24 24"><defs><linearGradient id="ml" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46b4ff"/><stop offset="1" stop-color="#1567e0"/></linearGradient></defs><rect width="24" height="24" rx="5.4" fill="url(#ml)"/><rect x="3.6" y="6.8" width="16.8" height="10.4" rx="2.6" fill="#fff"/><path d="M4.3 8 L12 13.4 L19.7 8" fill="none" stroke="#86b8ef" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/></svg>`,
+  contacts:`<svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5.4" fill="#f1ede6"/><circle cx="12" cy="9.4" r="3.5" fill="#9a8f80"/><path d="M5.4 19c0-3.5 3-5.8 6.6-5.8s6.6 2.3 6.6 5.8z" fill="#9a8f80"/></svg>`,
 };
-["notes","safari","editor","mail"].forEach(k=>{
+["notes","safari","editor","mail","contacts"].forEach(k=>{
   const el=document.getElementById("art-"+k); if(!el)return;
   const img=document.createElement("img"); img.className="full"; img.alt=k; img.src="icons/"+k+".png";
   img.onerror=()=>{el.innerHTML=ART[k];};
@@ -445,7 +479,7 @@ document.getElementById("banner-img").addEventListener("error",function(){this.r
 
 /* ---------- window manager ---------- */
 let z=20;
-const APPNAME={editor:"Shardul Mane",notes:"Notes",browser:"Safari",mail:"Mail"};
+const APPNAME={editor:"Shardul Mane",notes:"Notes",browser:"Safari",mail:"Mail",contacts:"Contacts"};
 function front(win){win.style.zIndex=++z;}
 function setActive(app){
   document.getElementById("mb-app").textContent=app?APPNAME[app]:"Finder";
@@ -480,7 +514,7 @@ function launchEditor(){
 }
 document.querySelectorAll("[data-open]").forEach(el=>el.addEventListener("click",()=>openApp(el.dataset.open)));
 document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();closeApp(el.dataset.close);}));
-function openLink(u){window.open(u,"_blank","noopener");}
+function openLink(u){if(!u)return;if(u.indexOf("mailto:")===0){location.href=u;return;}window.open(u,"_blank","noopener");}
 
 /* bring window to front on click */
 document.querySelectorAll(".appwin").forEach(w=>w.addEventListener("mousedown",()=>front(w)));
@@ -525,6 +559,21 @@ document.getElementById("mail-send").addEventListener("click",()=>{
   const body=encodeURIComponent(document.getElementById("mail-body").value||"");
   window.location.href=`mailto:shardulmane10@gmail.com?subject=${sub}&body=${body}`;
 });
+
+/* ---------- contacts / socials ---------- */
+const SOCIALS=[
+  {label:"Twitter / X", handle:"@shardul_mane",            url:"https://x.com/shardul_mane",            g:"X",  c:"#000000"},
+  {label:"Instagram",   handle:"@shardulmane",             url:"https://instagram.com/shardulmane",     g:"IG", c:"#e1306c"},
+  {label:"YouTube",     handle:"Shardul Mane",             url:"",                                       g:"YT", c:"#ff0000"},
+  {label:"LinkedIn",    handle:"in/shardulmane",           url:"https://www.linkedin.com/in/shardulmane",g:"in", c:"#0a66c2"},
+  {label:"GitHub",      handle:"shardulmane10",            url:"https://github.com/shardulmane10",       g:"GH", c:"#2b2b2b"},
+  {label:"Email",       handle:"shardulmane10@gmail.com",  url:"mailto:shardulmane10@gmail.com",         g:"@",  c:"#1567e0"},
+];
+document.getElementById("contact-rows").innerHTML=SOCIALS.map(s=>`
+  <a class="contact-row" ${s.url?`onclick="openLink('${s.url}')"`:'style="cursor:default;opacity:.55"'}>
+    <div class="contact-ic" style="background:${s.c}">${s.g}</div>
+    <div class="contact-meta"><div class="contact-lbl">${s.label}</div><div class="contact-val">${s.handle}</div></div>
+  </a>`).join("");
 
 /* ============================================================
    EDITOR
