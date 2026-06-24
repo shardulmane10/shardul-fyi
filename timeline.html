@@ -19,10 +19,20 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
-  body{background:#000;color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+  body{background:linear-gradient(150deg,#2a2740 0%,#34304d 45%,#412f4d 100%);color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;padding:22px}
+
+  /* ===== macOS window ===== */
+  .macwin{width:min(1280px,95vw);height:min(840px,92vh);display:flex;flex-direction:column;background:var(--bg);border-radius:12px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.10)}
+  .titlebar{flex:0 0 auto;height:40px;display:flex;align-items:center;gap:14px;padding:0 14px;background:#202225;border-bottom:.5px solid rgba(255,255,255,.06);position:relative}
+  .lights{display:flex;gap:8px;z-index:2}
+  .lights span{width:12px;height:12px;border-radius:50%;display:inline-block}
+  .l-red{background:#ff5f57}.l-yellow{background:#febc2e}.l-green{background:#28c840}
+  .titlebar .title{position:absolute;left:0;right:0;text-align:center;font-size:13px;color:#c7ccd4;font-weight:500;pointer-events:none}
+  .titlebar .meta{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--dim);z-index:2}
+  .macbody{flex:1;position:relative;min-height:0;overflow:hidden}
 
   /* ===== loading splash (DaVinci Resolve style) ===== */
-  #boot{position:fixed;inset:0;background:#0c0d0f;z-index:50;display:flex;transition:opacity .8s ease}
+  #boot{position:absolute;inset:0;background:#0c0d0f;z-index:50;display:flex;transition:opacity .8s ease}
   #boot.hide{opacity:0;pointer-events:none}
   .splash{position:relative;display:flex;width:100%;height:100%}
   .splash-left{position:relative;flex:1 1 52%;z-index:2}
@@ -46,7 +56,7 @@
   .splash-skip{position:absolute;bottom:7%;right:6%;font-size:10px;letter-spacing:.14em;color:#4b5059;text-transform:uppercase;z-index:3;cursor:pointer}
   .splash-skip:hover{color:#9aa0aa}
 
-  #app{display:flex;flex-direction:column;height:100vh;height:100dvh;opacity:0;transition:opacity .6s ease}
+  #app{display:flex;flex-direction:column;height:100%;opacity:0;transition:opacity .6s ease}
   #app.show{opacity:1}
 
   .topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--panel);border-bottom:.5px solid var(--line);flex:0 0 auto}
@@ -88,7 +98,7 @@
   .clip.films{background:var(--films-bg);border-color:var(--films);color:var(--films-tx)}
   .clip.growth{background:var(--growth-bg);border-color:var(--growth);color:var(--growth-tx)}
   .lane.wave{background:var(--write-bg);border:.5px solid var(--write);border-radius:3px;align-items:center;gap:1px;padding:0 6px;overflow:hidden}
-  .lane.wave span{width:2px;background:var(--write-tx);flex:0 0 2px}
+  .lane.wave span{flex:1 1 2px;min-width:2px;background:var(--write-tx)}
 
   .playhead{position:absolute;top:0;bottom:8px;width:2px;background:var(--play);z-index:6;pointer-events:none}
   .phandle{position:absolute;top:-26px;left:-9px;width:20px;height:24px;cursor:ew-resize;pointer-events:auto;z-index:7}
@@ -97,7 +107,10 @@
   .hint{position:absolute;right:16px;bottom:16px;font-family:var(--mono);font-size:10px;color:#3b4250}
 
   @media (max-width:760px){
-    body{overflow:auto}
+    body{overflow:auto;padding:0;display:block}
+    .macwin{width:100vw;min-height:100dvh;height:auto;border-radius:0;box-shadow:none}
+    .macbody{overflow:visible}
+    #boot{position:fixed}
     .splash{flex-direction:column}
     .splash-right{flex:0 0 42vh;order:-1}
     .splash-right .fade{background:linear-gradient(0deg,#0c0d0f 0%,rgba(12,13,15,0) 55%)}
@@ -115,6 +128,13 @@
 </style>
 </head>
 <body>
+<div class="macwin">
+  <div class="titlebar">
+    <div class="lights"><span class="l-red"></span><span class="l-yellow"></span><span class="l-green"></span></div>
+    <div class="title">Shardul Mane</div>
+    <div class="meta" id="tc">01:00:00:00</div>
+  </div>
+  <div class="macbody">
 
 <div id="boot">
   <div class="splash">
@@ -143,11 +163,6 @@
 </div>
 
 <div id="app">
-  <div class="topbar">
-    <span class="brand">shardul.fyi</span>
-    <span class="meta" id="tc">01:00:00:00</span>
-  </div>
-
   <div class="stage">
     <div class="viewer">
       <div class="monitor" id="monitor">
@@ -171,6 +186,9 @@
     <div class="tracks" id="tracks"></div>
     <div class="playhead" id="playhead" style="left:66px"><div class="phandle" id="phandle"></div></div>
     <div class="hint">drag the playhead / ruler &middot; click a clip &middot; space = play &middot; &larr;/&rarr; = step</div>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -232,12 +250,16 @@ function addClips(lane,track){
 }
 addClips(laneFilms,"films");addClips(laneGrowth,"growth");
 
-/* A1 writing waveform lane */
+/* A1 audio waveform lane — frequency across the whole channel */
 (function(){
   const row=document.createElement("div");row.className="track";
-  row.innerHTML=`<div class="lbl" style="color:var(--write)">A1 writing</div>`;
+  row.innerHTML=`<div class="lbl" style="color:var(--write)">A1 audio</div>`;
   const l=document.createElement("div");l.className="lane wave";
-  for(let i=0;i<60;i++){const s=document.createElement("span");s.style.height=(20+Math.abs(Math.sin(i*1.7))*70)+"%";l.appendChild(s);}
+  for(let i=0;i<160;i++){
+    const s=document.createElement("span");
+    const h=12+(Math.abs(Math.sin(i*0.45))*0.55+Math.abs(Math.sin(i*1.7+1))*0.45)*80;
+    s.style.height=h+"%";l.appendChild(s);
+  }
   row.appendChild(l);tracks.appendChild(row);
 })();
 
