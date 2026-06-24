@@ -47,7 +47,8 @@
   .desk-icon span{font-size:12px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);font-weight:400}
   .desk-icon:hover .tile{filter:brightness(1.08)}
   .desk-hello{position:absolute;left:0;right:0;top:27%;text-align:center;color:rgba(255,255,255,.95);text-shadow:0 2px 18px rgba(0,0,0,.35);pointer-events:none}
-  .desk-hello .memoji{width:132px;height:132px;margin:0 auto 20px;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
+  .desk-hello .memoji{display:block;width:140px;height:140px;margin:0 auto 20px;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
+  .desk-hello .memoji.photo{border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.28)}
   .desk-hello h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:600;letter-spacing:-.02em}
   .desk-hello small{display:block;margin-top:18px;font-size:14px;opacity:.85;letter-spacing:0}
 
@@ -268,25 +269,7 @@
 <!-- ===== DESKTOP / HOME ===== -->
 <div id="desktop">
   <div class="desk-hello">
-    <svg class="memoji" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-      <defs><clipPath id="mj"><circle cx="80" cy="80" r="80"/></clipPath></defs>
-      <g clip-path="url(#mj)">
-        <rect width="160" height="160" fill="#cfe0f5"/>
-        <path d="M20 162 C22 124 50 106 80 106 C110 106 138 124 140 162 Z" fill="#2c3039"/>
-        <rect x="69" y="90" width="22" height="26" rx="10" fill="#c6855f"/>
-        <circle cx="47" cy="74" r="7" fill="#dca074"/>
-        <circle cx="113" cy="74" r="7" fill="#dca074"/>
-        <ellipse cx="80" cy="72" rx="33" ry="37" fill="#dca074"/>
-        <path d="M47 70 C49 102 62 114 80 114 C98 114 111 102 113 70 C113 88 101 100 80 100 C59 100 47 88 47 70 Z" fill="#171410"/>
-        <rect x="47" y="56" width="8" height="24" fill="#171410"/>
-        <rect x="105" y="56" width="8" height="24" fill="#171410"/>
-        <path d="M45 66 C41 32 66 22 80 22 C94 22 119 32 115 66 C108 47 96 41 80 41 C64 41 52 47 45 66 Z" fill="#14110d"/>
-        <g fill="#17191d"><rect x="48" y="63" width="26" height="16" rx="7.5"/><rect x="86" y="63" width="26" height="16" rx="7.5"/></g>
-        <rect x="72" y="67" width="16" height="4" rx="2" fill="#17191d"/>
-        <rect x="52" y="66" width="8" height="3" rx="1.5" fill="#3a4049"/>
-        <rect x="90" y="66" width="8" height="3" rx="1.5" fill="#3a4049"/>
-      </g>
-    </svg>
+    <img class="memoji" src="memoji.png" alt="Shardul" onerror="this.onerror=null;this.src='me.jpg';this.classList.add('photo')">
     <h1>hi, i'm shardul</h1>
     <small>open an app from the dock &darr;</small>
   </div>
