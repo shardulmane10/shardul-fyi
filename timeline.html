@@ -22,10 +22,10 @@
   body{
     color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased;height:100vh;height:100dvh;position:relative;
     background:
-      radial-gradient(68% 40% at 50% 94%, rgba(255,201,143,.40) 0%, rgba(255,201,143,0) 62%),
-      radial-gradient(120% 90% at 84% 10%, rgba(126,156,255,.28) 0%, rgba(126,156,255,0) 56%),
-      linear-gradient(180deg,#0a1733 0%,#152661 22%,#33347e 42%,#6a4a93 62%,#b5618f 82%,#e6976d 100%);
-    background-color:#152661;
+      radial-gradient(78% 58% at 74% 14%, rgba(5,98,239,.32) 0%, rgba(5,98,239,0) 56%),
+      radial-gradient(64% 50% at 14% 92%, rgba(111,168,245,.15) 0%, rgba(111,168,245,0) 60%),
+      linear-gradient(180deg,#0B1015 0%,#0c1626 52%,#0e1f3a 100%);
+    background-color:#0B1015;
   }
 
   /* ===== menu bar ===== */
@@ -46,10 +46,10 @@
   .desk-icon .tile{width:54px;height:54px;border-radius:13px}
   .desk-icon span{font-size:12px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);font-weight:400}
   .desk-icon:hover .tile{filter:brightness(1.08)}
-  .desk-hello{position:absolute;left:0;right:0;top:34%;text-align:center;color:rgba(255,255,255,.92);text-shadow:0 2px 18px rgba(0,0,0,.35);pointer-events:none}
-  .desk-hello h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:700;letter-spacing:-.03em}
-  .desk-hello p{margin-top:10px;font-size:clamp(.9rem,2vw,1.2rem);letter-spacing:.3em;text-transform:uppercase;opacity:.9}
-  .desk-hello small{display:block;margin-top:22px;font-family:var(--mono);font-size:12px;opacity:.7;letter-spacing:.06em}
+  .desk-hello{position:absolute;left:0;right:0;top:27%;text-align:center;color:rgba(255,255,255,.95);text-shadow:0 2px 18px rgba(0,0,0,.35);pointer-events:none}
+  .desk-hello .memoji{width:132px;height:132px;margin:0 auto 20px;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
+  .desk-hello h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:600;letter-spacing:-.02em}
+  .desk-hello small{display:block;margin-top:18px;font-size:14px;opacity:.85;letter-spacing:0}
 
   /* ===== app icon tiles (fallback bg behind full-bleed svg) ===== */
   .t-notes{background:#fff}
@@ -81,6 +81,9 @@
   .l-red{background:#ff5f57}.l-yellow{background:#febc2e}.l-green{background:#28c840}
   .titlebar .title{position:absolute;left:0;right:0;text-align:center;font-size:13px;color:#c7ccd4;font-weight:500;pointer-events:none}
   .titlebar .meta{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--dim);z-index:2}
+  .appwin.light .titlebar{background:#ededee;border-bottom:.5px solid rgba(0,0,0,.10)}
+  .appwin.light .titlebar .title{color:#2c2c2e}
+  .appwin.light .titlebar .meta{color:#9a9a9e}
   .winbody{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column}
 
   /* ===== editor window ===== */
@@ -151,27 +154,30 @@
   .banner-right .fade{position:absolute;inset:0;background:linear-gradient(90deg,#0c0d0f 0%,rgba(12,13,15,.86) 24%,rgba(12,13,15,.35) 44%,rgba(12,13,15,0) 62%)}
   .banner-right.noimg{background:linear-gradient(135deg,#1a1d22,#0c0d0f)}
 
-  /* ===== Notes app ===== */
-  #win-notes{width:min(860px,92vw);height:min(580px,80vh);left:50%;top:50%;transform:translate(-50%,-50%)}
-  #win-notes .titlebar{background:#2b2a25}
-  .notes-body{display:flex;height:100%;background:#1e1e1c}
-  .notes-side{width:230px;flex:0 0 230px;background:#252420;border-right:.5px solid rgba(255,255,255,.06);overflow:auto}
-  .notes-side h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#9a8f6f;padding:14px 16px 6px}
-  .note-item{padding:10px 16px;border-bottom:.5px solid rgba(255,255,255,.05);cursor:pointer}
-  .note-item.sel{background:#fbbf24;color:#3a2e00}
-  .note-item .nt{font-size:13px;font-weight:500;color:#f3f0e6}
-  .note-item.sel .nt{color:#3a2e00}
-  .note-item .np{font-size:11px;color:#8a8470;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .note-item.sel .np{color:#6a560a}
-  .notes-main{flex:1;padding:26px 34px;overflow:auto;color:#e9e7df}
-  .notes-main h2{font-size:20px;font-weight:600;margin-bottom:4px}
-  .notes-main .date{font-size:12px;color:#8a8470;margin-bottom:18px}
-  .notes-main p{font-size:15px;line-height:1.8;margin-bottom:14px;color:#d9d6cc}
+  /* ===== Notes app (light, macOS) ===== */
+  #win-notes{width:min(900px,94vw);height:min(600px,82vh);left:50%;top:50%;transform:translate(-50%,-50%)}
+  .notes-body{display:flex;height:100%;background:#fff;color:#1d1d1f}
+  .notes-side{width:184px;flex:0 0 184px;background:#f6f5f3;border-right:.5px solid rgba(0,0,0,.08);padding:8px 0;overflow:auto}
+  .notes-side h4{font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:#9b9b9f;padding:12px 16px 4px;font-weight:600}
+  .nfolder{display:flex;align-items:center;gap:8px;padding:6px 16px;font-size:13px;color:#1d1d1f}
+  .nfolder.sel{background:#dcdcde;border-radius:6px;margin:0 8px;padding:6px 8px}
+  .nfolder svg{width:15px;height:15px;flex:0 0 15px}
+  .nfolder .ct{margin-left:auto;color:#9b9b9f;font-size:12px}
+  .notes-list{width:248px;flex:0 0 248px;background:#fbfbfa;border-right:.5px solid rgba(0,0,0,.08);overflow:auto;padding:6px 0}
+  .note-item{padding:8px 12px;cursor:pointer;border-radius:7px;margin:2px 8px}
+  .note-item.sel{background:#ffd84d}
+  .note-item .nt{font-size:13px;font-weight:600;color:#1d1d1f}
+  .note-item .np{font-size:12px;color:#86868b;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .note-item.sel .np{color:#7a6410}
+  .notes-main{flex:1;padding:24px 38px;overflow:auto;color:#1d1d1f}
+  .notes-main .ndate{text-align:center;font-size:11px;color:#a1a1a6;margin-bottom:16px}
+  .notes-main h2{font-size:19px;font-weight:700;margin-bottom:10px}
+  .notes-main p{font-size:15px;line-height:1.75;margin-bottom:13px;color:#2c2c2e}
 
   /* ===== Browser / Twitter app ===== */
   #win-browser{width:min(1000px,94vw);height:min(700px,86vh);left:50%;top:50%;transform:translate(-50%,-50%)}
-  .sf-toolbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#2a2c30;border-bottom:.5px solid rgba(255,255,255,.06)}
-  .sf-url{flex:1;max-width:520px;margin:0 auto;background:#3a3d42;border-radius:8px;padding:6px 12px;font-size:12px;color:#c7ccd4;text-align:center;font-family:var(--sans)}
+  .sf-toolbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#e8e8ea;border-bottom:.5px solid rgba(0,0,0,.08)}
+  .sf-url{flex:1;max-width:520px;margin:0 auto;background:#fff;border:.5px solid rgba(0,0,0,.10);border-radius:8px;padding:6px 12px;font-size:12px;color:#3a3a3c;text-align:center;font-family:var(--sans)}
   .tw{flex:1;overflow:auto;background:#000;color:#e7e9ea}
   .tw-head{position:sticky;top:0;background:rgba(0,0,0,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:.5px solid #2f3336;padding:10px 16px;display:flex;align-items:center;gap:18px;z-index:2}
   .tw-search{flex:1;max-width:420px;background:#202327;border-radius:18px;padding:9px 16px;font-size:14px;color:#e7e9ea;display:flex;align-items:center;gap:10px}
@@ -196,30 +202,36 @@
 
   /* ===== Mail app ===== */
   #win-mail{width:min(580px,92vw);height:min(500px,80vh);left:50%;top:50%;transform:translate(-50%,-50%)}
-  #win-mail .titlebar{background:#2a2c30}
-  .mail-body{flex:1;display:flex;flex-direction:column;background:#1c1d21}
-  .mail-actions{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:.5px solid rgba(255,255,255,.06)}
-  .mail-send{background:#1664d8;color:#fff;border:0;border-radius:8px;padding:7px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)}
-  .mail-send:hover{background:#1257bd}
-  .mail-field{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:.5px solid rgba(255,255,255,.05);font-size:14px}
-  .mail-field label{color:#8a8f98;width:60px;flex:0 0 60px}
-  .mail-field input{flex:1;background:transparent;border:0;color:#e7e9ea;font-size:14px;font-family:var(--sans);outline:none}
-  .mail-body textarea{flex:1;background:transparent;border:0;color:#e7e9ea;padding:16px;font-size:15px;line-height:1.7;font-family:var(--sans);resize:none;outline:none}
+  .mail-body{flex:1;display:flex;flex-direction:column;background:#fff;color:#1d1d1f}
+  .mail-actions{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:.5px solid rgba(0,0,0,.08)}
+  .mail-send{background:#0a84ff;color:#fff;border:0;border-radius:8px;padding:7px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)}
+  .mail-send:hover{background:#0a74e0}
+  .mail-field{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:.5px solid rgba(0,0,0,.06);font-size:14px}
+  .mail-field label{color:#86868b;width:60px;flex:0 0 60px}
+  .mail-field input{flex:1;background:transparent;border:0;color:#1d1d1f;font-size:14px;font-family:var(--sans);outline:none}
+  .mail-body textarea{flex:1;background:transparent;border:0;color:#1d1d1f;padding:16px;font-size:15px;line-height:1.7;font-family:var(--sans);resize:none;outline:none}
 
-  /* ===== Contacts app ===== */
-  #win-contacts{width:min(440px,92vw);height:min(580px,84vh);left:50%;top:50%;transform:translate(-50%,-50%)}
-  #win-contacts .titlebar{background:#2a2c30}
-  .contacts-body{flex:1;overflow:auto;background:#1c1d21;display:flex;flex-direction:column;align-items:center;padding:34px 24px 24px}
-  .contact-av{width:104px;height:104px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.12);background:#333}
-  .contact-name{font-size:22px;font-weight:600;margin-top:16px;color:#f3f4f6}
-  .contact-title{font-size:13px;color:#8a8f98;margin-top:5px;text-align:center;line-height:1.5}
-  .contact-rows{width:100%;margin-top:24px;display:flex;flex-direction:column;gap:2px}
-  .contact-row{display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:10px;text-decoration:none;cursor:pointer}
-  .contact-row:hover{background:rgba(255,255,255,.06)}
-  .contact-ic{width:34px;height:34px;flex:0 0 34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;letter-spacing:-.02em}
-  .contact-meta{min-width:0}
-  .contact-lbl{font-size:11px;color:#8a8f98;text-transform:uppercase;letter-spacing:.04em}
-  .contact-val{font-size:14px;color:#4aa3ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* ===== Contacts app (light, macOS) ===== */
+  #win-contacts{width:min(740px,94vw);height:min(560px,82vh);left:50%;top:50%;transform:translate(-50%,-50%)}
+  .contacts-body{display:flex;height:100%;background:#fff;color:#1d1d1f}
+  .ct-side{width:172px;flex:0 0 172px;background:#f6f5f3;border-right:.5px solid rgba(0,0,0,.08);padding:10px 0}
+  .ct-side .grp{font-size:11px;text-transform:uppercase;color:#9b9b9f;padding:10px 16px 3px;font-weight:600}
+  .ct-side .item{font-size:13px;color:#1d1d1f;padding:6px 8px;margin:0 8px;border-radius:6px}
+  .ct-side .item.sel{background:#dcdcde}
+  .ct-list{width:196px;flex:0 0 196px;border-right:.5px solid rgba(0,0,0,.08);overflow:auto;background:#fff;padding:6px 0}
+  .ct-list .row{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer;border-radius:7px;margin:2px 8px}
+  .ct-list .row.sel{background:#0a84ff;color:#fff}
+  .ct-list .av{width:30px;height:30px;border-radius:50%;object-fit:cover;background:#d0d0d3;flex:0 0 30px}
+  .ct-list .nm{font-size:13px;font-weight:500}
+  .ct-detail{flex:1;overflow:auto;padding:30px;background:#fff;color:#1d1d1f}
+  .ct-photo{width:118px;height:118px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;border:1px solid rgba(0,0,0,.08);background:#e5e5e7}
+  .ct-name{text-align:center;font-size:22px;font-weight:600;margin-top:14px}
+  .ct-title{text-align:center;font-size:13px;color:#86868b;margin-top:5px;line-height:1.5}
+  .ct-fields{margin-top:22px;border-top:.5px solid rgba(0,0,0,.08)}
+  .ct-field{display:flex;gap:14px;padding:11px 2px;border-bottom:.5px solid rgba(0,0,0,.07);align-items:baseline}
+  .ct-flabel{width:78px;flex:0 0 78px;text-align:right;font-size:12px;color:#86868b}
+  .ct-fval{font-size:14px;color:#0a84ff;cursor:pointer;word-break:break-all}
+  .ct-fval.dim{color:#86868b;cursor:default}
 
   @media (max-width:760px){
     body{overflow:auto}
@@ -256,6 +268,25 @@
 <!-- ===== DESKTOP / HOME ===== -->
 <div id="desktop">
   <div class="desk-hello">
+    <svg class="memoji" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="mj"><circle cx="80" cy="80" r="80"/></clipPath></defs>
+      <g clip-path="url(#mj)">
+        <rect width="160" height="160" fill="#cfe0f5"/>
+        <path d="M20 162 C22 124 50 106 80 106 C110 106 138 124 140 162 Z" fill="#2c3039"/>
+        <rect x="69" y="90" width="22" height="26" rx="10" fill="#c6855f"/>
+        <circle cx="47" cy="74" r="7" fill="#dca074"/>
+        <circle cx="113" cy="74" r="7" fill="#dca074"/>
+        <ellipse cx="80" cy="72" rx="33" ry="37" fill="#dca074"/>
+        <path d="M47 70 C49 102 62 114 80 114 C98 114 111 102 113 70 C113 88 101 100 80 100 C59 100 47 88 47 70 Z" fill="#171410"/>
+        <rect x="47" y="56" width="8" height="24" fill="#171410"/>
+        <rect x="105" y="56" width="8" height="24" fill="#171410"/>
+        <path d="M45 66 C41 32 66 22 80 22 C94 22 119 32 115 66 C108 47 96 41 80 41 C64 41 52 47 45 66 Z" fill="#14110d"/>
+        <g fill="#17191d"><rect x="48" y="63" width="26" height="16" rx="7.5"/><rect x="86" y="63" width="26" height="16" rx="7.5"/></g>
+        <rect x="72" y="67" width="16" height="4" rx="2" fill="#17191d"/>
+        <rect x="52" y="66" width="8" height="3" rx="1.5" fill="#3a4049"/>
+        <rect x="90" y="66" width="8" height="3" rx="1.5" fill="#3a4049"/>
+      </g>
+    </svg>
     <h1>hi, i'm shardul</h1>
     <small>open an app from the dock &darr;</small>
   </div>
@@ -273,7 +304,7 @@
       <div class="banner-sub">Films &middot; Growth</div>
       <div class="banner-meta">
         <div class="banner-ver" id="ver">Version 2026</div>
-        <div class="banner-copy">&copy; <span id="yr">2026</span> Shardul Mane. All rights reserved. Filmmaker and founding growth @ supermemory, based in San Francisco. Director, writer, editor.</div>
+        <div class="banner-copy">&copy; <span id="yr">2026</span> Shardul Mane. All rights reserved. Filmmaker and Founding Growth Lead @ supermemory, based in San Francisco. Director, writer, editor.</div>
         <div class="loadbar" id="loadbar"><i></i></div>
         <div class="banner-load">loading stories<span class="dots"></span></div>
       </div>
@@ -315,7 +346,7 @@
 </div>
 
 <!-- ===== NOTES WINDOW ===== -->
-<div class="appwin" id="win-notes">
+<div class="appwin light" id="win-notes">
   <div class="titlebar" data-drag="win-notes">
     <div class="lights"><span class="l-red" data-close="notes"></span><span class="l-yellow"></span><span class="l-green"></span></div>
     <div class="title">Notes</div>
@@ -324,16 +355,20 @@
     <div class="notes-body">
       <div class="notes-side">
         <h4>iCloud</h4>
+        <div class="nfolder sel"><svg viewBox="0 0 24 24" fill="#e8b53e"><path d="M3 6.5A1.5 1.5 0 014.5 5h4l2 2h7A1.5 1.5 0 0119 8.5v8A1.5 1.5 0 0117.5 18h-13A1.5 1.5 0 013 16.5z"/></svg>Notes<span class="ct">3</span></div>
+        <div class="nfolder"><svg viewBox="0 0 24 24" fill="none" stroke="#9b9b9f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M9 7V5h6v2M7 7l1 12h8l1-12"/></svg>Recently Deleted</div>
+      </div>
+      <div class="notes-list">
         <div class="note-item sel"><div class="nt">A note from me</div><div class="np">Hey — thanks for stopping by…</div></div>
-        <div class="note-item"><div class="nt">What I'm building</div><div class="np">supermemory, and the films…</div></div>
-        <div class="note-item"><div class="nt">Reach out</div><div class="np">say hi, I reply to everyone…</div></div>
+        <div class="note-item"><div class="nt">What I'm building</div><div class="np">supermemory + the films…</div></div>
+        <div class="note-item"><div class="nt">Reach out</div><div class="np">say hi, I reply to everyone</div></div>
       </div>
       <div class="notes-main">
+        <div class="ndate">June 2026 &middot; San Francisco</div>
         <h2>A note from me</h2>
-        <div class="date">June 2026 &middot; San Francisco</div>
-        <p>Hey — thanks for stopping by. [This is placeholder text — Shardul will replace it with a personal note.]</p>
-        <p>I make films and I help things grow. This little site is built like the tool I spend most of my life in, an edit timeline, because that's how I think about everything: clips, cuts, and the story you find between them.</p>
-        <p>If anything here resonates — the films, the work at supermemory, or you just want to talk — the mail icon in the dock goes straight to me. I read every message.</p>
+        <p>Hey — thanks for stopping by. [Placeholder — Shardul will replace this with a personal note.]</p>
+        <p>I make films and tell stories. This little site is built like the tool I spend most of my life in, an edit timeline, because that's how I think about everything: clips, cuts, and the story between them.</p>
+        <p>If anything here resonates — the films, the work at supermemory, or you just want to talk — the mail icon goes straight to me. I read every message.</p>
         <p>— Shardul</p>
       </div>
     </div>
@@ -341,7 +376,7 @@
 </div>
 
 <!-- ===== BROWSER / TWITTER WINDOW ===== -->
-<div class="appwin" id="win-browser">
+<div class="appwin light" id="win-browser">
   <div class="titlebar" data-drag="win-browser">
     <div class="lights"><span class="l-red" data-close="browser"></span><span class="l-yellow"></span><span class="l-green"></span></div>
     <div class="title">Safari</div>
@@ -369,7 +404,7 @@
 </div>
 
 <!-- ===== MAIL WINDOW ===== -->
-<div class="appwin" id="win-mail">
+<div class="appwin light" id="win-mail">
   <div class="titlebar" data-drag="win-mail">
     <div class="lights"><span class="l-red" data-close="mail"></span><span class="l-yellow"></span><span class="l-green"></span></div>
     <div class="title">New Message</div>
@@ -385,17 +420,21 @@
 </div>
 
 <!-- ===== CONTACTS WINDOW ===== -->
-<div class="appwin" id="win-contacts">
+<div class="appwin light" id="win-contacts">
   <div class="titlebar" data-drag="win-contacts">
     <div class="lights"><span class="l-red" data-close="contacts"></span><span class="l-yellow"></span><span class="l-green"></span></div>
     <div class="title">Contacts</div>
   </div>
   <div class="winbody">
     <div class="contacts-body">
-      <img class="contact-av" src="me.jpg" alt="Shardul Mane" onerror="this.style.display='none'">
-      <div class="contact-name">Shardul Mane</div>
-      <div class="contact-title">Founding growth @ supermemory &middot; San Francisco<br>films &middot; growth &middot; stories</div>
-      <div class="contact-rows" id="contact-rows"></div>
+      <div class="ct-side"><div class="grp">Groups</div><div class="item sel">All Contacts</div></div>
+      <div class="ct-list"><div class="row sel"><img class="av" src="me.jpg" onerror="this.style.visibility='hidden'"><span class="nm">Shardul Mane</span></div></div>
+      <div class="ct-detail">
+        <img class="ct-photo" src="me.jpg" alt="Shardul Mane" onerror="this.style.display='none'">
+        <div class="ct-name">Shardul Mane</div>
+        <div class="ct-title">Founding Growth Lead @ supermemory<br>San Francisco</div>
+        <div class="ct-fields" id="contact-rows"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -405,9 +444,9 @@
   <div class="dock-app t-notes" data-open="notes" data-label="Notes" id="art-notes"></div>
   <div class="dock-app t-safari" data-open="browser" data-label="Browser" id="art-safari"></div>
   <div class="dock-app t-editor" data-open="editor" data-label="Editor" id="art-editor"></div>
+  <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="supermemory.svg" alt="Supermemory"></div>
   <div class="dock-app t-mail" data-open="mail" data-label="Mail" id="art-mail"></div>
   <div class="dock-app t-contacts" data-open="contacts" data-label="Contacts" id="art-contacts"></div>
-  <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="supermemory.svg" alt="Supermemory"></div>
 </div>
 
 <script>
@@ -432,7 +471,7 @@ const CLIPS = [
 ];
 const ABOUT = {
   title:"Shardul Mane", sub:"films · growth · stories",
-  desc:"Founding growth @ supermemory, San Francisco. I make films and tell stories. Click a clip on the timeline to watch my work.",
+  desc:"Founding Growth Lead @ supermemory, San Francisco. I make films and tell stories. Click a clip on the timeline to watch my work.",
 };
 const LINKS = `<div class="insp-links">
   <a onclick="openLink('https://x.com/shardul_mane')">twitter</a>
@@ -570,10 +609,7 @@ const SOCIALS=[
   {label:"Email",       handle:"shardulmane10@gmail.com",  url:"mailto:shardulmane10@gmail.com",         g:"@",  c:"#1567e0"},
 ];
 document.getElementById("contact-rows").innerHTML=SOCIALS.map(s=>`
-  <a class="contact-row" ${s.url?`onclick="openLink('${s.url}')"`:'style="cursor:default;opacity:.55"'}>
-    <div class="contact-ic" style="background:${s.c}">${s.g}</div>
-    <div class="contact-meta"><div class="contact-lbl">${s.label}</div><div class="contact-val">${s.handle}</div></div>
-  </a>`).join("");
+  <div class="ct-field"><div class="ct-flabel">${s.label}</div><div class="ct-fval${s.url?'':' dim'}" ${s.url?`onclick="openLink('${s.url}')"`:''}>${s.handle}</div></div>`).join("");
 
 /* ============================================================
    EDITOR
