@@ -19,10 +19,34 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
-  body{background:linear-gradient(150deg,#2a2740 0%,#34304d 45%,#412f4d 100%);color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;padding:22px}
+  body{
+    color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;padding:40px 24px 104px;
+    background:
+      radial-gradient(110% 80% at 10% 6%, rgba(255,140,180,.55) 0%, rgba(255,140,180,0) 42%),
+      radial-gradient(120% 90% at 90% 4%, rgba(96,152,255,.55) 0%, rgba(96,152,255,0) 46%),
+      radial-gradient(120% 100% at 82% 94%, rgba(176,112,255,.62) 0%, rgba(176,112,255,0) 52%),
+      radial-gradient(120% 100% at 14% 98%, rgba(255,172,96,.50) 0%, rgba(255,172,96,0) 48%),
+      linear-gradient(135deg,#3a1c71 0%,#5b2a82 45%,#a83279 100%);
+    background-color:#3a1c71;
+  }
+
+  /* ===== macOS desktop chrome ===== */
+  .menubar{position:fixed;top:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(28,22,44,.34);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);color:#fff;font-size:13px;z-index:100;border-bottom:.5px solid rgba(255,255,255,.10);text-shadow:0 1px 1px rgba(0,0,0,.18)}
+  .mb-left{display:flex;align-items:center;gap:18px}
+  .mb-apple{font-size:15px;line-height:1}
+  .mb-app{font-weight:600}
+  .mb-item{font-weight:400;opacity:.95}
+  .mb-right{display:flex;align-items:center;gap:13px}
+  .mb-right svg{display:block}
+  .mb-clock{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:10px;padding:8px 12px;background:rgba(255,255,255,.20);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:.5px solid rgba(255,255,255,.28);border-radius:20px;z-index:100;box-shadow:0 14px 44px rgba(0,0,0,.40)}
+  .dock-app{width:46px;height:46px;border-radius:11px;transition:transform .18s cubic-bezier(.2,.8,.3,1.4);cursor:pointer;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.20),0 3px 8px rgba(0,0,0,.25)}
+  .dock-app:hover{transform:translateY(-12px) scale(1.14)}
+  @media (max-width:760px){.menubar .mb-item{display:none}.dock{display:none}}
 
   /* ===== macOS window ===== */
-  .macwin{width:min(1280px,95vw);height:min(840px,92vh);display:flex;flex-direction:column;background:var(--bg);border-radius:12px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.10)}
+  .macwin{width:min(1280px,95vw);height:min(820px,100%);display:flex;flex-direction:column;background:var(--bg);border-radius:12px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.10)}
   .titlebar{flex:0 0 auto;height:40px;display:flex;align-items:center;gap:14px;padding:0 14px;background:#202225;border-bottom:.5px solid rgba(255,255,255,.06);position:relative}
   .lights{display:flex;gap:8px;z-index:2}
   .lights span{width:12px;height:12px;border-radius:50%;display:inline-block}
@@ -67,6 +91,9 @@
   .viewer{flex:2;display:flex;flex-direction:column;padding:16px;min-width:0}
   .monitor{flex:1;background:#000;border:.5px solid var(--line);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
   .monitor iframe{width:100%;height:100%;border:0;display:block}
+  .monitor.social{align-items:flex-start;justify-content:center;overflow:auto;background:#0c0d0f;padding:14px}
+  .monitor.social iframe{height:auto}
+  .embedwrap{margin:auto;width:100%;max-width:480px}
   .monitor .placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--dim)}
   .monitor .pbtn{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
   .transport{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--dim)}
@@ -128,6 +155,26 @@
 </style>
 </head>
 <body>
+
+<div class="menubar">
+  <div class="mb-left">
+    <span class="mb-apple">&#63743;</span>
+    <span class="mb-app">Shardul Mane</span>
+    <span class="mb-item">File</span>
+    <span class="mb-item">Edit</span>
+    <span class="mb-item">View</span>
+    <span class="mb-item">Timeline</span>
+    <span class="mb-item">Help</span>
+  </div>
+  <div class="mb-right">
+    <svg width="26" height="13" viewBox="0 0 26 14" fill="none"><rect x="1" y="2" width="21" height="10" rx="3" stroke="#fff" stroke-width="1.2"/><rect x="2.5" y="3.5" width="15" height="7" rx="1.5" fill="#fff"/><path d="M24 5v4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <svg width="16" height="13" viewBox="0 0 24 18" fill="none" stroke="#fff" stroke-width="2"><path d="M2 5C8 0 16 0 22 5"/><path d="M5 9c4-3 10-3 14 0"/><path d="M8.5 12.5c2-1.5 5-1.5 7 0"/><circle cx="12" cy="16" r="1" fill="#fff" stroke="none"/></svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke-linecap="round"/></svg>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="6" width="18" height="5" rx="2.5"/><rect x="3" y="13" width="18" height="5" rx="2.5"/><circle cx="8" cy="8.5" r="1.3" fill="#fff"/><circle cx="16" cy="15.5" r="1.3" fill="#fff"/></svg>
+    <span class="mb-clock" id="mb-clock">&nbsp;</span>
+  </div>
+</div>
+
 <div class="macwin">
   <div class="titlebar">
     <div class="lights"><span class="l-red"></span><span class="l-yellow"></span><span class="l-green"></span></div>
@@ -192,19 +239,35 @@
   </div>
 </div>
 
+<div class="dock">
+  <div class="dock-app" title="Finder" style="background:linear-gradient(160deg,#a6e3ff,#1f6fe5)"></div>
+  <div class="dock-app" title="Safari" style="background:linear-gradient(160deg,#eaf6ff,#1da1f2)"></div>
+  <div class="dock-app" title="Messages" style="background:linear-gradient(160deg,#5ff07a,#15c64a)"></div>
+  <div class="dock-app" title="Mail" style="background:linear-gradient(160deg,#7cc6ff,#1664d8)"></div>
+  <div class="dock-app" title="Photos" style="background:conic-gradient(from 210deg,#ff5f57,#febc2e,#28c840,#1da1f2,#b06bff,#ff5f57)"></div>
+  <div class="dock-app" title="Music" style="background:linear-gradient(160deg,#ff7eb3,#fa233b)"></div>
+  <div class="dock-app" title="Final Cut" style="background:linear-gradient(160deg,#3a3a3c,#101012)"></div>
+  <div class="dock-app" title="Settings" style="background:linear-gradient(160deg,#cfd3da,#7c828c)"></div>
+</div>
+
 <script>
 /* ============================================================
    YOUR CONTENT — edit this list. Each clip is one piece of work.
    track: "films" (V1) | "growth" (V2)
-   embed: a YouTube/Vimeo embed URL, or "" for none yet
+   url: paste ANY link — a tweet/X, an Instagram reel/post, or a
+        YouTube link. The type is auto-detected. Leave "" for none.
+   examples:
+     url:"https://x.com/shardul_mane/status/1234567890"
+     url:"https://www.instagram.com/reel/Cxxxxxxxxxx/"
+     url:"https://youtu.be/dQw4w9WgXcQ"
    ============================================================ */
 const CLIPS = [
-  {track:"films",  year:2022, title:"Homecoming.", role:"director, editor", runtime:"3:10", span:2, embed:"", links:[]},
-  {track:"films",  year:2024, title:"Excuses.",    role:"director, writer, editor", runtime:"4:32", span:3, embed:"", links:[]},
-  {track:"films",  year:2025, title:"Escape.",     role:"director, editor", runtime:"5:01", span:2, embed:"", links:[]},
-  {track:"growth", year:2023, title:"supermemory launch film", role:"concept, edit", runtime:"1:20", span:2, embed:"", links:[]},
-  {track:"growth", year:2024, title:"product demos", role:"writer, editor", runtime:"series", span:1, embed:"", links:[]},
-  {track:"growth", year:2025, title:"growth ads",    role:"director, editor", runtime:"series", span:3, embed:"", links:[]},
+  {track:"films",  year:2022, title:"Homecoming.", role:"director, editor", runtime:"3:10", span:2, url:"", links:[]},
+  {track:"films",  year:2024, title:"Excuses.",    role:"director, writer, editor", runtime:"4:32", span:3, url:"", links:[]},
+  {track:"films",  year:2025, title:"Escape.",     role:"director, editor", runtime:"5:01", span:2, url:"", links:[]},
+  {track:"growth", year:2023, title:"supermemory launch film", role:"concept, edit", runtime:"1:20", span:2, url:"", links:[]},
+  {track:"growth", year:2024, title:"product demos", role:"writer, editor", runtime:"series", span:1, url:"", links:[]},
+  {track:"growth", year:2025, title:"growth ads",    role:"director, editor", runtime:"series", span:3, url:"", links:[]},
 ];
 const ABOUT = {
   title:"Shardul Mane", sub:"films · growth · stories",
@@ -219,6 +282,15 @@ const LINKS = `<div class="insp-links">
 const Y = new Date().getFullYear();
 document.getElementById("ver").textContent = "Version " + Y;
 document.getElementById("yr").textContent = Y;
+
+/* menu-bar clock */
+function tickClock(){
+  const d=new Date();
+  const day=d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+  const time=d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+  document.getElementById("mb-clock").textContent=day+"  "+time;
+}
+tickClock(); setInterval(tickClock,15000);
 
 /* missing-image fallback */
 document.getElementById("splash-img").addEventListener("error", function(){
@@ -277,15 +349,49 @@ function renderAbout(){
     <div class="insp-desc">${ABOUT.desc}</div>${LINKS}`;
 }
 
+/* ---------- multi-platform embeds (YouTube / X / Instagram) ---------- */
+const loaded={};
+function loadScript(src,cb){
+  if(loaded[src]){cb&&cb();return;}
+  const s=document.createElement("script");s.src=src;s.async=true;
+  s.onload=()=>{loaded[src]=true;cb&&cb();};
+  document.body.appendChild(s);
+}
+function embedType(url){
+  if(!url)return"";
+  if(/instagram\.com/i.test(url))return"instagram";
+  if(/(twitter\.com|x\.com)/i.test(url))return"twitter";
+  if(/(youtube\.com|youtu\.be)/i.test(url))return"youtube";
+  return"link";
+}
+function ytEmbed(url){
+  let id="";const m=url.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/);
+  if(m)id=m[1];
+  return id?`https://www.youtube.com/embed/${id}`:"";
+}
+function renderEmbed(c){
+  const url=c.url, t=embedType(url);
+  monitor.classList.toggle("social", t==="twitter"||t==="instagram");
+  if(t==="youtube"){
+    monitor.innerHTML=`<iframe src="${ytEmbed(url)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  }else if(t==="twitter"){
+    monitor.innerHTML=`<div class="embedwrap"><blockquote class="twitter-tweet" data-theme="dark" data-dnt="true" data-conversation="none"><a href="${url}"></a></blockquote></div>`;
+    loadScript("https://platform.twitter.com/widgets.js",()=>{window.twttr&&twttr.widgets.load(monitor);});
+  }else if(t==="instagram"){
+    monitor.innerHTML=`<div class="embedwrap"><blockquote class="instagram-media" data-instgrm-version="14" data-instgrm-captioned><a href="${url}"></a></blockquote></div>`;
+    loadScript("https://www.instagram.com/embed.js",()=>{window.instgrm&&instgrm.Embeds.process();});
+  }else if(t==="link"){
+    monitor.innerHTML=`<div class="placeholder"><a href="${url}" target="_blank" rel="noopener" style="color:#fff"><div class="pbtn">&#9654;</div></a><div style="font-family:var(--mono);font-size:12px">open ${c.title} &#8599;</div></div>`;
+  }else{
+    monitor.innerHTML=`<div class="placeholder"><div class="pbtn">&#9654;</div><div style="font-family:var(--mono);font-size:12px">${c.title} — link coming soon</div></div>`;
+  }
+}
+
 function select(c){
   current=c;
   document.querySelectorAll(".clip").forEach(e=>e.classList.remove("sel"));
   if(c._el)c._el.classList.add("sel");
-  if(c.embed){
-    monitor.innerHTML=`<iframe src="${c.embed}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-  }else{
-    monitor.innerHTML=`<div class="placeholder"><div class="pbtn">&#9654;</div><div style="font-family:var(--mono);font-size:12px">${c.title} — embed coming soon</div></div>`;
-  }
+  renderEmbed(c);
   const trackName=c.track==="films"?"V1 · films":"V2 · growth";
   const trackColor=c.track==="films"?"var(--films)":"var(--growth)";
   insp.innerHTML=`
