@@ -21,24 +21,30 @@
   html,body{height:100%}
   body{background:#000;color:var(--txt);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
 
-  /* ===== splash ===== */
-  #boot{position:fixed;inset:0;background:#0b0c0e;z-index:50;display:flex;transition:opacity .7s ease}
+  /* ===== loading splash (DaVinci Resolve style) ===== */
+  #boot{position:fixed;inset:0;background:#0c0d0f;z-index:50;display:flex;transition:opacity .8s ease}
   #boot.hide{opacity:0;pointer-events:none}
-  .splash{display:flex;width:100%;height:100%}
-  .splash-left{flex:1;display:flex;flex-direction:column;justify-content:center;padding:6vw 5vw;max-width:680px;z-index:2}
-  .splash-name{font-size:clamp(2.4rem,7vw,4.6rem);font-weight:500;letter-spacing:-.04em;line-height:1}
-  .splash-sub{font-size:clamp(1rem,2.4vw,1.6rem);letter-spacing:.42em;color:var(--mut);margin-top:14px;font-weight:400}
-  .splash-ver{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--mut);margin-top:8vh}
-  .splash-copy{font-family:var(--mono);font-size:10.5px;line-height:1.65;color:#5b606b;margin-top:14px;max-width:520px}
-  .splash-copy .marks{color:#43474f;display:block;margin-top:10px;word-spacing:2px}
-  .splash-load{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:5vh}
+  .splash{position:relative;display:flex;width:100%;height:100%}
+  .splash-left{position:relative;flex:1 1 52%;z-index:2}
+  .brand-group{position:absolute;top:31%;left:7%;right:6%}
+  .splash-name{font-size:clamp(2.6rem,6.4vw,5.2rem);font-weight:700;letter-spacing:-.03em;line-height:.98;color:#fff}
+  .splash-sub{font-size:clamp(.9rem,1.7vw,1.45rem);letter-spacing:.34em;color:#c7ccd4;margin-top:18px;font-weight:400;text-transform:uppercase}
+  .meta-group{position:absolute;bottom:9%;left:7%;right:6%}
+  .splash-ver{font-size:12px;letter-spacing:.16em;color:#9aa0aa;text-transform:uppercase;font-weight:500}
+  .splash-copy{font-size:10px;line-height:1.7;color:#5b606b;margin-top:14px;max-width:540px;letter-spacing:.02em}
+  .splash-copy .marks{color:#42464d;display:block;margin-top:10px}
+  .loadbar{margin-top:22px;width:240px;max-width:62%;height:2px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+  .loadbar i{display:block;height:100%;width:0;background:var(--play);animation:load 2.6s ease forwards}
+  @keyframes load{0%{width:0}100%{width:100%}}
+  .splash-load{font-size:11px;letter-spacing:.1em;color:#6b7280;text-transform:uppercase;margin-top:10px}
   .dots::after{content:"";animation:dots 1.4s steps(4,end) infinite}
   @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}100%{content:""}}
-  .splash-right{flex:1.1;position:relative;overflow:hidden}
+  .splash-right{flex:1 1 48%;position:relative;overflow:hidden}
   .splash-right img{width:100%;height:100%;object-fit:cover;object-position:center}
-  .splash-right .fade{position:absolute;inset:0;background:linear-gradient(90deg,#0b0c0e 0%,rgba(11,12,14,.55) 22%,rgba(11,12,14,0) 55%)}
-  .splash-right.noimg{background:linear-gradient(135deg,#1a1d22,#0b0c0e)}
-  .splash-right.noimg::after{content:"drop your photo at me.jpg";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:#3b4250}
+  .splash-right .fade{position:absolute;inset:0;background:linear-gradient(90deg,#0c0d0f 0%,rgba(12,13,15,.65) 18%,rgba(12,13,15,0) 50%)}
+  .splash-right.noimg{background:linear-gradient(135deg,#1a1d22,#0c0d0f)}
+  .splash-skip{position:absolute;bottom:7%;right:6%;font-size:10px;letter-spacing:.14em;color:#4b5059;text-transform:uppercase;z-index:3;cursor:pointer}
+  .splash-skip:hover{color:#9aa0aa}
 
   #app{display:flex;flex-direction:column;height:100vh;height:100dvh;opacity:0;transition:opacity .6s ease}
   #app.show{opacity:1}
@@ -93,9 +99,11 @@
   @media (max-width:760px){
     body{overflow:auto}
     .splash{flex-direction:column}
-    .splash-right{flex:0 0 38vh;order:-1}
-    .splash-right .fade{background:linear-gradient(0deg,#0b0c0e 0%,rgba(11,12,14,0) 60%)}
-    .splash-left{padding:8vw 7vw}
+    .splash-right{flex:0 0 42vh;order:-1}
+    .splash-right .fade{background:linear-gradient(0deg,#0c0d0f 0%,rgba(12,13,15,0) 55%)}
+    .splash-left{flex:1;padding:7vw 7vw 9vw}
+    .brand-group,.meta-group{position:static;left:auto;right:auto;top:auto;bottom:auto}
+    .meta-group{margin-top:6vh}
     #app{height:auto;min-height:100dvh}
     .stage{flex-direction:column}
     .inspector{max-width:none;border-left:0;border-top:.5px solid var(--line)}
@@ -111,21 +119,27 @@
 <div id="boot">
   <div class="splash">
     <div class="splash-left">
-      <div class="splash-name">Shardul Mane</div>
-      <div class="splash-sub">FILMS&nbsp;&middot;&nbsp;GROWTH</div>
-      <div class="splash-ver" id="ver">VERSION 2026</div>
-      <div class="splash-copy">
-        &copy; <span id="yr">2026</span> Shardul Mane. All rights reserved.<br>
-        Films, growth, and stories — made in San Francisco. Founding growth @ supermemory.
-        Director, writer, editor. Shot on location, cut on the timeline you're about to scrub.
-        <span class="marks">EXCUSES. HOMECOMING. ESCAPE. SUPERMEMORY. LAUNCH FILM. PRODUCT DEMOS. GROWTH ADS. ESSAYS. THREADS.</span>
+      <div class="brand-group">
+        <div class="splash-name">Shardul Mane</div>
+        <div class="splash-sub">Films &middot; Growth</div>
       </div>
-      <div class="splash-load">loading stories<span class="dots"></span></div>
+      <div class="meta-group">
+        <div class="splash-ver" id="ver">Version 2026</div>
+        <div class="splash-copy">
+          &copy; <span id="yr">2026</span> Shardul Mane. All rights reserved.<br>
+          Filmmaker and founding growth @ supermemory, based in San Francisco. Director, writer, editor.
+          Everything here was shot on location and cut on the timeline you're about to open.
+          <span class="marks">EXCUSES. &middot; HOMECOMING. &middot; ESCAPE. &middot; SUPERMEMORY &middot; LAUNCH FILM &middot; PRODUCT DEMOS &middot; GROWTH ADS &middot; ESSAYS &middot; THREADS</span>
+        </div>
+        <div class="loadbar"><i></i></div>
+        <div class="splash-load">loading stories<span class="dots"></span></div>
+      </div>
     </div>
     <div class="splash-right" id="splash-right">
       <img src="me.jpg" alt="Shardul Mane" id="splash-img" />
       <div class="fade"></div>
     </div>
+    <div class="splash-skip" id="skip">skip &rarr;</div>
   </div>
 </div>
 
@@ -186,7 +200,7 @@ const LINKS = `<div class="insp-links">
 
 /* dynamic year on splash */
 const Y = new Date().getFullYear();
-document.getElementById("ver").textContent = "VERSION " + Y;
+document.getElementById("ver").textContent = "Version " + Y;
 document.getElementById("yr").textContent = Y;
 
 /* missing-image fallback */
@@ -314,21 +328,24 @@ document.getElementById("play").addEventListener("click",tour);
 document.getElementById("next").addEventListener("click",()=>go(idx+1));
 document.getElementById("prev").addEventListener("click",()=>go(idx-1));
 window.addEventListener("keydown",e=>{
+  if(!document.getElementById("boot").classList.contains("hide")){e.preventDefault();enterApp();return;}
   if(e.code==="Space"){e.preventDefault();tour();}
   else if(e.code==="ArrowRight"){e.preventDefault();stopTour();go(idx+1);}
   else if(e.code==="ArrowLeft"){e.preventDefault();stopTour();go(idx-1);}
   else if(e.code==="Escape"){stopTour();renderAbout();}
 });
 
-/* ---------- boot ---------- */
+/* ---------- boot / loading page ---------- */
 renderAbout();
-window.addEventListener("load",()=>{
-  setTimeout(()=>{
-    document.getElementById("boot").classList.add("hide");
-    document.getElementById("app").classList.add("show");
-    setPlayheadClientX(laneRect().left);
-  },2600);
-});
+function enterApp(){
+  const b=document.getElementById("boot");
+  if(b.classList.contains("hide"))return;
+  b.classList.add("hide");
+  document.getElementById("app").classList.add("show");
+  setPlayheadClientX(laneRect().left);
+}
+document.getElementById("skip").addEventListener("click",enterApp);
+window.addEventListener("load",()=>{setTimeout(enterApp,3000);});
 </script>
 </body>
 </html>
