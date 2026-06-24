@@ -262,12 +262,22 @@
      url:"https://youtu.be/dQw4w9WgXcQ"
    ============================================================ */
 const CLIPS = [
-  {track:"films",  year:2022, title:"Homecoming.", role:"director, editor", runtime:"3:10", span:2, url:"", links:[]},
-  {track:"films",  year:2024, title:"Excuses.",    role:"director, writer, editor", runtime:"4:32", span:3, url:"", links:[]},
-  {track:"films",  year:2025, title:"Escape.",     role:"director, editor", runtime:"5:01", span:2, url:"", links:[]},
-  {track:"growth", year:2023, title:"supermemory launch film", role:"concept, edit", runtime:"1:20", span:2, url:"", links:[]},
-  {track:"growth", year:2024, title:"product demos", role:"writer, editor", runtime:"series", span:1, url:"", links:[]},
-  {track:"growth", year:2025, title:"growth ads",    role:"director, editor", runtime:"series", span:3, url:"", links:[]},
+  /* V1 — personal (the RV short-film series) */
+  {track:"films", year:2024, title:"Excuses",          role:"short film · RV 01", span:1, url:"https://youtu.be/ZTFMwrLNWLw"},
+  {track:"films", year:2024, title:"Homecoming",       role:"short film · RV 02", span:1, url:"https://youtu.be/n5lPwGL3ZhA"},
+  {track:"films", year:2025, title:"Escape",           role:"short film · RV 03", span:1, url:"https://youtu.be/eWxIyEz5Cx0"},
+  {track:"films", year:2025, title:"Lost & Found",     role:"short film · RV 04", span:1, url:"https://youtu.be/CclouYHkLV0"},
+  {track:"films", year:2026, title:"Long Time No See", role:"short film · RV 05", span:1, url:"https://youtu.be/XjJXFytiwL4"},
+  /* V2 — work (supermemory) */
+  {track:"growth", year:2026, title:"make memories, wherever you go", role:"supermemory", span:1, url:"https://youtu.be/q-FDRsXR9lM"},
+  {track:"growth", year:2026, title:"run Supermemory locally",        role:"supermemory", span:1, url:"https://youtu.be/zviUAqxok_Y"},
+  {track:"growth", year:2026, title:"Vibe Check",                     role:"supermemory", span:1, url:"https://youtu.be/TQJam4dzd90"},
+  {track:"growth", year:2026, title:"Your Personal Brain",            role:"supermemory app", span:1, url:"https://youtu.be/vIAm71Yh4Pk"},
+  {track:"growth", year:2026, title:"The Context Cloud",              role:"supermemory", span:1, url:"https://youtu.be/hfQ0fp-mEb4"},
+  {track:"growth", year:2026, title:"Founders before Supermemory",    role:"supermemory", span:1, url:"https://youtu.be/aoUSo5CotQw"},
+  {track:"growth", year:2026, title:"Qualitative Analysis",           role:"supermemory", span:1, url:"https://youtu.be/SAUNKXQLMeA"},
+  {track:"growth", year:2026, title:"Filesystems or Vector Search?",  role:"supermemory", span:1, url:"https://youtu.be/_Q8GBaRzMNo"},
+  {track:"growth", year:2026, title:"How Adapta scaled with Supermemory", role:"customer story", span:1, url:"https://youtu.be/31oJ50-ATns"},
 ];
 const ABOUT = {
   title:"Shardul Mane", sub:"films · growth · stories",
@@ -299,7 +309,7 @@ document.getElementById("splash-img").addEventListener("error", function(){
 });
 
 /* ---------- build timeline ---------- */
-const YEARS=[2021,2022,2023,2024,2025,"now"];
+const YEARS=[2023,2024,2025,2026,"now"];
 document.getElementById("ruler").innerHTML=YEARS.map(y=>`<span>${y}</span>`).join("");
 
 const tracks=document.getElementById("tracks");
@@ -308,8 +318,8 @@ function lane(name,colorVar){
   row.innerHTML=`<div class="lbl" style="color:var(--${colorVar})">${name}</div>`;
   const l=document.createElement("div");l.className="lane";row.appendChild(l);tracks.appendChild(row);return l;
 }
-const laneFilms=lane("V1 films","films");
-const laneGrowth=lane("V2 growth","growth");
+const laneFilms=lane("V1 personal","films");
+const laneGrowth=lane("V2 work","growth");
 
 let order=[];
 function addClips(lane,track){
@@ -392,16 +402,15 @@ function select(c){
   document.querySelectorAll(".clip").forEach(e=>e.classList.remove("sel"));
   if(c._el)c._el.classList.add("sel");
   renderEmbed(c);
-  const trackName=c.track==="films"?"V1 · films":"V2 · growth";
+  const trackName=c.track==="films"?"V1 · personal":"V2 · work";
   const trackColor=c.track==="films"?"var(--films)":"var(--growth)";
   insp.innerHTML=`
     <div class="insp-label">inspector</div>
     <div class="insp-title">${c.title}</div>
     <div class="insp-sub">${c.role} · ${c.year}</div>
-    <div class="insp-row"><span class="k">runtime</span><span>${c.runtime}</span></div>
     <div class="insp-row"><span class="k">year</span><span>${c.year}</span></div>
     <div class="insp-row"><span class="k">track</span><span style="color:${trackColor}">${trackName}</span></div>
-    ${c.links&&c.links.length?`<div class="insp-links">${c.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join("")}</div>`:""}
+    ${c.url?`<div class="insp-links"><a href="${c.url}" target="_blank" rel="noopener">watch on YouTube &#8599;</a></div>`:""}
     <div class="insp-desc" style="border-top:.5px solid var(--line);padding-top:14px;margin-top:16px">${ABOUT.title} · ${ABOUT.sub}</div>`;
   movePlayheadToClip(c._el);
   idx=order.indexOf(c);
