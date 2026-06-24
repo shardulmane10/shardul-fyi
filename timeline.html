@@ -269,7 +269,35 @@
 <!-- ===== DESKTOP / HOME ===== -->
 <div id="desktop">
   <div class="desk-hello">
-    <img class="memoji" src="memoji.png" alt="Shardul" onerror="this.onerror=null;this.src='me.jpg';this.classList.add('photo')">
+    <img class="memoji" src="memoji.png" alt="Shardul" onerror="this.style.display='none';document.getElementById('memoji-svg').style.display='block'">
+    <svg id="memoji-svg" class="memoji" style="display:none" viewBox="0 0 200 214" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="skin" cx="42%" cy="34%" r="74%"><stop offset="0" stop-color="#e8b487"/><stop offset="62%" stop-color="#d6986a"/><stop offset="100%" stop-color="#bb7e50"/></radialGradient>
+        <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2419"/><stop offset="100%" stop-color="#0f0b07"/></linearGradient>
+        <linearGradient id="beard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241c14"/><stop offset="100%" stop-color="#0d0a06"/></linearGradient>
+        <linearGradient id="jacket" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#343a45"/><stop offset="100%" stop-color="#1b1f27"/></linearGradient>
+        <linearGradient id="lens" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c3038"/><stop offset="45%" stop-color="#15171c"/><stop offset="100%" stop-color="#0b0c0f"/></linearGradient>
+      </defs>
+      <path d="M38 214 C40 178 66 164 100 164 C134 164 160 178 162 214 Z" fill="url(#jacket)"/>
+      <path d="M82 166 L100 182 L118 166" fill="none" stroke="#161922" stroke-width="3"/>
+      <path d="M84 134 C84 156 88 164 100 164 C112 164 116 156 116 134 Z" fill="#c0865a"/>
+      <path d="M84 138 C90 148 110 148 116 138 L116 145 C110 153 90 153 84 145 Z" fill="#a9744c" opacity=".45"/>
+      <ellipse cx="52" cy="96" rx="9" ry="12" fill="url(#skin)"/><ellipse cx="148" cy="96" rx="9" ry="12" fill="url(#skin)"/>
+      <ellipse cx="53" cy="96" rx="4" ry="6" fill="#b07a4e" opacity=".5"/><ellipse cx="147" cy="96" rx="4" ry="6" fill="#b07a4e" opacity=".5"/>
+      <path d="M48 58 C40 38 64 24 100 24 C136 24 160 38 152 58 L152 100 C150 92 146 88 142 88 L58 88 C54 88 50 92 48 100 Z" fill="url(#hair)"/>
+      <ellipse cx="100" cy="90" rx="48" ry="54" fill="url(#skin)"/>
+      <ellipse cx="100" cy="96" rx="46" ry="50" fill="#b07a4e" opacity=".10"/>
+      <path d="M100 84 C97 94 95 100 95 102 C95 106 105 106 105 102 C105 100 103 94 100 84 Z" fill="#c98a5c" opacity=".5"/>
+      <path d="M55 90 C57 84 60 88 62 94 C66 82 134 82 138 94 C140 88 143 84 145 90 C148 114 138 148 100 150 C62 148 52 114 55 90 Z" fill="url(#beard)"/>
+      <path d="M80 102 C88 98 94 100 100 104 C106 100 112 98 120 102 C114 110 106 108 100 106 C94 108 86 110 80 102 Z" fill="#1a140d"/>
+      <path d="M89 114 C94 119 106 119 111 114" fill="none" stroke="#5e3621" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+      <path d="M50 62 C46 34 70 22 100 22 C130 22 154 34 150 62 C140 44 124 40 100 48 C84 53 64 50 50 62 Z" fill="url(#hair)"/>
+      <path d="M62 42 C78 32 122 32 138 42" fill="none" stroke="#4a3c2c" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+      <path d="M50 79 L72 77" stroke="#15171c" stroke-width="4" stroke-linecap="round"/><path d="M150 79 L128 77" stroke="#15171c" stroke-width="4" stroke-linecap="round"/>
+      <rect x="58" y="71" width="34" height="26" rx="11" fill="url(#lens)"/><rect x="108" y="71" width="34" height="26" rx="11" fill="url(#lens)"/>
+      <path d="M92 79 C96 77 104 77 108 79" stroke="#15171c" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <rect x="63" y="75" width="12" height="5" rx="2.5" fill="#5a6470" opacity=".55"/><rect x="113" y="75" width="12" height="5" rx="2.5" fill="#5a6470" opacity=".55"/>
+    </svg>
     <h1>hi, i'm shardul</h1>
     <small>open an app from the dock &darr;</small>
   </div>
