@@ -64,6 +64,7 @@
   .dock-app:hover{transform:translateY(-12px) scale(1.14)}
   .dock-app svg{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:12px}
   .dock-app img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;height:60%;object-fit:contain}
+  .dock-app img.full{inset:0;top:0;left:0;transform:none;width:100%;height:100%;border-radius:12px;object-fit:cover}
   .dock-app.t-sm img{filter:brightness(0) invert(1)}
   .dock-app::before{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
   .dock-app.active::before{opacity:1}
@@ -422,7 +423,12 @@ const ART={
   editor:`<svg viewBox="0 0 24 24"><defs><linearGradient id="ed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a40"/><stop offset="1" stop-color="#101012"/></linearGradient></defs><rect width="24" height="24" rx="5.4" fill="url(#ed)"/><rect x="4.5" y="6" width="9" height="3" rx="1.2" fill="#d85a30"/><rect x="9" y="10.5" width="10.5" height="3" rx="1.2" fill="#378add"/><rect x="4.5" y="15" width="12.5" height="3" rx="1.2" fill="#1d9e75"/><line x1="12" y1="4.6" x2="12" y2="19.4" stroke="#ff5f57" stroke-width="1.1"/><circle cx="12" cy="4.8" r="1.1" fill="#ff5f57"/></svg>`,
   mail:`<svg viewBox="0 0 24 24"><defs><linearGradient id="ml" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46b4ff"/><stop offset="1" stop-color="#1567e0"/></linearGradient></defs><rect width="24" height="24" rx="5.4" fill="url(#ml)"/><rect x="3.6" y="6.8" width="16.8" height="10.4" rx="2.6" fill="#fff"/><path d="M4.3 8 L12 13.4 L19.7 8" fill="none" stroke="#86b8ef" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/></svg>`,
 };
-["notes","safari","editor","mail"].forEach(k=>{const a=document.getElementById("art-"+k);if(a)a.innerHTML=ART[k];});
+["notes","safari","editor","mail"].forEach(k=>{
+  const el=document.getElementById("art-"+k); if(!el)return;
+  const img=document.createElement("img"); img.className="full"; img.alt=k; img.src="icons/"+k+".png";
+  img.onerror=()=>{el.innerHTML=ART[k];};
+  el.appendChild(img);
+});
 
 /* ---------- clock + year ---------- */
 const Y=new Date().getFullYear();
