@@ -53,21 +53,24 @@
   .desk-hello p{margin-top:10px;font-size:clamp(.9rem,2vw,1.2rem);letter-spacing:.3em;text-transform:uppercase;opacity:.9}
   .desk-hello small{display:block;margin-top:22px;font-family:var(--mono);font-size:12px;opacity:.7;letter-spacing:.06em}
 
-  /* ===== app tiles (shared icon art) ===== */
-  .tile{position:relative;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.18),0 4px 10px rgba(0,0,0,.28)}
-  .tile svg{width:56%;height:56%}
-  .t-notes{background:linear-gradient(180deg,#fff 0%,#fff 30%,#fde68a 30%,#fbbf24 100%)}
-  .t-safari{background:linear-gradient(160deg,#eaf6ff,#1da1f2)}
-  .t-editor{background:linear-gradient(160deg,#2b2b2e,#0d0d0f)}
-  .t-mail{background:linear-gradient(160deg,#7cc6ff,#1664d8)}
-  .t-sm{background:linear-gradient(160deg,#2a2a2a,#000)}
+  /* ===== app icon tiles (fallback bg behind full-bleed svg) ===== */
+  .t-notes{background:#fff}
+  .t-safari{background:#1a86e0}
+  .t-editor{background:#16161a}
+  .t-mail{background:#1f7ce8}
+  .t-sm{background:#0b0f14}
 
   /* ===== dock ===== */
   .dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:12px;padding:8px 12px;background:rgba(255,255,255,.20);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:.5px solid rgba(255,255,255,.28);border-radius:20px;z-index:8000;box-shadow:0 14px 44px rgba(0,0,0,.40)}
-  .dock-app{position:relative;width:52px;height:52px;border-radius:13px;transition:transform .18s cubic-bezier(.2,.8,.3,1.4);cursor:pointer}
+  .dock-app{position:relative;width:52px;height:52px;border-radius:13px;transition:transform .18s cubic-bezier(.2,.8,.3,1.4);cursor:pointer;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.18),0 4px 10px rgba(0,0,0,.28)}
   .dock-app:hover{transform:translateY(-12px) scale(1.14)}
-  .dock-app .run{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
-  .dock-app.active .run{opacity:1}
+  .dock-app svg{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:13px}
+  .dock-app img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;height:60%;object-fit:contain}
+  .dock-app.t-sm img{filter:brightness(0) invert(1)}
+  .dock-app::before{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
+  .dock-app.active::before{opacity:1}
+  .dock-app::after{content:attr(data-label);position:absolute;bottom:64px;left:50%;transform:translateX(-50%);background:rgba(40,40,46,.94);color:#fff;font-size:12px;padding:4px 11px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+  .dock-app:hover::after{opacity:1}
   @media (max-width:760px){.dock{gap:8px;padding:7px 9px}.dock-app{width:46px;height:46px}}
 
   /* ===== generic app window ===== */
@@ -238,16 +241,8 @@
 <!-- ===== DESKTOP / HOME ===== -->
 <div id="desktop">
   <div class="desk-hello">
-    <h1>Shardul Mane</h1>
-    <p>Films &middot; Growth</p>
+    <h1>hi, i'm shardul</h1>
     <small>open an app from the dock &darr;</small>
-  </div>
-  <div class="desk-icons">
-    <div class="desk-icon" data-open="notes"><div class="tile t-notes" id="art-notes-d"></div><span>A note</span></div>
-    <div class="desk-icon" data-open="browser"><div class="tile t-safari" id="art-safari-d"></div><span>What people say</span></div>
-    <div class="desk-icon" data-open="editor"><div class="tile t-editor" id="art-editor-d"></div><span>The work</span></div>
-    <div class="desk-icon" data-open="mail"><div class="tile t-mail" id="art-mail-d"></div><span>Say hi</span></div>
-    <div class="desk-icon" data-open="supermemory"><div class="tile t-sm" id="art-sm-d"></div><span>supermemory</span></div>
   </div>
 </div>
 
@@ -376,11 +371,11 @@
 
 <!-- ===== DOCK ===== -->
 <div class="dock">
-  <div class="dock-app t-notes" data-open="notes" id="art-notes"><div class="run"></div></div>
-  <div class="dock-app t-safari" data-open="browser" id="art-safari"><div class="run"></div></div>
-  <div class="dock-app t-editor" data-open="editor" id="art-editor"><div class="run"></div></div>
-  <div class="dock-app t-mail" data-open="mail" id="art-mail"><div class="run"></div></div>
-  <div class="dock-app t-sm" data-open="supermemory" id="art-sm"><div class="run"></div></div>
+  <div class="dock-app t-notes" data-open="notes" data-label="Notes" id="art-notes"></div>
+  <div class="dock-app t-safari" data-open="browser" data-label="Browser" id="art-safari"></div>
+  <div class="dock-app t-editor" data-open="editor" data-label="Editor" id="art-editor"></div>
+  <div class="dock-app t-mail" data-open="mail" data-label="Mail" id="art-mail"></div>
+  <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="supermemory.svg" alt="Supermemory"></div>
 </div>
 
 <script>
@@ -405,7 +400,7 @@ const CLIPS = [
 ];
 const ABOUT = {
   title:"Shardul Mane", sub:"films · growth · stories",
-  desc:"Founding growth @ supermemory, San Francisco. I make films and I make things grow. Click a clip to watch the work — or hit space and let it play.",
+  desc:"Founding growth @ supermemory, San Francisco. I make films and tell stories. Click a clip on the timeline to watch my work.",
 };
 const LINKS = `<div class="insp-links">
   <a onclick="openLink('https://x.com/shardul_mane')">twitter</a>
@@ -423,17 +418,13 @@ const TWEETS = [
 const SUPERMEMORY_URL = "https://supermemory.ai";
 
 /* ---------- icon art ---------- */
-const ART = {
-  notes:`<svg viewBox="0 0 24 24" fill="none" stroke="#caa106" stroke-width="2" stroke-linecap="round"><line x1="7" y1="11" x2="17" y2="11"/><line x1="7" y1="14.5" x2="17" y2="14.5"/><line x1="7" y1="18" x2="13" y2="18"/></svg>`,
-  safari:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9.2"/><polygon points="15.5,8.5 11,11 8.5,15.5 13,13" fill="#fff" stroke="none"/></svg>`,
-  editor:`<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="12" rx="2.2" stroke="#fff" stroke-width="1.5"/><line x1="3" y1="10" x2="21" y2="10" stroke="#fff" stroke-width="1"/><rect x="5" y="12.5" width="5" height="3" rx="1" fill="#d85a30"/><rect x="11" y="12.5" width="7" height="3" rx="1" fill="#378add"/></svg>`,
-  mail:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7"><rect x="3" y="6" width="18" height="12" rx="2.6"/><path d="M3.6 7.4l8.4 6 8.4-6"/></svg>`,
-  sm:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><path d="M7.5 8.5a3.2 3.2 0 100 7c2.2 0 3.2-2.2 4.5-3.5s2.3-3.5 4.5-3.5a3.2 3.2 0 110 7c-2.2 0-3.2-2.2-4.5-3.5"/></svg>`,
+const ART={
+  notes:`<svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#ffffff"/><path d="M0 6a6 6 0 016-6h12a6 6 0 016 6v1.6H0z" fill="#ffcb3d"/><g stroke="#d6cdb4" stroke-width="1.3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="15.4" x2="19" y2="15.4"/><line x1="5" y1="18.8" x2="13" y2="18.8"/></g></svg>`,
+  safari:`<svg viewBox="0 0 24 24"><defs><linearGradient id="sf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#37a9f6"/><stop offset="1" stop-color="#1772d4"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#sf)"/><circle cx="12" cy="12" r="8.4" fill="#eef3f7"/><g stroke="#b9c3cb" stroke-width=".55">${Array.from({length:24},(_,i)=>{const a=i*15*Math.PI/180,r1=8.4,r2=i%6===0?6.6:7.5;return `<line x1="${(12+r2*Math.cos(a)).toFixed(2)}" y1="${(12+r2*Math.sin(a)).toFixed(2)}" x2="${(12+r1*Math.cos(a)).toFixed(2)}" y2="${(12+r1*Math.sin(a)).toFixed(2)}"/>`}).join("")}</g><polygon points="12,12 16.5,7.5 13,11" fill="#ec1c3c"/><polygon points="12,12 7.5,16.5 11,13" fill="#c2ccd3"/><circle cx="12" cy="12" r="1.1" fill="#3a3f45"/></svg>`,
+  editor:`<svg viewBox="0 0 24 24"><defs><linearGradient id="ed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a40"/><stop offset="1" stop-color="#101012"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#ed)"/><rect x="4.5" y="6" width="9" height="3" rx="1.2" fill="#d85a30"/><rect x="9" y="10.5" width="10.5" height="3" rx="1.2" fill="#378add"/><rect x="4.5" y="15" width="12.5" height="3" rx="1.2" fill="#1d9e75"/><line x1="12" y1="4.6" x2="12" y2="19.4" stroke="#ff5f57" stroke-width="1.1"/><circle cx="12" cy="4.8" r="1.1" fill="#ff5f57"/></svg>`,
+  mail:`<svg viewBox="0 0 24 24"><defs><linearGradient id="ml" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#41a3ff"/><stop offset="1" stop-color="#1565d6"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#ml)"/><rect x="4.2" y="7.5" width="15.6" height="9" rx="1.8" fill="none" stroke="#fff" stroke-width="1.3"/><path d="M4.7 8.3l7.3 5 7.3-5" fill="none" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/></svg>`,
 };
-["notes","safari","editor","mail","sm"].forEach(k=>{
-  const a=document.getElementById("art-"+k); if(a)a.innerHTML=ART[k];
-  const d=document.getElementById("art-"+k+"-d"); if(d)d.innerHTML=ART[k];
-});
+["notes","safari","editor","mail"].forEach(k=>{const a=document.getElementById("art-"+k);if(a)a.innerHTML=ART[k];});
 
 /* ---------- clock + year ---------- */
 const Y=new Date().getFullYear();
@@ -583,7 +574,7 @@ function renderAbout(){
   document.querySelectorAll(".clip").forEach(e=>e.classList.remove("sel"));
   insp.innerHTML=`<div class="insp-label">inspector</div>
     <div class="insp-title">${ABOUT.title}</div><div class="insp-sub">${ABOUT.sub}</div>
-    <div class="insp-desc">${ABOUT.desc}</div>${LINKS}`;
+    <div class="insp-desc">${ABOUT.desc}</div>`;
 }
 function select(c){
   current=c;idx=order.indexOf(c);
