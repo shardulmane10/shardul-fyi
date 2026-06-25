@@ -628,12 +628,12 @@ document.getElementById("mail-send").addEventListener("click",()=>{
 
 /* ---------- contacts / socials ---------- */
 const SOCIALS=[
-  {label:"Twitter / X", handle:"@shardul_mane",            url:"https://x.com/shardul_mane",            g:"X",  c:"#000000"},
-  {label:"Instagram",   handle:"@shardulmane",             url:"https://instagram.com/shardulmane",     g:"IG", c:"#e1306c"},
-  {label:"YouTube",     handle:"Shardul Mane",             url:"",                                       g:"YT", c:"#ff0000"},
-  {label:"LinkedIn",    handle:"in/shardulmane",           url:"https://www.linkedin.com/in/shardulmane",g:"in", c:"#0a66c2"},
-  {label:"GitHub",      handle:"shardulmane10",            url:"https://github.com/shardulmane10",       g:"GH", c:"#2b2b2b"},
-  {label:"Email",       handle:"shardulmane10@gmail.com",  url:"mailto:shardulmane10@gmail.com",         g:"@",  c:"#1567e0"},
+  {label:"Twitter / X", handle:"@shardul_mane",            url:"https://x.com/shardul_mane",                  g:"X",  c:"#000000"},
+  {label:"Instagram",   handle:"@shardul.mane",            url:"https://www.instagram.com/shardul.mane",      g:"IG", c:"#e1306c"},
+  {label:"YouTube",     handle:"@shardul_mane",            url:"https://www.youtube.com/@shardul_mane",       g:"YT", c:"#ff0000"},
+  {label:"LinkedIn",    handle:"in/shardul-mane",          url:"https://www.linkedin.com/in/shardul-mane",    g:"in", c:"#0a66c2"},
+  {label:"GitHub",      handle:"shardulmane10",            url:"https://github.com/shardulmane10",            g:"GH", c:"#2b2b2b"},
+  {label:"Email",       handle:"shardulmane10@gmail.com",  url:"mailto:shardulmane10@gmail.com",              g:"@",  c:"#1567e0"},
 ];
 document.getElementById("contact-rows").innerHTML=SOCIALS.map(s=>`
   <div class="ct-field"><div class="ct-flabel">${s.label}</div><div class="ct-fval${s.url?'':' dim'}" ${s.url?`onclick="openLink('${s.url}')"`:''}>${s.handle}</div></div>`).join("");
