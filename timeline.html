@@ -537,7 +537,7 @@ const ART={
 };
 ["notes","safari","editor","mail","contacts"].forEach(k=>{
   const el=document.getElementById("art-"+k); if(!el)return;
-  const img=document.createElement("img"); img.className="full"; img.alt=k; img.src="icons/"+k+".png?v=3";
+  const img=document.createElement("img"); img.className="full"; img.alt=k; img.src="icons/"+k+".png?v=4";
   img.onerror=()=>{el.innerHTML=ART[k];};
   el.appendChild(img);
 });
