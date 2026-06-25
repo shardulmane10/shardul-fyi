@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>shardul.fyi</title>
-<meta name="description" content="Shardul Mane — films, growth, stories." />
+<meta name="description" content="Shardul Mane. Films, growth, stories." />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✶</text></svg>" />
 <style>
   :root{
@@ -71,11 +71,14 @@
   .w-photos img{width:100%;height:100%;object-fit:cover;display:block}
   .ph-ph{display:flex;flex-direction:column;align-items:center;gap:7px;color:#9fb3d0;font-size:13px;font-weight:500}
   .ph-ph svg{width:32px;height:32px}
-  .w-now{grid-column:1 / 3;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,#0562EF,#0a4fc0);color:#fff;border:none;box-shadow:0 12px 30px rgba(5,98,239,.30)}
-  .w-now .lab{font-size:11px;letter-spacing:.14em;opacity:.85;font-weight:600}
-  .w-now .ti{font-size:20px;font-weight:600;margin-top:5px}
-  .w-now .su{font-size:13px;opacity:.92;margin-top:2px}
-  .w-now .fo{font-size:12px;opacity:.78;margin-top:10px}
+  .w-cal{grid-column:1 / 3;display:flex;align-items:center;gap:16px;cursor:pointer;transition:background .15s}
+  .w-cal:hover{background:rgba(255,255,255,.9)}
+  .cal-left{text-align:center;flex:0 0 auto;padding-right:16px;border-right:.5px solid rgba(10,40,90,.12)}
+  .cal-wd{font-size:13px;font-weight:700;color:#ff3b30;letter-spacing:.05em}
+  .cal-day{font-size:38px;font-weight:600;line-height:1;color:#1d2733}
+  .cal-right{flex:1;min-width:0}
+  .cal-month{font-size:13px;color:#6b86ad}
+  .cal-cta{font-size:16px;font-weight:600;color:#0a84ff;margin-top:6px}
   @media (max-width:760px){.deskwrap{transform:translate(-50%,-50%);gap:20px}.sticky{width:200px}.widgets{grid-template-columns:130px 130px;grid-auto-rows:130px}.wc-time{font-size:34px}}
 
   /* ===== app icon tiles (fallback bg behind full-bleed svg) ===== */
@@ -295,9 +298,9 @@
 <div id="desktop">
   <div class="deskwrap">
     <div class="sticky">
-      <p>hey — i'm <b>shardul</b>.</p>
-      <p>founding growth @ supermemory.<br>i make films &amp; tell stories.</p>
-      <p class="poke">poke around — open an app from the dock &darr;</p>
+      <p>hey, i'm <b>shardul</b>.</p>
+      <p>Founding Growth Lead at Supermemory. I make films, tell stories, and grow startups.</p>
+      <p class="poke">poke around. open an app from the dock &darr;</p>
     </div>
     <div class="widgets">
       <div class="w w-clock">
@@ -306,11 +309,9 @@
         <div class="wc-date" id="wc-date">&nbsp;</div>
       </div>
       <div class="w w-photos"><div class="ph-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-7 7"/></svg><span>Photos</span></div></div>
-      <div class="w w-now">
-        <div class="lab">NOW</div>
-        <div class="ti">Founding Growth Lead</div>
-        <div class="su">@ supermemory &middot; San Francisco</div>
-        <div class="fo">making films — the RV series</div>
+      <div class="w w-cal" onclick="openLink('https://cal.com/shardulmane')" title="Book a call">
+        <div class="cal-left"><div class="cal-wd" id="cal-wd">&nbsp;</div><div class="cal-day" id="cal-day">&nbsp;</div></div>
+        <div class="cal-right"><div class="cal-month" id="cal-month">&nbsp;</div><div class="cal-cta">Book a call &rarr;</div></div>
       </div>
     </div>
   </div>
@@ -347,7 +348,7 @@
     <div class="stage">
       <div class="viewer">
         <div class="monitor" id="monitor">
-          <div class="placeholder"><div class="pbtn">&#9654;</div><div style="font-family:var(--mono);font-size:12px">select a clip — or press space to play</div></div>
+          <div class="placeholder"><div class="pbtn">&#9654;</div><div style="font-family:var(--mono);font-size:12px">select a clip, or press space to play</div></div>
         </div>
         <div class="transport">
           <span>scrub the work</span>
@@ -383,17 +384,17 @@
         <div class="nfolder"><svg viewBox="0 0 24 24" fill="none" stroke="#9b9b9f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M9 7V5h6v2M7 7l1 12h8l1-12"/></svg>Recently Deleted</div>
       </div>
       <div class="notes-list">
-        <div class="note-item sel"><div class="nt">A note from me</div><div class="np">Hey — thanks for stopping by…</div></div>
+        <div class="note-item sel"><div class="nt">A note from me</div><div class="np">Hey, thanks for stopping by…</div></div>
         <div class="note-item"><div class="nt">What I'm building</div><div class="np">supermemory + the films…</div></div>
         <div class="note-item"><div class="nt">Reach out</div><div class="np">say hi, I reply to everyone</div></div>
       </div>
       <div class="notes-main">
         <div class="ndate">June 2026 &middot; San Francisco</div>
         <h2>A note from me</h2>
-        <p>Hey — thanks for stopping by. [Placeholder — Shardul will replace this with a personal note.]</p>
+        <p>Hey, thanks for stopping by. [Placeholder. Shardul will replace this with a personal note.]</p>
         <p>I make films and tell stories. This little site is built like the tool I spend most of my life in, an edit timeline, because that's how I think about everything: clips, cuts, and the story between them.</p>
-        <p>If anything here resonates — the films, the work at supermemory, or you just want to talk — the mail icon goes straight to me. I read every message.</p>
-        <p>— Shardul</p>
+        <p>If anything here resonates, the films, the work at supermemory, or you just want to talk, the mail icon goes straight to me. I read every message.</p>
+        <p>Shardul</p>
       </div>
     </div>
   </div>
@@ -436,7 +437,7 @@
   <div class="winbody">
     <div class="mail-body">
       <div class="mail-actions"><button class="mail-send" id="mail-send">Send</button></div>
-      <div class="mail-field"><label>To:</label><select id="mail-to"><option value="shardulmane10@gmail.com">Personal — shardulmane10@gmail.com</option><option value="shardul@supermemory.com">Work — shardul@supermemory.com</option></select></div>
+      <div class="mail-field"><label>To:</label><select id="mail-to"><option value="shardulmane10@gmail.com">Personal: shardulmane10@gmail.com</option><option value="shardul@supermemory.com">Work: shardul@supermemory.com</option></select></div>
       <div class="mail-field"><label>Subject:</label><input id="mail-sub" placeholder="Saw your site…"></div>
       <textarea id="mail-body" placeholder="Write your message…"></textarea>
     </div>
@@ -502,11 +503,11 @@ const LINKS = `<div class="insp-links">
   <a onclick="openLink('https://github.com/shardulmane10')">github</a>
   <a onclick="openApp('mail')">email</a></div>`;
 
-/* placeholder tweets — replace text/handles with real ones later */
+/* placeholder tweets, replace text/handles with real ones later */
 const TWEETS = [
   {name:"Dhravya Shah", handle:"@dhravyashah", time:"2d", text:"the growth at @supermemoryai since Shardul Mane joined has been unreal. one of the best storytellers i've worked with.", r:"48", rt:"12", l:"312"},
   {name:"a founder", handle:"@buildinpublic", time:"5d", text:"Shardul Mane's short films hit different. went in for the supermemory demos, stayed for the filmmaking.", r:"21", rt:"34", l:"540"},
-  {name:"design nerd", handle:"@pixelpusher", time:"1w", text:"whoever cut the latest @supermemoryai launch video (Shardul Mane) — chef's kiss. the pacing is so clean.", r:"9", rt:"7", l:"188"},
+  {name:"design nerd", handle:"@pixelpusher", time:"1w", text:"whoever cut the latest @supermemoryai launch video (Shardul Mane), chef's kiss. the pacing is so clean.", r:"9", rt:"7", l:"188"},
   {name:"sf tech", handle:"@sftechdaily", time:"1w", text:"talked to Shardul Mane about growth + storytelling for early startups. dropped more value in 20 min than most threads do in 20 tweets.", r:"33", rt:"58", l:"902"},
   {name:"film student", handle:"@24fps", time:"2w", text:"the RV short film series by Shardul Mane is criminally underrated. 'Excuses' lives in my head rent free.", r:"14", rt:"19", l:"276"},
 ];
@@ -541,6 +542,12 @@ function tickClock(){
     wd.textContent=d.toLocaleDateString("en-US",{weekday:"long"});
     document.getElementById("wc-time").textContent=d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
     document.getElementById("wc-date").textContent=d.toLocaleDateString("en-US",{month:"long",day:"numeric"});
+  }
+  const cw=document.getElementById("cal-wd");
+  if(cw){
+    cw.textContent=d.toLocaleDateString("en-US",{weekday:"short"}).toUpperCase();
+    document.getElementById("cal-day").textContent=d.getDate();
+    document.getElementById("cal-month").textContent=d.toLocaleDateString("en-US",{month:"long",year:"numeric"});
   }
 }
 tickClock(); setInterval(tickClock,15000);
@@ -716,7 +723,7 @@ function renderEmbed(c){
   if(t==="youtube"){monitor.innerHTML=`<iframe src="${ytEmbed(c.url)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;}
   else if(t==="twitter"){monitor.innerHTML=`<div class="embedwrap"><blockquote class="twitter-tweet" data-theme="dark"><a href="${c.url}"></a></blockquote></div>`;loadScript("https://platform.twitter.com/widgets.js",()=>{window.twttr&&twttr.widgets.load(monitor);});}
   else if(t==="instagram"){monitor.innerHTML=`<div class="embedwrap"><blockquote class="instagram-media" data-instgrm-version="14"><a href="${c.url}"></a></blockquote></div>`;loadScript("https://www.instagram.com/embed.js",()=>{window.instgrm&&instgrm.Embeds.process();});}
-  else{monitor.innerHTML=`<div class="placeholder"><div class="pbtn">&#9654;</div><div style="font-family:var(--mono);font-size:12px">${c.title} — link coming soon</div></div>`;}
+  else{monitor.innerHTML=`<div class="placeholder"><div class="pbtn">&#9654;</div><div style="font-family:var(--mono);font-size:12px">${c.title}: link coming soon</div></div>`;}
 }
 
 function renderAbout(){
