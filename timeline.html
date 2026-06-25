@@ -56,7 +56,7 @@
   .desk-hello h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:600;letter-spacing:-.02em;color:#0a234c}
   .desk-hello small{display:block;margin-top:18px;font-size:14px;opacity:.85;letter-spacing:0}
   .deskwrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);display:flex;gap:32px;align-items:center;justify-content:center;flex-wrap:wrap;max-width:92vw}
-  .sticky{position:relative;width:320px;background:linear-gradient(180deg,#fff7ae,#ffe770);border-radius:3px;padding:30px 24px 22px;box-shadow:0 18px 40px rgba(120,90,0,.22);transform:rotate(-3deg);color:#5b4a06;font-size:14px;line-height:1.5}
+  .sticky{position:relative;width:300px;aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,#fff7ae,#ffe770);border-radius:3px;padding:30px 26px;box-shadow:0 18px 40px rgba(120,90,0,.22);transform:rotate(-3deg);color:#5b4a06;font-size:14px;line-height:1.5}
   .sticky::before{content:"";position:absolute;top:0;left:0;right:0;height:20px;background:rgba(0,0,0,.05);border-radius:3px 3px 0 0}
   .sticky p{margin-bottom:9px}
   .sticky b{font-weight:700}
@@ -78,7 +78,7 @@
   .w-photos img{width:100%;height:100%;object-fit:cover;display:block}
   .ph-ph{display:flex;flex-direction:column;align-items:center;gap:7px;color:#9fb3d0;font-size:13px;font-weight:500}
   .ph-ph svg{width:32px;height:32px}
-  @media (max-width:760px){.deskwrap{transform:translate(-50%,-50%);gap:20px}.sticky{width:200px}.widgets{grid-template-columns:130px 130px;grid-auto-rows:130px}.wc-time{font-size:44px}}
+  @media (max-width:760px){.deskwrap{transform:translate(-50%,-50%);gap:20px}.sticky{width:230px;aspect-ratio:auto}.widgets{grid-template-columns:130px 130px;grid-auto-rows:130px}.wc-time{font-size:44px}}
 
   /* ===== app icon tiles (fallback bg behind full-bleed svg) ===== */
   .t-notes,.t-safari,.t-editor,.t-mail,.t-contacts{background:transparent}
