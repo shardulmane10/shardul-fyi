@@ -574,14 +574,23 @@ function buildClockTicks(){
     ln.setAttribute("x2",(p.x+nx*len).toFixed(2));ln.setAttribute("y2",(p.y+ny*len).toFixed(2));
     ln.setAttribute("stroke-width","1.3");svg.appendChild(ln);clkTicks.push(ln);
   }
-  svg.removeChild(path);updateClockTicks();
+  svg.removeChild(path);requestAnimationFrame(animateClock);
 }
-function updateClockTicks(){
-  const s=new Date().getSeconds();
-  clkTicks.forEach((ln,i)=>ln.setAttribute("stroke",i<=s?"#1d1f24":"#d9dce1"));
+function clkColor(f){const a=[214,217,223],b=[26,28,33];const c=a.map((v,i)=>Math.round(v+(b[i]-v)*f));return `rgb(${c[0]},${c[1]},${c[2]})`;}
+function animateClock(){
+  if(clkTicks.length){
+    const d=new Date(),p=d.getSeconds()+d.getMilliseconds()/1000,TL=16;
+    for(let i=0;i<60;i++){
+      let b=(p-i+60)%60;          // how far the leading edge is past tick i
+      let f=b<=TL?(1-b/TL):0;     // dark at the leader, fading out over TL ticks behind
+      f=f*f;                       // ease the trail
+      clkTicks[i].setAttribute("stroke",clkColor(f));
+      clkTicks[i].setAttribute("stroke-width",(1.3+f*0.7).toFixed(2));
+    }
+  }
+  requestAnimationFrame(animateClock);
 }
 tickClock(); setInterval(tickClock,15000); buildCalendar(); buildClockTicks();
-setInterval(()=>{updateClockTicks();},1000);
 document.getElementById("banner-img").addEventListener("error",function(){this.remove();document.getElementById("banner-right").classList.add("noimg");});
 
 /* ---------- window manager ---------- */
