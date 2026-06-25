@@ -66,7 +66,7 @@
   .w-clock{position:relative;display:flex;align-items:center;justify-content:center;background:#fff;padding:0}
   .clk-ticks{position:absolute;inset:0;width:100%;height:100%}
   .clk-ticks line{stroke-linecap:round}
-  .wc-time{position:relative;z-index:1;font-size:50px;font-weight:900;letter-spacing:-.045em;color:#0a0a0a;font-feature-settings:"tnum"}
+  .wc-time{position:relative;z-index:1;font-size:54px;font-weight:900;letter-spacing:-.03em;color:#0a0a0a;font-feature-settings:"tnum";transform:scaleX(.78);transform-origin:center}
   .w-cal{position:relative;display:flex;flex-direction:column;background:#fff;cursor:pointer;padding:13px 13px 11px}
   .cal-mon{font-size:13px;font-weight:700;color:#ff3b30;margin-bottom:5px}
   .cal-grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);align-content:space-between}
@@ -117,7 +117,7 @@
   #win-editor{width:min(1200px,94vw);height:min(760px,84vh);left:50%;top:calc(50% + 6px);transform:translate(-50%,-50%)}
   .stage{flex:1;display:flex;min-height:0}
   .viewer{flex:2;display:flex;flex-direction:column;padding:16px;min-width:0}
-  .monitor{flex:1;background:#000;border:.5px solid var(--line);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .monitor{aspect-ratio:16/9;width:100%;flex:0 0 auto;background:#000;border:.5px solid var(--line);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
   .monitor iframe{width:100%;height:100%;border:0;display:block}
   .monitor.social{align-items:flex-start;justify-content:center;overflow:auto;background:#0c0d0f;padding:14px}
   .monitor.social iframe{height:auto}
@@ -128,7 +128,7 @@
   .transport .ctr{display:flex;gap:18px;color:#9aa0aa;font-size:16px}
   .transport .ctr span{cursor:pointer}
   .transport .ctr span:hover{color:#fff}
-  .inspector{flex:1;min-width:230px;max-width:320px;background:var(--panel);border-left:.5px solid var(--line);padding:16px 18px;overflow:auto}
+  .inspector{flex:0 0 280px;background:var(--panel);border-left:.5px solid var(--line);padding:16px 18px;overflow:auto}
   .insp-label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
   .insp-title{font-size:16px;font-weight:500;margin-bottom:3px}
   .insp-sub{font-size:13px;color:var(--mut);margin-bottom:14px}
@@ -276,7 +276,7 @@
     .appwin{width:100vw!important;height:calc(100dvh - 26px)!important;left:0!important;top:26px!important;transform:none!important;border-radius:0}
     .banner-card{width:94vw}
     #win-editor .stage{flex-direction:column}
-    .inspector{max-width:none;border-left:0;border-top:.5px solid var(--line)}
+    .inspector{flex:0 0 auto;max-width:none;border-left:0;border-top:.5px solid var(--line)}
     .notes-side{flex:0 0 150px;width:150px}
     .desk-hello{top:24%}
   }
@@ -567,9 +567,9 @@ function buildClockTicks(){
   const svg=document.getElementById("clk-ticks");if(!svg)return;
   const ns="http://www.w3.org/2000/svg";
   const path=document.createElementNS(ns,"path");
-  path.setAttribute("d","M50,4 L74,4 A22,22 0 0 1 96,26 L96,74 A22,22 0 0 1 74,96 L26,96 A22,22 0 0 1 4,74 L4,26 A22,22 0 0 1 26,4 Z");
+  path.setAttribute("d","M50,3 L75,3 A22,22 0 0 1 97,25 L97,75 A22,22 0 0 1 75,97 L25,97 A22,22 0 0 1 3,75 L3,25 A22,22 0 0 1 25,3 Z");
   path.setAttribute("fill","none");svg.appendChild(path);
-  const total=path.getTotalLength(),cx=50,cy=50,len=5.5;
+  const total=path.getTotalLength(),cx=50,cy=50,len=4.5;
   for(let i=0;i<60;i++){
     const l=(i/60)*total,p=path.getPointAtLength(l),p2=path.getPointAtLength((l+0.4)%total);
     let nx=-(p2.y-p.y),ny=(p2.x-p.x);const m=Math.hypot(nx,ny)||1;nx/=m;ny/=m;
@@ -617,6 +617,30 @@ function closeApp(id){
   const anyOpen=[...document.querySelectorAll(".appwin")].some(w=>w.style.display==="flex");
   setActive(anyOpen?null:null);
 }
+function sizeEditor(){
+  const win=document.getElementById("win-editor");
+  if(getComputedStyle(win).display==="none")return;
+  if(innerWidth<=760)return;                 // mobile is full-screen
+  const insp=280, vpad=16, titlebar=40, extra=64; // viewer paddings + transport
+  const maxW=Math.round(innerWidth*0.96), maxH=Math.round(innerHeight*0.95);
+  const tlEl=win.querySelector(".timeline");
+  const tlH=tlEl?tlEl.offsetHeight:200;
+  let winW=Math.min(1200,maxW);
+  let monW=winW-insp-vpad*2;
+  let monH=Math.round(monW*9/16);
+  let winH=titlebar+monH+extra+tlH;
+  if(winH>maxH){
+    let availMonH=maxH-titlebar-extra-tlH;
+    monH=Math.max(150,availMonH); monW=Math.round(monH*16/9);
+    winW=monW+insp+vpad*2;
+    if(winW>maxW){winW=maxW;monW=winW-insp-vpad*2;monH=Math.round(monW*9/16);}
+    winH=titlebar+monH+extra+tlH;
+  }
+  win.style.transform="none";
+  win.style.width=winW+"px"; win.style.height=winH+"px";
+  win.style.left=Math.round((innerWidth-winW)/2)+"px";
+  win.style.top=Math.round((innerHeight-winH)/2)+"px";
+}
 function launchEditor(){
   const ed=document.getElementById("win-editor");
   if(ed.style.display==="flex"){front(ed);setActive("editor");return;}
@@ -626,7 +650,7 @@ function launchEditor(){
   bar.classList.remove("run"); void bar.offsetWidth; bar.classList.add("run");
   setActive("editor");
   setTimeout(()=>{
-    ed.style.display="flex"; front(ed); renderAbout();
+    ed.style.display="flex"; front(ed); renderAbout(); sizeEditor();
     setTimeout(()=>setPlayheadStart(),60);
     b.classList.add("hide");
     setTimeout(()=>{b.style.display="none";},700);
