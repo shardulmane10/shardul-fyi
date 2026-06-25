@@ -66,7 +66,7 @@
   .w-clock{position:relative;display:flex;align-items:center;justify-content:center;background:#fff;padding:0}
   .clk-ticks{position:absolute;inset:0;width:100%;height:100%}
   .clk-ticks line{stroke-linecap:round}
-  .wc-time{position:relative;z-index:1;font-size:50px;font-weight:800;letter-spacing:-.04em;color:#111;font-feature-settings:"tnum"}
+  .wc-time{position:relative;z-index:1;font-size:50px;font-weight:900;letter-spacing:-.045em;color:#0a0a0a;font-feature-settings:"tnum"}
   .w-cal{position:relative;display:flex;flex-direction:column;background:#fff;cursor:pointer;padding:13px 13px 11px}
   .cal-mon{font-size:13px;font-weight:700;color:#ff3b30;margin-bottom:5px}
   .cal-grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);align-content:space-between}
@@ -579,13 +579,12 @@ function buildClockTicks(){
 function clkColor(f){const a=[214,217,223],b=[26,28,33];const c=a.map((v,i)=>Math.round(v+(b[i]-v)*f));return `rgb(${c[0]},${c[1]},${c[2]})`;}
 function animateClock(){
   if(clkTicks.length){
-    const d=new Date(),p=d.getSeconds()+d.getMilliseconds()/1000,TL=16;
+    const d=new Date(),p=d.getSeconds()+d.getMilliseconds()/1000,TL=20;
     for(let i=0;i<60;i++){
-      let b=(p-i+60)%60;          // how far the leading edge is past tick i
-      let f=b<=TL?(1-b/TL):0;     // dark at the leader, fading out over TL ticks behind
-      f=f*f;                       // ease the trail
+      let b=(p-i+60)%60;                  // how far the leading edge is past tick i
+      let f=b<=TL?Math.min(1,(1-b/TL)*1.5):0; // solid near the leader, soft fade along the tail
       clkTicks[i].setAttribute("stroke",clkColor(f));
-      clkTicks[i].setAttribute("stroke-width",(1.3+f*0.7).toFixed(2));
+      clkTicks[i].setAttribute("stroke-width",(1.3+f*0.55).toFixed(2));
     }
   }
   requestAnimationFrame(animateClock);
