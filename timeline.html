@@ -41,6 +41,23 @@
   .mb-right{display:flex;align-items:center;gap:13px}
   .mb-right svg{display:block}
   .mb-clock{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mb-siri{width:16px;height:16px;border-radius:50%;cursor:pointer;background:conic-gradient(from 0deg,#f9d423,#ff4e50,#a166ff,#3a8dff,#33d9b2,#f9d423);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+  .mb-siri:hover{filter:brightness(1.1)}
+  #siri{position:fixed;top:34px;right:14px;width:340px;max-width:92vw;z-index:9600;background:rgba(30,30,34,.6);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:.5px solid rgba(255,255,255,.18);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.5);padding:20px 18px 16px;color:#fff;display:none;flex-direction:column;align-items:center}
+  #siri.show{display:flex;animation:siri-in .24s ease}
+  @keyframes siri-in{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+  .siri-orb{width:60px;height:60px;border-radius:50%;background:conic-gradient(from 0deg,#f9d423,#ff4e50,#a166ff,#3a8dff,#33d9b2,#ff4e50,#f9d423);filter:blur(1px) saturate(1.25);animation:siri-spin 5s linear infinite;box-shadow:0 0 26px rgba(120,140,255,.5)}
+  @keyframes siri-spin{to{transform:rotate(360deg)}}
+  .siri-convo{width:100%;margin-top:14px;display:flex;flex-direction:column;gap:8px;max-height:300px;overflow:auto}
+  .siri-greet{text-align:center;color:rgba(255,255,255,.72);font-size:15px;margin-top:2px}
+  .siri-msg{font-size:14px;line-height:1.45;padding:9px 13px;border-radius:14px;max-width:88%}
+  .siri-msg.user{align-self:flex-end;background:rgba(10,132,255,.92);color:#fff;border-bottom-right-radius:5px}
+  .siri-msg.bot{align-self:flex-start;background:rgba(255,255,255,.14);color:#f2f2f5;border-bottom-left-radius:5px}
+  .siri-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;width:100%;justify-content:center}
+  .siri-chip{font-size:12.5px;color:#dfe6ff;background:rgba(255,255,255,.1);border:.5px solid rgba(255,255,255,.16);border-radius:14px;padding:6px 11px;cursor:pointer}
+  .siri-chip:hover{background:rgba(255,255,255,.2)}
+  .siri-input{margin-top:12px;width:100%;background:rgba(255,255,255,.1);border:.5px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 14px;color:#fff;font-size:14px;font-family:var(--sans);outline:none}
+  .siri-input::placeholder{color:rgba(255,255,255,.5)}
   @media (max-width:760px){.menubar .mb-item{display:none}}
 
   /* ===== desktop ===== */
@@ -295,6 +312,7 @@
     <span class="mb-item">Help</span>
   </div>
   <div class="mb-right">
+    <span class="mb-siri" id="mb-siri" title="Siri" aria-label="Siri"></span>
     <svg width="26" height="13" viewBox="0 0 26 14" fill="none"><rect x="1" y="2" width="21" height="10" rx="3" stroke="#fff" stroke-width="1.2"/><rect x="2.5" y="3.5" width="15" height="7" rx="1.5" fill="#fff"/><path d="M24 5v4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
     <svg width="16" height="13" viewBox="0 0 24 18" fill="none" stroke="#fff" stroke-width="2"><path d="M2 5C8 0 16 0 22 5"/><path d="M5 9c4-3 10-3 14 0"/><path d="M8.5 12.5c2-1.5 5-1.5 7 0"/><circle cx="12" cy="16" r="1" fill="#fff" stroke="none"/></svg>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke-linecap="round"/></svg>
@@ -304,6 +322,13 @@
 </div>
 
 <!-- ===== DESKTOP / HOME ===== -->
+<div id="siri">
+  <div class="siri-orb"></div>
+  <div class="siri-convo" id="siri-convo"><div class="siri-greet">What can I help you with?</div></div>
+  <div class="siri-chips" id="siri-chips"></div>
+  <input class="siri-input" id="siri-input" placeholder="Type to Siri" autocomplete="off">
+</div>
+
 <div id="desktop">
   <div class="deskwrap">
     <div class="sticky">
@@ -661,6 +686,42 @@ function launchEditor(){
 document.querySelectorAll("[data-open]").forEach(el=>el.addEventListener("click",()=>openApp(el.dataset.open)));
 document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();closeApp(el.dataset.close);}));
 function openLink(u){if(!u)return;if(u.indexOf("mailto:")===0){location.href=u;return;}window.open(u,"_blank","noopener");}
+
+/* ---------- Siri (scripted) ---------- */
+function siriRespond(q){
+  q=(q||"").toLowerCase();
+  const has=(...w)=>w.some(x=>q.includes(x));
+  if(has("film","short","rv","movie","watch","reel","direct"))
+    return {t:"Shardul has written and directed five short films — the RV series. Opening the editor so you can watch them.",run:launchEditor};
+  if(has("book","call","meet","schedule","calendar","chat with","talk to","catch up"))
+    return {t:"On it — opening Shardul's calendar so you can grab a time.",run:()=>openLink("https://cal.com/shardulmane")};
+  if(has("email","mail","reach","contact","get in touch","message","hire"))
+    return {t:"You can write to Shardul directly — opening Mail.",run:()=>openApp("mail")};
+  if(has("supermemory","what does he do","company","growth lead"))
+    return {t:"Shardul is Founding Growth Lead at Supermemory. Opening it for you.",run:()=>openLink(SUPERMEMORY_URL)};
+  if(has("social","twitter"," x ","instagram","linkedin","youtube","follow","links"))
+    return {t:"Here are Shardul's links — opening Contacts.",run:()=>openApp("contacts")};
+  if(has("experience","worked","previous","prev","resume","career","past","travelxp","zee","expertron"))
+    return {t:"Before Supermemory, Shardul worked at Travelxp, Zee, and Expertrons — and once wrote and directed ads in what he calls a past life."};
+  if(has("who","about","yourself","bio","tell me"))
+    return {t:"Shardul Mane — Founding Growth Lead at Supermemory in San Francisco. He makes films, tells stories, and grows startups."};
+  if(has("hello","hi ","hey","yo ","sup","hii","namaste"))
+    return {t:"Hey! I can show you Shardul's films, book a call, or help you reach him. What would you like?"};
+  if(has("help","what can you","options"))
+    return {t:"Try: “show me his films”, “book a call”, “what’s Supermemory?”, or “how do I reach him?”"};
+  return {t:"I can help you explore Shardul's world — try asking about his films, booking a call, or how to reach him."};
+}
+const SIRI_CHIPS=["Show me his films","Book a call","What's Supermemory?","How do I reach him?"];
+function siriEl(id){return document.getElementById(id);}
+function siriOpen(){siriEl("siri").classList.add("show");setTimeout(()=>siriEl("siri-input").focus(),60);}
+function siriClose(){siriEl("siri").classList.remove("show");}
+function siriAdd(text,who){const c=siriEl("siri-convo");const g=c.querySelector(".siri-greet");if(g)g.remove();const d=document.createElement("div");d.className="siri-msg "+who;d.textContent=text;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function siriAsk(q){q=(q||"").trim();if(!q)return;siriAdd(q,"user");const r=siriRespond(q);setTimeout(()=>{siriAdd(r.t,"bot");if(r.run)setTimeout(()=>{r.run();siriClose();},850);},340);}
+siriEl("siri-chips").innerHTML=SIRI_CHIPS.map(c=>`<span class="siri-chip">${c}</span>`).join("");
+document.querySelectorAll(".siri-chip").forEach(ch=>ch.addEventListener("click",()=>siriAsk(ch.textContent)));
+siriEl("mb-siri").addEventListener("click",e=>{e.stopPropagation();siriEl("siri").classList.contains("show")?siriClose():siriOpen();});
+siriEl("siri-input").addEventListener("keydown",e=>{if(e.code==="Enter"){siriAsk(e.target.value);e.target.value="";}});
+document.addEventListener("mousedown",e=>{const s=siriEl("siri");if(s.classList.contains("show")&&!s.contains(e.target)&&e.target.id!=="mb-siri")siriClose();});
 
 /* bring window to front on click */
 document.querySelectorAll(".appwin").forEach(w=>w.addEventListener("mousedown",()=>front(w)));
