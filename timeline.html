@@ -172,9 +172,9 @@
   .banner-load{font-size:10px;letter-spacing:.1em;color:#6b7280;text-transform:uppercase;margin-top:9px}
   .dots::after{content:"";animation:dots 1.4s steps(4,end) infinite}
   @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}100%{content:""}}
-  .banner-right{position:absolute;inset:0;z-index:1}
-  .banner-right img{width:100%;height:100%;object-fit:cover;object-position:right center}
-  .banner-right .fade{position:absolute;inset:0;background:linear-gradient(90deg,#0c0d0f 0%,rgba(12,13,15,.86) 24%,rgba(12,13,15,.35) 44%,rgba(12,13,15,0) 62%)}
+  .banner-right{position:absolute;right:0;top:0;bottom:0;width:66%;z-index:1}
+  .banner-right img{width:100%;height:100%;object-fit:cover;object-position:center}
+  .banner-right .fade{position:absolute;inset:0;background:linear-gradient(90deg,#0c0d0f 0%,rgba(12,13,15,.85) 18%,rgba(12,13,15,.3) 42%,rgba(12,13,15,0) 68%)}
   .banner-right.noimg{background:linear-gradient(135deg,#1a1d22,#0c0d0f)}
 
   /* ===== Notes app (light, macOS) ===== */
@@ -232,6 +232,7 @@
   .mail-field{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:.5px solid rgba(0,0,0,.06);font-size:14px}
   .mail-field label{color:#86868b;width:60px;flex:0 0 60px}
   .mail-field input{flex:1;background:transparent;border:0;color:#1d1d1f;font-size:14px;font-family:var(--sans);outline:none}
+  .mail-field select{flex:1;background:transparent;border:0;color:#1d1d1f;font-size:14px;font-family:var(--sans);outline:none;cursor:pointer}
   .mail-body textarea{flex:1;background:transparent;border:0;color:#1d1d1f;padding:16px;font-size:15px;line-height:1.7;font-family:var(--sans);resize:none;outline:none}
 
   /* ===== Contacts app (light, macOS) ===== */
@@ -325,7 +326,7 @@
       <div class="banner-sub">Films &middot; Growth</div>
       <div class="banner-meta">
         <div class="banner-ver" id="ver">Version 2026</div>
-        <div class="banner-copy">&copy; <span id="yr">2026</span> Shardul Mane. All rights reserved. Filmmaker and Founding Growth Lead @ supermemory, based in San Francisco. Director, writer, editor.</div>
+        <div class="banner-copy">&copy; <span id="yr">2026</span> Shardul Mane. All rights reserved.</div>
         <div class="loadbar" id="loadbar"><i></i></div>
         <div class="banner-load">loading stories<span class="dots"></span></div>
       </div>
@@ -433,7 +434,7 @@
   <div class="winbody">
     <div class="mail-body">
       <div class="mail-actions"><button class="mail-send" id="mail-send">Send</button></div>
-      <div class="mail-field"><label>To:</label><input id="mail-to" value="shardulmane10@gmail.com" readonly></div>
+      <div class="mail-field"><label>To:</label><select id="mail-to"><option value="shardulmane10@gmail.com">Personal — shardulmane10@gmail.com</option><option value="shardul@supermemory.com">Work — shardul@supermemory.com</option></select></div>
       <div class="mail-field"><label>Subject:</label><input id="mail-sub" placeholder="Saw your site…"></div>
       <textarea id="mail-body" placeholder="Write your message…"></textarea>
     </div>
@@ -475,11 +476,11 @@
    YOUR CONTENT
    ============================================================ */
 const CLIPS = [
-  {track:"films", year:2024, title:"Excuses",          role:"short film · RV 01", url:"https://youtu.be/ZTFMwrLNWLw"},
-  {track:"films", year:2024, title:"Homecoming",       role:"short film · RV 02", url:"https://youtu.be/n5lPwGL3ZhA"},
-  {track:"films", year:2025, title:"Escape",           role:"short film · RV 03", url:"https://youtu.be/eWxIyEz5Cx0"},
-  {track:"films", year:2025, title:"Lost & Found",     role:"short film · RV 04", url:"https://youtu.be/CclouYHkLV0"},
   {track:"films", year:2026, title:"Long Time No See", role:"short film · RV 05", url:"https://youtu.be/XjJXFytiwL4"},
+  {track:"films", year:2025, title:"Lost & Found",     role:"short film · RV 04", url:"https://youtu.be/CclouYHkLV0"},
+  {track:"films", year:2025, title:"Escape",           role:"short film · RV 03", url:"https://youtu.be/eWxIyEz5Cx0"},
+  {track:"films", year:2024, title:"Homecoming",       role:"short film · RV 02", url:"https://youtu.be/n5lPwGL3ZhA"},
+  {track:"films", year:2024, title:"Excuses",          role:"short film · RV 01", url:"https://youtu.be/ZTFMwrLNWLw"},
   {track:"growth", year:2026, title:"make memories, wherever you go", role:"supermemory", url:"https://youtu.be/q-FDRsXR9lM"},
   {track:"growth", year:2026, title:"run Supermemory locally",        role:"supermemory", url:"https://youtu.be/zviUAqxok_Y"},
   {track:"growth", year:2026, title:"Vibe Check",                     role:"supermemory", url:"https://youtu.be/TQJam4dzd90"},
@@ -623,7 +624,8 @@ document.getElementById("tw-feed").innerHTML=TWEETS.map(t=>`
 document.getElementById("mail-send").addEventListener("click",()=>{
   const sub=encodeURIComponent(document.getElementById("mail-sub").value||"Hello from shardul.fyi");
   const body=encodeURIComponent(document.getElementById("mail-body").value||"");
-  window.location.href=`mailto:shardulmane10@gmail.com?subject=${sub}&body=${body}`;
+  const to=document.getElementById("mail-to").value;
+  window.location.href=`mailto:${to}?subject=${sub}&body=${body}`;
 });
 
 /* ---------- contacts / socials ---------- */
