@@ -41,8 +41,8 @@
   .mb-right{display:flex;align-items:center;gap:13px}
   .mb-right svg{display:block}
   .mb-clock{font-variant-numeric:tabular-nums;white-space:nowrap}
-  .mb-siri{width:16px;height:16px;border-radius:50%;cursor:pointer;background:conic-gradient(from 0deg,#f9d423,#ff4e50,#a166ff,#3a8dff,#33d9b2,#f9d423);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
-  .mb-siri:hover{filter:brightness(1.1)}
+  .mb-siri{width:17px;height:17px;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 28%,#ff8fc7 0%,rgba(255,143,199,0) 50%),radial-gradient(circle at 72% 30%,#ffd36b 0%,rgba(255,211,107,0) 48%),radial-gradient(circle at 70% 75%,#5aa0ff 0%,rgba(90,160,255,0) 52%),radial-gradient(circle at 28% 74%,#b388ff 0%,rgba(179,136,255,0) 52%),conic-gradient(from 210deg,#ff5e9a,#ffcc66,#5ad1ff,#a06bff,#ff5e9a);box-shadow:inset 0 0 2.5px rgba(255,255,255,.7),0 0 5px rgba(150,140,255,.55)}
+  .mb-siri:hover{filter:brightness(1.08) saturate(1.1)}
   #siri{position:fixed;top:34px;right:14px;width:340px;max-width:92vw;z-index:9600;background:rgba(30,30,34,.6);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:.5px solid rgba(255,255,255,.18);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.5);padding:20px 18px 16px;color:#fff;display:none;flex-direction:column;align-items:center}
   #siri.show{display:flex;animation:siri-in .24s ease}
   @keyframes siri-in{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
@@ -688,30 +688,59 @@ document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click
 function openLink(u){if(!u)return;if(u.indexOf("mailto:")===0){location.href=u;return;}window.open(u,"_blank","noopener");}
 
 /* ---------- Siri (scripted) ---------- */
+function closeAllApps(){document.querySelectorAll(".appwin").forEach(w=>w.style.display="none");setActive(null);}
+function playClip(c){
+  const ed=document.getElementById("win-editor");
+  if(ed.style.display==="flex"){front(ed);setActive("editor");select(c);return;}
+  launchEditor();
+  setTimeout(()=>{try{select(c);}catch(e){}},2600);
+}
 function siriRespond(q){
   q=(q||"").toLowerCase();
   const has=(...w)=>w.some(x=>q.includes(x));
-  if(has("film","short","rv","movie","watch","reel","direct"))
-    return {t:"Shardul has written and directed five short films — the RV series. Opening the editor so you can watch them.",run:launchEditor};
-  if(has("book","call","meet","schedule","calendar","chat with","talk to","catch up"))
+  const wantsPlay=has("play","watch","open","show","start","put on");
+  const clip=CLIPS.find(c=>{const t=c.title.toLowerCase();return q.includes(t)||(t.length>=6&&q.includes(t.replace(/[^a-z0-9 ]/g,"")));});
+  if(clip&&(wantsPlay||q.replace(/[^a-z ]/g,"").trim().length<=clip.title.length+6))
+    return {t:`Playing “${clip.title}” in the editor.`,run:()=>playClip(clip)};
+  if(has("note","sticky"))
+    return {t:"Opening Shardul's note.",run:()=>openApp("notes")};
+  if(has("tweet","what people say","what do people","praise","testimonial","saying about","think about","reputation","what's said"))
+    return {t:"Here's what people are saying about Shardul — opening it in the browser.",run:()=>openApp("browser")};
+  if(has("twitter","x.com","x profile","on x"))
+    return {t:"Opening Shardul's X.",run:()=>openLink("https://x.com/shardul_mane")};
+  if(has("instagram","insta"," ig"))
+    return {t:"Opening Shardul's Instagram.",run:()=>openLink("https://www.instagram.com/shardul.mane")};
+  if(has("youtube","yt","channel"))
+    return {t:"Opening Shardul's YouTube.",run:()=>openLink("https://www.youtube.com/@shardul_mane")};
+  if(has("linkedin"))
+    return {t:"Opening Shardul's LinkedIn.",run:()=>openLink("https://www.linkedin.com/in/shardul-mane")};
+  if(has("github","git "))
+    return {t:"Opening Shardul's GitHub.",run:()=>openLink("https://github.com/shardulmane10")};
+  if(has("book","call","meet","schedule","calendar","talk to","catch up","1:1","one on one","grab time","grab a"))
     return {t:"On it — opening Shardul's calendar so you can grab a time.",run:()=>openLink("https://cal.com/shardulmane")};
-  if(has("email","mail","reach","contact","get in touch","message","hire"))
-    return {t:"You can write to Shardul directly — opening Mail.",run:()=>openApp("mail")};
-  if(has("supermemory","what does he do","company","growth lead"))
+  if(has("email","mail","reach","contact","get in touch","write to","hire","message him"))
+    return {t:"Opening Mail — you can pick his personal or work address.",run:()=>openApp("mail")};
+  if(has("supermemory","what does he do","growth lead"))
     return {t:"Shardul is Founding Growth Lead at Supermemory. Opening it for you.",run:()=>openLink(SUPERMEMORY_URL)};
-  if(has("social","twitter"," x ","instagram","linkedin","youtube","follow","links"))
-    return {t:"Here are Shardul's links — opening Contacts.",run:()=>openApp("contacts")};
+  if(has("contact card","contacts","all his links","his links","socials","social media"))
+    return {t:"Opening Shardul's contact card with all his links.",run:()=>openApp("contacts")};
+  if(has("editor","timeline","his work","portfolio","videos","work videos","demos","everything"))
+    return {t:"Opening the editor — personal films on V1, Supermemory work on V2.",run:launchEditor};
+  if(has("film","short","rv series","movies","reel","directed"))
+    return {t:"Shardul has directed five short films — the RV series. Opening the editor.",run:launchEditor};
+  if(has("home","close","go back","desktop","minimi","minimize"))
+    return {t:"Taking you back to the desktop.",run:closeAllApps};
   if(has("experience","worked","previous","prev","resume","career","past","travelxp","zee","expertron"))
     return {t:"Before Supermemory, Shardul worked at Travelxp, Zee, and Expertrons — and once wrote and directed ads in what he calls a past life."};
   if(has("who","about","yourself","bio","tell me"))
     return {t:"Shardul Mane — Founding Growth Lead at Supermemory in San Francisco. He makes films, tells stories, and grows startups."};
-  if(has("hello","hi ","hey","yo ","sup","hii","namaste"))
-    return {t:"Hey! I can show you Shardul's films, book a call, or help you reach him. What would you like?"};
-  if(has("help","what can you","options"))
-    return {t:"Try: “show me his films”, “book a call”, “what’s Supermemory?”, or “how do I reach him?”"};
-  return {t:"I can help you explore Shardul's world — try asking about his films, booking a call, or how to reach him."};
+  if(has("hello","hi","hey","yo","sup","namaste"))
+    return {t:"Hey! I can play his films, book a call, show what people say, open his socials, or help you reach him. What would you like?"};
+  if(has("help","what can you","options","commands","do for me"))
+    return {t:"Try: “play Excuses”, “book a call”, “what do people say?”, “open his Instagram”, “read his note”, or “how do I reach him?”"};
+  return {t:"I can do anything on this site — play his films, book a call, show his socials, read his note, or contact him. Just ask."};
 }
-const SIRI_CHIPS=["Show me his films","Book a call","What's Supermemory?","How do I reach him?"];
+const SIRI_CHIPS=["Play Excuses","Book a call","What do people say?","Reach him"];
 function siriEl(id){return document.getElementById(id);}
 function siriOpen(){siriEl("siri").classList.add("show");setTimeout(()=>siriEl("siri-input").focus(),60);}
 function siriClose(){siriEl("siri").classList.remove("show");}
