@@ -141,16 +141,20 @@
 
   .timeline{flex:0 0 auto;background:var(--panel2);border-top:.5px solid var(--line);padding:12px 0 14px;position:relative}
   .tl-body{display:flex;align-items:flex-start}
-  .tl-heads{flex:0 0 116px;display:flex;flex-direction:column;gap:6px;padding-left:12px;background:var(--panel2);border-right:.5px solid var(--line);z-index:6}
-  .tl-head{height:32px;display:flex;align-items:center;gap:8px}
+  .tl-heads{flex:0 0 116px;display:flex;flex-direction:column;padding-left:12px;background:var(--panel2);border-right:.5px solid var(--line);z-index:6}
+  .tl-rspace{height:22px;margin-bottom:6px}
+  .tl-head{height:32px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
   .tl-badge{flex:0 0 auto;width:30px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:#fff}
   .tl-meta{display:flex;flex-direction:column;line-height:1.15;min-width:0}
   .tl-tname{font-size:11px;color:#c7ccd4}
   .tl-tcount{font-size:9px;color:#6b7280}
-  .tlscroll{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden;padding:0 14px 6px}
-  .tlscroll::-webkit-scrollbar{height:8px}
-  .tlscroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px}
+  .tlscroll{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden;padding:0 14px 0}
+  .tlscroll::-webkit-scrollbar{height:13px}
+  .tlscroll::-webkit-scrollbar-track{background:transparent}
+  .tlscroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:10px;border:3px solid transparent;background-clip:content-box}
+  .tlscroll::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.36);background-clip:content-box}
   .tlinner{position:relative;width:max-content;min-width:100%}
+  .ruler{height:22px;margin-bottom:6px;position:relative;cursor:ew-resize;border-bottom:.5px solid var(--line);background:linear-gradient(90deg,rgba(255,255,255,.30) 0 1px,transparent 1px) left bottom/60px 12px repeat-x,linear-gradient(90deg,rgba(255,255,255,.13) 0 1px,transparent 1px) left bottom/12px 7px repeat-x}
   .track{display:flex;align-items:center;margin-bottom:6px;height:32px;width:max-content}
   .track .lane{display:flex;gap:4px;height:100%}
   .clip{flex:0 0 auto;width:150px;border-radius:3px;padding:0 9px;font-size:11px;display:flex;align-items:center;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .15s;border:.5px solid}
@@ -162,7 +166,7 @@
   .lane.wave{flex:1;background:var(--write-bg);border:.5px solid var(--write);border-radius:3px;overflow:hidden}
   .lane.wave svg{display:block;width:100%;height:100%}
   .playhead{position:absolute;top:0;bottom:8px;left:0;width:2px;background:var(--play);z-index:5;pointer-events:none}
-  .playhead::before{content:"";position:absolute;top:-2px;left:-5px;width:12px;height:9px;background:var(--play);clip-path:polygon(0 0,100% 0,50% 100%)}
+  .playhead::before{content:"";position:absolute;top:1px;left:-6px;width:14px;height:11px;background:var(--play);clip-path:polygon(0 0,100% 0,50% 100%)}
   .hint{padding:2px 16px 0;font-family:var(--mono);font-size:10px;color:#3b4250}
 
   /* ===== DaVinci-style loading banner ===== */
@@ -367,6 +371,7 @@
         <div class="tl-heads" id="tl-heads"></div>
         <div class="tlscroll" id="tlscroll">
           <div class="tlinner" id="tlinner">
+            <div class="ruler" id="ruler"></div>
             <div class="tracks" id="tracks"></div>
             <div class="playhead" id="playhead"></div>
           </div>
@@ -726,6 +731,7 @@ function lane(badge,name,count,colorVar,cls){
   row.appendChild(l);tracks.appendChild(row);return l;
 }
 function buildTimeline(){
+  const sp=document.createElement("div");sp.className="tl-rspace";document.getElementById("tl-heads").appendChild(sp);
   const nf=CLIPS.filter(c=>c.track==="films").length, ng=CLIPS.filter(c=>c.track==="growth").length;
   const lf=lane("V1","personal",nf+" clips","films");
   CLIPS.filter(c=>c.track==="films").forEach(c=>addClip(lf,c));
