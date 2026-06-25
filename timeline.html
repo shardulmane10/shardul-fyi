@@ -310,7 +310,7 @@
       <p>hey, i'm <b>shardul</b>.</p>
       <p>founding growth lead @ supermemory.</p>
       <p>i make films, tell stories, and help startups grow.</p>
-      <p>prev, cooked up cool things @ travelxp, zee &amp; expertrons. and in what feels like a past life, wrote &amp; directed ads. lol.</p>
+      <p>prev cooked up cool things @ travelxp, zee &amp; expertrons. and in what feels like a past life, wrote &amp; directed ads. lol.</p>
       <p class="poke">play around, open an app from the dock, or click on the calendar to book a call with me :)</p>
     </div>
     <div class="widgets">
@@ -537,7 +537,7 @@ const ART={
 };
 ["notes","safari","editor","mail","contacts"].forEach(k=>{
   const el=document.getElementById("art-"+k); if(!el)return;
-  const img=document.createElement("img"); img.className="full"; img.alt=k; img.src="icons/"+k+".png";
+  const img=document.createElement("img"); img.className="full"; img.alt=k; img.src="icons/"+k+".png?v=3";
   img.onerror=()=>{el.innerHTML=ART[k];};
   el.appendChild(img);
 });
