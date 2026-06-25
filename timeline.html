@@ -141,12 +141,18 @@
   .insp-links a:hover{background:rgba(255,255,255,.06)}
 
   .timeline{flex:0 0 auto;background:var(--panel2);border-top:.5px solid var(--line);padding:12px 0 14px;position:relative}
-  .tlscroll{overflow-x:auto;overflow-y:hidden;padding:0 14px 6px}
+  .tl-body{display:flex;align-items:flex-start}
+  .tl-heads{flex:0 0 116px;display:flex;flex-direction:column;gap:6px;padding-left:12px;background:var(--panel2);border-right:.5px solid var(--line);z-index:6}
+  .tl-head{height:32px;display:flex;align-items:center;gap:8px}
+  .tl-badge{flex:0 0 auto;width:30px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:#fff}
+  .tl-meta{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+  .tl-tname{font-size:11px;color:#c7ccd4}
+  .tl-tcount{font-size:9px;color:#6b7280}
+  .tlscroll{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden;padding:0 14px 6px}
   .tlscroll::-webkit-scrollbar{height:8px}
   .tlscroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px}
   .tlinner{position:relative;width:max-content;min-width:100%}
-  .track{display:flex;align-items:center;gap:10px;margin-bottom:6px;height:32px;width:max-content}
-  .track .lbl{position:sticky;left:0;z-index:4;width:56px;flex:0 0 56px;font-family:var(--mono);font-size:10px;background:var(--panel2);height:100%;display:flex;align-items:center}
+  .track{display:flex;align-items:center;margin-bottom:6px;height:32px;width:max-content}
   .track .lane{display:flex;gap:4px;height:100%}
   .clip{flex:0 0 auto;width:150px;border-radius:3px;padding:0 9px;font-size:11px;display:flex;align-items:center;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .15s;border:.5px solid}
   .clip:hover{filter:brightness(1.4)}
@@ -156,7 +162,7 @@
   .track.audio{width:100%}
   .lane.wave{flex:1;background:var(--write-bg);border:.5px solid var(--write);border-radius:3px;overflow:hidden}
   .lane.wave svg{display:block;width:100%;height:100%}
-  .playhead{position:absolute;top:0;bottom:8px;left:66px;width:2px;background:var(--play);z-index:5;pointer-events:none}
+  .playhead{position:absolute;top:0;bottom:8px;left:0;width:2px;background:var(--play);z-index:5;pointer-events:none}
   .playhead::before{content:"";position:absolute;top:-2px;left:-5px;width:12px;height:9px;background:var(--play);clip-path:polygon(0 0,100% 0,50% 100%)}
   .hint{padding:2px 16px 0;font-family:var(--mono);font-size:10px;color:#3b4250}
 
@@ -178,7 +184,7 @@
   .dots::after{content:"";animation:dots 1.4s steps(4,end) infinite}
   @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}100%{content:""}}
   .banner-right{position:absolute;right:0;top:0;bottom:0;width:66%;z-index:1}
-  .banner-right img{width:100%;height:100%;object-fit:cover;object-position:center}
+  .banner-right img{width:100%;height:100%;object-fit:cover;object-position:center 72%}
   .banner-right .fade{position:absolute;inset:0;background:linear-gradient(90deg,#0c0d0f 0%,rgba(12,13,15,.85) 18%,rgba(12,13,15,.3) 42%,rgba(12,13,15,0) 68%)}
   .banner-right.noimg{background:linear-gradient(135deg,#1a1d22,#0c0d0f)}
 
@@ -359,10 +365,13 @@
       <div class="inspector" id="inspector"></div>
     </div>
     <div class="timeline">
-      <div class="tlscroll" id="tlscroll">
-        <div class="tlinner" id="tlinner">
-          <div class="tracks" id="tracks"></div>
-          <div class="playhead" id="playhead"></div>
+      <div class="tl-body">
+        <div class="tl-heads" id="tl-heads"></div>
+        <div class="tlscroll" id="tlscroll">
+          <div class="tlinner" id="tlinner">
+            <div class="tracks" id="tracks"></div>
+            <div class="playhead" id="playhead"></div>
+          </div>
         </div>
       </div>
       <div class="hint">click a clip &middot; space = play &middot; &larr;/&rarr; = step &middot; scroll the timeline for more &rarr;</div>
@@ -678,18 +687,21 @@ const tlinner=document.getElementById("tlinner");
 const tlscroll=document.getElementById("tlscroll");
 let order=[], idx=-1, current=null, touring=false, timer=null, scrubbing=false, scrubMoved=false;
 
-function lane(name,colorVar,cls){
+function lane(badge,name,count,colorVar,cls){
+  const head=document.createElement("div");head.className="tl-head";
+  head.innerHTML=`<div class="tl-badge" style="background:var(--${colorVar})">${badge}</div><div class="tl-meta"><span class="tl-tname">${name}</span><span class="tl-tcount">${count}</span></div>`;
+  document.getElementById("tl-heads").appendChild(head);
   const row=document.createElement("div");row.className="track"+(cls?(" "+cls):"");
-  row.innerHTML=`<div class="lbl" style="color:var(--${colorVar})">${name}</div>`;
   const l=document.createElement("div");l.className="lane"+(cls==="audio"?" wave":"");
   row.appendChild(l);tracks.appendChild(row);return l;
 }
 function buildTimeline(){
-  const lf=lane("V1 personal","films");
+  const nf=CLIPS.filter(c=>c.track==="films").length, ng=CLIPS.filter(c=>c.track==="growth").length;
+  const lf=lane("V1","personal",nf+" clips","films");
   CLIPS.filter(c=>c.track==="films").forEach(c=>addClip(lf,c));
-  const lg=lane("V2 work","growth");
+  const lg=lane("V2","work",ng+" clips","growth");
   CLIPS.filter(c=>c.track==="growth").forEach(c=>addClip(lg,c));
-  const la=lane("A1 audio","write","audio");
+  const la=lane("A1","audio","score","write","audio");
   la.innerHTML=`<svg viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="${genWave()}" fill="var(--write-tx)"/></svg>`;
 }
 function genWave(){
@@ -776,7 +788,7 @@ function movePlayheadToClip(el){
   document.getElementById("tc").textContent=
     String(1+Math.floor(f/3600)).padStart(2,"0")+":"+String(Math.floor((f%3600)/60)).padStart(2,"0")+":"+String(f%60).padStart(2,"0")+":00";
 }
-function setPlayheadStart(){playhead.style.left="66px";}
+function setPlayheadStart(){playhead.style.left="0px";}
 
 /* transport + keyboard */
 function go(n){idx=(n+order.length)%order.length;select(order[idx]);}
