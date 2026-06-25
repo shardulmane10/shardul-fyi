@@ -67,14 +67,14 @@
   .clk-ticks{position:absolute;inset:0;width:100%;height:100%}
   .clk-ticks line{stroke-linecap:round}
   .wc-time{position:relative;z-index:1;font-size:50px;font-weight:800;letter-spacing:-.04em;color:#111;font-feature-settings:"tnum"}
-  .w-cal{position:relative;grid-column:1 / 3;display:flex;flex-direction:column;background:#fff;cursor:pointer;padding:13px 16px 12px}
+  .w-cal{position:relative;display:flex;flex-direction:column;background:#fff;cursor:pointer;padding:13px 13px 11px}
   .cal-mon{font-size:13px;font-weight:700;color:#ff3b30;margin-bottom:5px}
   .cal-grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);align-content:space-between}
   .cal-cell{display:flex;align-items:center;justify-content:center;font-size:9px;color:#1d1d1f}
   .cal-cell.hd{color:#9aa0aa;font-weight:600}
   .cal-cell span{display:flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%}
   .cal-cell.today span{background:#ff3b30;color:#fff;font-weight:600}
-  .w-photos{padding:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.72)}
+  .w-photos{grid-column:1 / 3;padding:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.72)}
   .w-photos img{width:100%;height:100%;object-fit:cover;display:block}
   .ph-ph{display:flex;flex-direction:column;align-items:center;gap:7px;color:#9fb3d0;font-size:13px;font-weight:500}
   .ph-ph svg{width:32px;height:32px}
@@ -312,11 +312,11 @@
         <svg class="clk-ticks" id="clk-ticks" viewBox="0 0 100 100"></svg>
         <div class="wc-time" id="wc-time">&nbsp;</div>
       </div>
-      <div class="w w-photos"><div class="ph-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-7 7"/></svg><span>Photos</span></div></div>
       <div class="w w-cal" onclick="openLink('https://cal.com/shardulmane')" title="book a call">
         <div class="cal-mon" id="cal-mon">&nbsp;</div>
         <div class="cal-grid" id="cal-grid"></div>
       </div>
+      <div class="w w-photos"><div class="ph-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-7 7"/></svg><span>Photos</span></div></div>
     </div>
   </div>
 </div>
@@ -562,9 +562,9 @@ function buildClockTicks(){
   const svg=document.getElementById("clk-ticks");if(!svg)return;
   const ns="http://www.w3.org/2000/svg";
   const path=document.createElementNS(ns,"path");
-  path.setAttribute("d","M50,7 L71,7 A22,22 0 0 1 93,29 L93,71 A22,22 0 0 1 71,93 L29,93 A22,22 0 0 1 7,71 L7,29 A22,22 0 0 1 29,7 Z");
+  path.setAttribute("d","M50,4 L74,4 A22,22 0 0 1 96,26 L96,74 A22,22 0 0 1 74,96 L26,96 A22,22 0 0 1 4,74 L4,26 A22,22 0 0 1 26,4 Z");
   path.setAttribute("fill","none");svg.appendChild(path);
-  const total=path.getTotalLength(),cx=50,cy=50,len=8;
+  const total=path.getTotalLength(),cx=50,cy=50,len=5.5;
   for(let i=0;i<60;i++){
     const l=(i/60)*total,p=path.getPointAtLength(l),p2=path.getPointAtLength((l+0.4)%total);
     let nx=-(p2.y-p.y),ny=(p2.x-p.x);const m=Math.hypot(nx,ny)||1;nx/=m;ny/=m;
@@ -572,13 +572,13 @@ function buildClockTicks(){
     const ln=document.createElementNS(ns,"line");
     ln.setAttribute("x1",p.x.toFixed(2));ln.setAttribute("y1",p.y.toFixed(2));
     ln.setAttribute("x2",(p.x+nx*len).toFixed(2));ln.setAttribute("y2",(p.y+ny*len).toFixed(2));
-    ln.setAttribute("stroke-width","1.7");svg.appendChild(ln);clkTicks.push(ln);
+    ln.setAttribute("stroke-width","1.3");svg.appendChild(ln);clkTicks.push(ln);
   }
   svg.removeChild(path);updateClockTicks();
 }
 function updateClockTicks(){
   const s=new Date().getSeconds();
-  clkTicks.forEach((ln,i)=>ln.setAttribute("stroke",i<=s?"#2f3338":"#d4d7dc"));
+  clkTicks.forEach((ln,i)=>ln.setAttribute("stroke",i<=s?"#1d1f24":"#d9dce1"));
 }
 tickClock(); setInterval(tickClock,15000); buildCalendar(); buildClockTicks();
 setInterval(()=>{updateClockTicks();},1000);
