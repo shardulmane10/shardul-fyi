@@ -578,7 +578,7 @@ function tickClock(){
     d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})+"  "+
     d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
   const wt=document.getElementById("wc-time");
-  if(wt)wt.textContent=d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",hour12:true}).replace(/\s?[AP]M/i,"");
+  if(wt)wt.textContent=d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",hour12:false});
 }
 function buildCalendar(){
   const g=document.getElementById("cal-grid");if(!g)return;
