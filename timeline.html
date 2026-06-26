@@ -327,7 +327,7 @@
   <div class="siri-orb"></div>
   <div class="siri-convo" id="siri-convo"><div class="siri-greet">What can I help you with?</div></div>
   <div class="siri-chips" id="siri-chips"></div>
-  <input class="siri-input" id="siri-input" placeholder="Type to Siri" autocomplete="off">
+  <input class="siri-input" id="siri-input" placeholder="Talk to Siri" autocomplete="off">
 </div>
 
 <div id="desktop">
@@ -594,18 +594,22 @@ let clkTicks=[];
 function buildClockTicks(){
   const svg=document.getElementById("clk-ticks");if(!svg)return;
   const ns="http://www.w3.org/2000/svg";
+  const W=svg.clientWidth||152, H=svg.clientHeight||152;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const m=5, R=22, rr=R-m;                 // inset from edge, widget radius, concentric ring radius
+  const x0=m,y0=m,x1=W-m,y1=H-m,cx=W/2,cy=H/2,len=6;
   const path=document.createElementNS(ns,"path");
-  path.setAttribute("d","M50,3 L75,3 A22,22 0 0 1 97,25 L97,75 A22,22 0 0 1 75,97 L25,97 A22,22 0 0 1 3,75 L3,25 A22,22 0 0 1 25,3 Z");
+  path.setAttribute("d",`M${cx},${y0} L${x1-rr},${y0} A${rr},${rr} 0 0 1 ${x1},${y0+rr} L${x1},${y1-rr} A${rr},${rr} 0 0 1 ${x1-rr},${y1} L${x0+rr},${y1} A${rr},${rr} 0 0 1 ${x0},${y1-rr} L${x0},${y0+rr} A${rr},${rr} 0 0 1 ${x0+rr},${y0} Z`);
   path.setAttribute("fill","none");svg.appendChild(path);
-  const total=path.getTotalLength(),cx=50,cy=50,len=4.5;
+  const total=path.getTotalLength();
   for(let i=0;i<60;i++){
     const l=(i/60)*total,p=path.getPointAtLength(l),p2=path.getPointAtLength((l+0.4)%total);
-    let nx=-(p2.y-p.y),ny=(p2.x-p.x);const m=Math.hypot(nx,ny)||1;nx/=m;ny/=m;
+    let nx=-(p2.y-p.y),ny=(p2.x-p.x);const mm=Math.hypot(nx,ny)||1;nx/=mm;ny/=mm;
     if((cx-p.x)*nx+(cy-p.y)*ny<0){nx=-nx;ny=-ny;}
     const ln=document.createElementNS(ns,"line");
     ln.setAttribute("x1",p.x.toFixed(2));ln.setAttribute("y1",p.y.toFixed(2));
     ln.setAttribute("x2",(p.x+nx*len).toFixed(2));ln.setAttribute("y2",(p.y+ny*len).toFixed(2));
-    ln.setAttribute("stroke-width","1.3");svg.appendChild(ln);clkTicks.push(ln);
+    ln.setAttribute("stroke-width","1.1");ln.setAttribute("stroke-linecap","round");svg.appendChild(ln);clkTicks.push(ln);
   }
   svg.removeChild(path);requestAnimationFrame(animateClock);
 }
@@ -617,7 +621,7 @@ function animateClock(){
       let b=(p-i+60)%60;                  // how far the leading edge is past tick i
       let f=b<=TL?Math.min(1,(1-b/TL)*1.5):0; // solid near the leader, soft fade along the tail
       clkTicks[i].setAttribute("stroke",clkColor(f));
-      clkTicks[i].setAttribute("stroke-width",(1.3+f*0.55).toFixed(2));
+      clkTicks[i].setAttribute("stroke-width",(1.1+f*0.5).toFixed(2));
     }
   }
   requestAnimationFrame(animateClock);
