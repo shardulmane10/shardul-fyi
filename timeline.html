@@ -741,7 +741,7 @@ function siriRespond(q){
     return {t:"Try: “play Excuses”, “book a call”, “what do people say?”, “open his Instagram”, “read his note”, or “how do I reach him?”"};
   return {t:"I can do anything on this site — play his films, book a call, show his socials, read his note, or contact him. Just ask."};
 }
-const SIRI_CHIPS=["Play Excuses","Book a call","What do people say?","Reach him"];
+const SIRI_CHIPS=["Play Excuses","Book a call","What do people say?","Read his note"];
 function siriEl(id){return document.getElementById(id);}
 function siriOpen(){siriEl("siri").classList.add("show");setTimeout(()=>siriEl("siri-input").focus(),60);}
 function siriClose(){siriEl("siri").classList.remove("show");}
