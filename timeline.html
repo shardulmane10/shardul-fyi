@@ -81,10 +81,12 @@
   .sticky .poke{font-size:13px;color:#8a7410;margin-bottom:0}
   .widgets{display:grid;grid-template-columns:152px 152px;grid-auto-rows:152px;gap:16px}
   .w{background:rgba(255,255,255,.72);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:.5px solid rgba(255,255,255,.6);border-radius:22px;box-shadow:0 12px 30px rgba(10,40,90,.12);padding:16px;color:#0d2a55;overflow:hidden}
-  .w-clock{position:relative;display:flex;align-items:center;justify-content:center;background:#fff;padding:0}
-  .clk-ticks{position:absolute;inset:0;width:100%;height:100%}
-  .clk-ticks line{stroke-linecap:round}
-  .wc-time{position:relative;z-index:1;font-size:46px;font-weight:900;letter-spacing:-.045em;color:#0a0a0a;font-feature-settings:"tnum"}
+  .w-clock2{grid-column:1 / 3;display:flex;align-items:center;background:rgba(255,255,255,.72)}
+  .tz{flex:1;text-align:center;padding:0 6px;min-width:0}
+  .tz-label{font-size:13px;color:#0d2a55;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tz-time{font-size:34px;font-weight:800;letter-spacing:-.02em;color:#0a0a0a;font-feature-settings:"tnum";line-height:1.15}
+  .tz-sub{font-size:11px;color:#6b86ad}
+  .tz-div{width:.5px;align-self:stretch;background:rgba(10,40,90,.14);margin:14px 0}
   .w-cal{position:relative;display:flex;flex-direction:column;background:#fff;cursor:pointer;padding:13px 13px 11px}
   .cal-mon{font-size:13px;font-weight:700;color:#ff3b30;margin-bottom:5px}
   .cal-grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);align-content:space-between}
@@ -92,7 +94,7 @@
   .cal-cell.hd{color:#9aa0aa;font-weight:600}
   .cal-cell span{display:flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%}
   .cal-cell.today span{background:#ff3b30;color:#fff;font-weight:600}
-  .w-photos{grid-column:1 / 3;padding:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.72)}
+  .w-photos{padding:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.72)}
   .w-photos img{width:100%;height:100%;object-fit:cover;display:block}
   .ph-ph{display:flex;flex-direction:column;align-items:center;gap:7px;color:#9fb3d0;font-size:13px;font-weight:500}
   .ph-ph svg{width:32px;height:32px}
@@ -340,15 +342,16 @@
       <p class="poke">play around, open an app from the dock, or click on the calendar to book a call with me :)</p>
     </div>
     <div class="widgets">
-      <div class="w w-clock">
-        <svg class="clk-ticks" id="clk-ticks" viewBox="0 0 100 100"></svg>
-        <div class="wc-time" id="wc-time">&nbsp;</div>
-      </div>
+      <div class="w w-photos"><div class="ph-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-7 7"/></svg><span>Photos</span></div></div>
       <div class="w w-cal" onclick="openLink('https://cal.com/shardulmane')" title="book a call">
         <div class="cal-mon" id="cal-mon">&nbsp;</div>
         <div class="cal-grid" id="cal-grid"></div>
       </div>
-      <div class="w w-photos"><div class="ph-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-7 7"/></svg><span>Photos</span></div></div>
+      <div class="w w-clock2">
+        <div class="tz"><div class="tz-label">San Francisco</div><div class="tz-time" id="tz-sf">--:--</div><div class="tz-sub">my time</div></div>
+        <div class="tz-div"></div>
+        <div class="tz"><div class="tz-label" id="tz-you-city">your time</div><div class="tz-time" id="tz-you">--:--</div><div class="tz-sub">where you are</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -577,8 +580,17 @@ function tickClock(){
   document.getElementById("mb-clock").textContent=
     d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})+"  "+
     d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
-  const wt=document.getElementById("wc-time");
-  if(wt)wt.textContent=d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",hour12:false});
+  const f24={hour:"2-digit",minute:"2-digit",hour12:false};
+  const sf=document.getElementById("tz-sf");
+  if(sf){
+    sf.textContent=d.toLocaleTimeString("en-GB",{...f24,timeZone:"America/Los_Angeles"});
+    document.getElementById("tz-you").textContent=d.toLocaleTimeString("en-GB",f24);
+    try{
+      const z=Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const city=z.split("/").pop().replace(/_/g," ");
+      document.getElementById("tz-you-city").textContent=(z==="America/Los_Angeles")?"you (also SF!)":city;
+    }catch(e){}
+  }
 }
 function buildCalendar(){
   const g=document.getElementById("cal-grid");if(!g)return;
