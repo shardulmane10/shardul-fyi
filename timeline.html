@@ -34,10 +34,20 @@
   .menubar{position:fixed;top:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(255,255,255,.55);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);color:#0d1b34;font-size:13px;z-index:9000;border-bottom:.5px solid rgba(0,0,0,.08)}
   .menubar [stroke="#fff"]{stroke:currentColor}
   .menubar [fill="#fff"]{fill:currentColor}
-  .mb-left{display:flex;align-items:center;gap:18px}
+  .mb-left{display:flex;align-items:center;gap:4px}
   .mb-apple{font-size:15px;line-height:1}
   .mb-app{font-weight:600}
   .mb-item{font-weight:400;opacity:.95}
+  .mb-menu{position:relative;display:flex;align-items:center;height:100%;cursor:default}
+  .mb-menu>span{padding:0 7px}
+  .mb-menu.open{background:rgba(0,0,0,.08);border-radius:5px}
+  .mb-dropdown{position:absolute;top:25px;left:-2px;min-width:236px;background:rgba(245,245,247,.9);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(0,0,0,.14);border-radius:9px;box-shadow:0 18px 44px rgba(0,0,0,.3);padding:5px;display:none;z-index:9700}
+  .mb-menu.open .mb-dropdown{display:block}
+  .mb-dd-item{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:5px 10px;border-radius:5px;font-size:13.5px;color:#1d1d1f;white-space:nowrap;cursor:pointer}
+  .mb-dd-item:hover{background:#0a6cff;color:#fff}
+  .mb-dd-item .ext{opacity:.4;font-size:11px}
+  .mb-dd-item:hover .ext{opacity:.85}
+  .mb-sep{height:.5px;background:rgba(0,0,0,.13);margin:5px 8px}
   .mb-right{display:flex;align-items:center;gap:13px}
   .mb-right svg{display:block}
   .mb-clock{font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -303,13 +313,13 @@
 
 <div class="menubar">
   <div class="mb-left">
-    <span class="mb-apple">&#63743;</span>
-    <span class="mb-app" id="mb-app">Finder</span>
-    <span class="mb-item">File</span>
-    <span class="mb-item">Edit</span>
-    <span class="mb-item">View</span>
-    <span class="mb-item">Window</span>
-    <span class="mb-item">Help</span>
+    <div class="mb-menu" data-menu="apple"><span class="mb-apple">&#63743;</span></div>
+    <div class="mb-menu" data-menu="app"><span class="mb-app" id="mb-app">Finder</span></div>
+    <div class="mb-menu" data-menu="file"><span class="mb-item">File</span></div>
+    <div class="mb-menu" data-menu="edit"><span class="mb-item">Edit</span></div>
+    <div class="mb-menu" data-menu="view"><span class="mb-item">View</span></div>
+    <div class="mb-menu" data-menu="window"><span class="mb-item">Window</span></div>
+    <div class="mb-menu" data-menu="help"><span class="mb-item">Help</span></div>
   </div>
   <div class="mb-right">
     <span class="mb-siri" id="mb-siri" title="Siri" aria-label="Siri"></span>
@@ -629,6 +639,72 @@ function animateClocks(){
   }
   requestAnimationFrame(animateClocks);
 }
+/* ---------- joke menu-bar dropdowns ---------- */
+const MENUS={
+  apple:[
+    {l:"About This Shardul",run:()=>openApp("contacts")},
+    {l:"Software Update: touch grass",u:"https://www.google.com/maps/search/parks+near+me"},
+    {l:"Force Quit Procrastination",u:"https://todoist.com"},
+    {sep:1},
+    {l:"Sleep (what's that?)",u:"https://www.sleepfoundation.org/how-sleep-works"},
+    {l:"Log Out of Reality",u:"https://www.calm.com"},
+  ],
+  app:[
+    {l:"About Shardul",run:()=>openApp("contacts")},
+    {l:"Hide the cringe",run:()=>closeAllApps()},
+    {l:"Quit pretending to work",u:"https://www.netflix.com"},
+  ],
+  file:[
+    {l:"File a Divorce",u:"https://www.divorce.com"},
+    {l:"File Taxes",u:"https://www.irs.gov/filing"},
+    {l:"File a Complaint",u:"https://www.usa.gov/complaints"},
+    {l:"File Your Nails",u:"https://www.amazon.com/s?k=nail+file"},
+  ],
+  edit:[
+    {l:"Edit My Life Choices",u:"https://www.betterhelp.com"},
+    {l:"Find & Replace (my ex)",u:"https://bumble.com"},
+    {l:"Undo… if only",u:"https://en.wikipedia.org/wiki/Regret"},
+    {l:"Select All My Regrets",u:"https://www.headspace.com"},
+  ],
+  view:[
+    {l:"View My Search History",u:"https://myactivity.google.com"},
+    {l:"Enter Full Screen: Touch Grass",u:"https://www.google.com/maps/search/parks+near+me"},
+    {l:"Zoom Out on Life",u:"https://www.calm.com"},
+    {l:"Hide Feelings",u:"https://www.betterhelp.com"},
+  ],
+  window:[
+    {l:"Minimize Responsibilities",u:"https://www.netflix.com"},
+    {l:"Window Shopping",u:"https://www.amazon.com"},
+    {l:"Zoom (the call I'm dodging)",u:"https://zoom.us"},
+    {l:"Close All Tabs (impossible)",u:"https://www.reddit.com"},
+  ],
+  help:[
+    {l:"Help, I'm Stuck",u:"https://stackoverflow.com"},
+    {l:"How to Adult",u:"https://www.youtube.com/results?search_query=how+to+adult"},
+    {l:"Talk to Someone",u:"https://www.betterhelp.com"},
+    {sep:1},
+    {l:"Actually, email Shardul",run:()=>openApp("mail")},
+  ],
+};
+function closeMenus(){document.querySelectorAll(".mb-menu.open").forEach(m=>m.classList.remove("open"));}
+function buildMenus(){
+  document.querySelectorAll(".mb-menu").forEach(m=>{
+    const items=MENUS[m.dataset.menu];if(!items)return;
+    const dd=document.createElement("div");dd.className="mb-dropdown";
+    items.forEach(it=>{
+      if(it.sep){const s=document.createElement("div");s.className="mb-sep";dd.appendChild(s);return;}
+      const el=document.createElement("div");el.className="mb-dd-item";
+      el.innerHTML=`<span>${it.l}</span>`+(it.u?`<span class="ext">&#8599;</span>`:"");
+      el.addEventListener("click",e=>{e.stopPropagation();closeMenus();if(it.u)openLink(it.u);else if(it.run)it.run();});
+      dd.appendChild(el);
+    });
+    m.appendChild(dd);
+    m.addEventListener("click",e=>{e.stopPropagation();const o=m.classList.contains("open");closeMenus();if(!o)m.classList.add("open");});
+    m.addEventListener("mouseenter",()=>{if(document.querySelector(".mb-menu.open")){closeMenus();m.classList.add("open");}});
+  });
+  document.addEventListener("click",closeMenus);
+}
+buildMenus();
 tickClock(); setInterval(tickClock,15000); buildCalendar(); buildClocks();
 document.getElementById("banner-img").addEventListener("error",function(){this.remove();document.getElementById("banner-right").classList.add("noimg");});
 
