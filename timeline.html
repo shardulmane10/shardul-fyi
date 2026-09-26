@@ -110,7 +110,7 @@
 
   /* ===== app icon tiles (fallback bg behind full-bleed svg) ===== */
   .t-notes,.t-safari,.t-editor,.t-mail,.t-contacts{background:transparent}
-  .t-sm{background:#3d7cf5;border-radius:23%;overflow:hidden}
+  .t-sm{background:radial-gradient(circle,rgba(255,255,255,.16) 0 .7px,transparent 1px) 0 0/3px 3px,linear-gradient(145deg,#6aa7f4 0%,#4f97f4 55%,#2a86f3 100%);border-radius:23%;overflow:hidden}
 
   /* ===== dock ===== */
   .dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:12px;padding:8px 12px;background:rgba(255,255,255,.5);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:.5px solid rgba(0,0,0,.10);border-radius:20px;z-index:8000;box-shadow:0 12px 40px rgba(10,40,90,.20)}
@@ -119,7 +119,7 @@
   .dock-app svg{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:12px}
   .dock-app img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;height:100%;object-fit:contain}
   .dock-app img.full{width:116%;height:116%;object-fit:contain;border-radius:0}
-  .dock-app.t-sm img{width:100%;height:100%;object-fit:cover}
+  .dock-app.t-sm img{width:56%;height:56%;object-fit:contain;filter:brightness(0) invert(1)}
   .dock-app::before{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
   .dock-app.active::before{opacity:1}
   .dock-app::after{content:attr(data-label);position:absolute;bottom:64px;left:50%;transform:translateX(-50%);background:rgba(40,40,46,.94);color:#fff;font-size:12px;padding:4px 11px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;box-shadow:0 4px 14px rgba(0,0,0,.35)}
@@ -519,7 +519,7 @@
   <div class="dock-app t-notes" data-open="notes" data-label="Notes" id="art-notes"></div>
   <div class="dock-app t-safari" data-open="browser" data-label="Browser" id="art-safari"></div>
   <div class="dock-app t-editor" data-open="editor" data-label="Editor" id="art-editor"></div>
-  <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="icons/supermemory.png?v=1" alt="Supermemory"></div>
+  <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="supermemory.svg" alt="Supermemory"></div>
   <div class="dock-app t-mail" data-open="mail" data-label="Mail" id="art-mail"></div>
   <div class="dock-app t-contacts" data-open="contacts" data-label="Contacts" id="art-contacts"></div>
 </div>
