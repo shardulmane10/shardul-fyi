@@ -328,15 +328,15 @@
   float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
   float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p*=2.03;a*=.5;}return v;}
   void main(){
-    vec2 fc=gl_FragCoord.xy;float t=T*.045;
+    vec2 fc=gl_FragCoord.xy;float t=T*.03;
     vec2 m=vec2(M.x,R.y-M.y),dv=fc-m;float L=160.*D,g=exp(-dot(dv,dv)/(2.*L*L))*MA;
-    vec2 w=m+dv*(1.-.5*g);                                     // magnifying lens under the cursor
-    float energy=g*(.55+.45*SPD);
-    for(int i=0;i<${NR};i++){vec4 r=RP[i];if(r.z>=0.){vec2 c=vec2(r.x,R.y-r.y);float dd=distance(fc,c),rad=r.z*760.*D;
+    vec2 w=m+dv*(1.-.25*g);                                     // magnifying lens under the cursor
+    float energy=g*(.4+.2*SPD);
+    for(int i=0;i<${NR};i++){vec4 r=RP[i];if(r.z>=0.){vec2 c=vec2(r.x,R.y-r.y);float dd=distance(fc,c),rad=r.z*620.*D;
       float ring=exp(-pow((dd-rad)/(40.*D),2.))*max(0.,1.-r.z/1.7)*r.w;
-      w+=normalize(fc-c+.001)*ring*14.*D;energy+=ring*.9;}}   // ripples push the dots outward
-    for(int i=0;i<${NT};i++){vec3 p=TR[i];if(p.z<1.){float dd=distance(fc,vec2(p.x,R.y-p.y)),rr=(46.+120.*p.z)*D;
-      energy+=.5*(1.-p.z)*exp(-dd*dd/(2.*rr*rr));}}              // glowing wake behind the cursor
+      w+=normalize(fc-c+.001)*ring*5.*D;energy+=ring*.5;}}   // ripples push the dots outward
+    for(int i=0;i<${NT};i++){vec3 p=TR[i];if(p.z<1.){float dd=distance(fc,vec2(p.x,R.y-p.y)),rr=(40.+80.*p.z)*D;
+      energy+=.28*(1.-p.z)*exp(-dd*dd/(2.*rr*rr));}}              // glowing wake behind the cursor
     vec2 uv=w/R;float asp=R.x/R.y;vec2 p=vec2(uv.x*asp,uv.y);
     float diag=dot(uv-vec2(.5),normalize(vec2(1.,.62)));
     vec2 q=vec2(fbm(p*1.1+vec2(t,0.)),fbm(p*1.1+vec2(5.2,1.3)-t));
@@ -345,17 +345,17 @@
     float lum=.43-diag*.5+(f-.5)*.95;
     float sd=dot(uv-vec2(.64,.36),normalize(vec2(1.,-.55)));
     lum+=.26*exp(-sd*sd*70.)-.14*exp(-(sd-.09)*(sd-.09)*90.);
-    lum=clamp(lum+energy*.75,0.,1.);
+    lum=clamp(lum+energy*.6,0.,1.);
     vec3 deep=vec3(.02,.52,.93),soft=vec3(.34,.57,.83),dotc=vec3(.86,.97,1.);
     vec3 base=mix(deep,soft,smoothstep(.12,.88,lum));
-    base=mix(base,vec3(.18,.78,1.),clamp(energy*.55,0.,.6));     // energy shifts toward bright cyan
+    base=mix(base,vec3(.18,.78,1.),clamp(energy*.35,0.,.3));     // energy shifts toward bright cyan
     float cell=3.6*D;vec2 c=mod(w,cell)-cell*.5;
     float cov=clamp(lum*.78-.12,0.,.82),rad=cell*.5*sqrt(cov)*1.13;
     float dm=1.-smoothstep(rad-.6,rad+.6,length(c));
     vec3 col=mix(base,mix(dotc,vec3(1.),clamp(energy,0.,1.)),dm);
     float gx=step(mod(w.x,53.*D),D)*step(.42,n(vec2(floor(w.x/(53.*D)),3.)));
     float gy=step(mod(w.y,47.*D),D)*step(.42,n(vec2(floor(w.y/(47.*D))+9.,7.)));
-    col=mix(col,dotc,(.24+.3*clamp(energy,0.,1.))*max(gx,gy));
+    col=mix(col,dotc,(.24+.15*clamp(energy,0.,1.))*max(gx,gy));
     gl_FragColor=vec4(col,1.);
   }`;
   function sh(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.warn(gl.getShaderInfoLog(s));return null;}return s;}
@@ -374,17 +374,16 @@
     const now=performance.now();tx=e.clientX;ty=e.clientY;tma=1;lastMove=now;
     if(lx!==null){const d=Math.hypot(tx-lx,ty-ly),dt=Math.max(1,now-lt);spd=spd*.8+.2*Math.min(1,(d/dt)/2.2);
       if(d>7){trail.push({x:tx,y:ty,t:now});if(trail.length>NT)trail.shift();lx=tx;ly=ty;lt=now;}
-      if(spd>.55&&now-lastAuto>240){addRip(tx,ty,.55*spd);lastAuto=now;}}
+}
     else{lx=tx;ly=ty;lt=now;}
   },{passive:true});
   document.documentElement.addEventListener("pointerleave",()=>{tma=0;});
-  addEventListener("pointerdown",e=>{const d=document.getElementById("desktop");if(e.target===d||e.target===document.body)addRip(e.clientX,e.clientY,1);});
+  addEventListener("pointerdown",e=>{const d=document.getElementById("desktop");if(e.target===d||e.target===document.body)addRip(e.clientX,e.clientY,.8);});
   const t0=performance.now();
   (function frame(){
     const now=performance.now();mx+=(tx-mx)*.18;my+=(ty-my)*.18;ma+=(tma-ma)*.08;
     if(now-lastMove>120)spd*=.93;
-    if(!still&&now-lastMove>3000&&now-lastAmbient>2600){addRip(innerWidth*(.15+.7*Math.random()),innerHeight*(.15+.65*Math.random()),.4);lastAmbient=now;}
-    for(let i=0;i<NT;i++){const p=trail[trail.length-1-i];const age=p?(now-p.t)/750:2;trArr[i*3]=p?p.x*dpr:0;trArr[i*3+1]=p?p.y*dpr:0;trArr[i*3+2]=age;}
+    for(let i=0;i<NT;i++){const p=trail[trail.length-1-i];const age=p?(now-p.t)/600:2;trArr[i*3]=p?p.x*dpr:0;trArr[i*3+1]=p?p.y*dpr:0;trArr[i*3+2]=age;}
     for(let i=0;i<NR;i++){const r=rips[i];const tt=r?(now-r.t)/1000:-1;rpArr[i*4]=r?r.x*dpr:0;rpArr[i*4+1]=r?r.y*dpr:0;rpArr[i*4+2]=(r&&tt<1.7)?tt:-1;rpArr[i*4+3]=r?r.s:0;}
     gl.uniform2f(U.R,cv.width,cv.height);gl.uniform1f(U.T,still?0:(now-t0)/1000);
     gl.uniform2f(U.M,mx*dpr,my*dpr);gl.uniform1f(U.MA,ma);gl.uniform1f(U.SPD,spd);gl.uniform1f(U.D,dpr);
