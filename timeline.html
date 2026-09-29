@@ -711,7 +711,7 @@ buildMenus();
   const dock=document.querySelector(".dock");
   if(!dock||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
   const apps=[...dock.querySelectorAll(".dock-app")];
-  const MAX=2.15, RANGE=4;                 // peak scale; reach in icon-widths either side
+  const MAX=2.15, RANGE=2.2;                 // peak scale; reach in icon-widths either side
   let mouseX=null, cur=apps.map(()=>1), raf=0;
   const px=v=>parseFloat(v)||0;
   function frame(){
