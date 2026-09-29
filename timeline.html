@@ -73,7 +73,8 @@
   @media (max-width:760px){.menubar .mb-item{display:none}}
 
   /* ===== desktop ===== */
-  #desktop{position:fixed;inset:26px 0 0 0;z-index:1}
+  :root{--mb:26px;--dz:96px}
+  #desktop{position:fixed;inset:var(--mb) 0 var(--dz) 0;z-index:1}
   .desk-icons{position:absolute;top:18px;right:20px;display:flex;flex-direction:column;gap:20px}
   .desk-icon{display:flex;flex-direction:column;align-items:center;gap:5px;width:84px;cursor:pointer;text-align:center}
   .desk-icon .tile{width:54px;height:54px;border-radius:13px}
@@ -84,7 +85,7 @@
   .desk-hello .memoji.photo{border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.28)}
   .desk-hello h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:600;letter-spacing:-.02em;color:#0a234c}
   .desk-hello small{display:block;margin-top:18px;font-size:14px;opacity:.85;letter-spacing:0}
-  .deskwrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);display:flex;gap:32px;align-items:center;justify-content:center;flex-wrap:wrap;max-width:92vw}
+  .deskwrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(var(--ds,1));transform-origin:center;display:flex;gap:32px;align-items:center;justify-content:center;flex-wrap:nowrap}
   .sticky{position:relative;width:300px;aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,#fff7ae,#ffe770);border-radius:3px;padding:30px 26px;box-shadow:0 18px 40px rgba(120,90,0,.22);transform:rotate(-3deg);color:#5b4a06;font-size:14px;line-height:1.5}
   .sticky::before{content:"";position:absolute;top:0;left:0;right:0;height:20px;background:rgba(0,0,0,.05);border-radius:3px 3px 0 0}
   .sticky p{margin-bottom:9px}
@@ -106,7 +107,7 @@
   .w-photos img{width:100%;height:100%;object-fit:cover;display:block}
   .ph-ph{display:flex;flex-direction:column;align-items:center;gap:7px;color:#9fb3d0;font-size:13px;font-weight:500}
   .ph-ph svg{width:32px;height:32px}
-  @media (max-width:760px){.deskwrap{transform:translate(-50%,-50%);gap:20px}.sticky{width:230px;aspect-ratio:auto}.widgets{grid-template-columns:130px 130px;grid-auto-rows:130px}.wc-time{font-size:44px}}
+  @media (max-width:760px){:root{--dz:84px}.deskwrap{flex-direction:column;gap:20px}.sticky{width:230px;aspect-ratio:auto}.widgets{grid-template-columns:130px 130px;grid-auto-rows:130px}.wc-time{font-size:44px}}
 
   /* ===== app icon tiles (fallback bg behind full-bleed svg) ===== */
   .t-notes,.t-safari,.t-editor,.t-mail,.t-contacts{background:transparent}
@@ -141,7 +142,7 @@
   .winbody{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column}
 
   /* ===== editor window ===== */
-  #win-editor{width:min(1200px,94vw);height:min(760px,84vh);left:50%;top:calc(50% + 6px);transform:translate(-50%,-50%)}
+  #win-editor{width:min(1200px,94vw);height:min(760px,calc(100vh - var(--mb) - var(--dz) - 20px));left:50%;top:calc(var(--mb) + (100vh - var(--mb) - var(--dz))/2);transform:translate(-50%,-50%)}
   .stage{flex:1;display:flex;min-height:0}
   .viewer{flex:2;display:flex;flex-direction:column;padding:16px;min-width:0}
   .monitor{aspect-ratio:16/9;width:100%;flex:0 0 auto;background:#000;border:.5px solid var(--line);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
@@ -219,7 +220,7 @@
   .banner-right.noimg{background:linear-gradient(135deg,#1a1d22,#0c0d0f)}
 
   /* ===== Notes app (light, macOS) ===== */
-  #win-notes{width:min(900px,94vw);height:min(600px,82vh);left:50%;top:50%;transform:translate(-50%,-50%)}
+  #win-notes{width:min(900px,94vw);height:min(600px,calc(100vh - var(--mb) - var(--dz) - 20px));left:50%;top:calc(var(--mb) + (100vh - var(--mb) - var(--dz))/2);transform:translate(-50%,-50%)}
   .notes-body{display:flex;height:100%;background:#fff;color:#1d1d1f}
   .notes-side{width:184px;flex:0 0 184px;background:#f6f5f3;border-right:.5px solid rgba(0,0,0,.08);padding:8px 0;overflow:auto}
   .notes-side h4{font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:#9b9b9f;padding:12px 16px 4px;font-weight:600}
@@ -239,7 +240,7 @@
   .notes-main p{font-size:15px;line-height:1.75;margin-bottom:13px;color:#2c2c2e}
 
   /* ===== Browser / Twitter app ===== */
-  #win-browser{width:min(1000px,94vw);height:min(700px,86vh);left:50%;top:50%;transform:translate(-50%,-50%)}
+  #win-browser{width:min(1000px,94vw);height:min(700px,calc(100vh - var(--mb) - var(--dz) - 20px));left:50%;top:calc(var(--mb) + (100vh - var(--mb) - var(--dz))/2);transform:translate(-50%,-50%)}
   .sf-toolbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#e8e8ea;border-bottom:.5px solid rgba(0,0,0,.08)}
   .sf-url{flex:1;max-width:520px;margin:0 auto;background:#fff;border:.5px solid rgba(0,0,0,.10);border-radius:8px;padding:6px 12px;font-size:12px;color:#3a3a3c;text-align:center;font-family:var(--sans)}
   .tw{flex:1;overflow:auto;background:#000;color:#e7e9ea}
@@ -265,7 +266,7 @@
   .tw-actions svg{width:16px;height:16px}
 
   /* ===== Mail app ===== */
-  #win-mail{width:min(580px,92vw);height:min(500px,80vh);left:50%;top:50%;transform:translate(-50%,-50%)}
+  #win-mail{width:min(580px,92vw);height:min(500px,calc(100vh - var(--mb) - var(--dz) - 20px));left:50%;top:calc(var(--mb) + (100vh - var(--mb) - var(--dz))/2);transform:translate(-50%,-50%)}
   .mail-body{flex:1;display:flex;flex-direction:column;background:#fff;color:#1d1d1f}
   .mail-actions{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:.5px solid rgba(0,0,0,.08)}
   .mail-send{background:#0a84ff;color:#fff;border:0;border-radius:8px;padding:7px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)}
@@ -277,7 +278,7 @@
   .mail-body textarea{flex:1;background:transparent;border:0;color:#1d1d1f;padding:16px;font-size:15px;line-height:1.7;font-family:var(--sans);resize:none;outline:none}
 
   /* ===== Contacts app (light, macOS) ===== */
-  #win-contacts{width:min(740px,94vw);height:min(560px,82vh);left:50%;top:50%;transform:translate(-50%,-50%)}
+  #win-contacts{width:min(740px,94vw);height:min(560px,calc(100vh - var(--mb) - var(--dz) - 20px));left:50%;top:calc(var(--mb) + (100vh - var(--mb) - var(--dz))/2);transform:translate(-50%,-50%)}
   .contacts-body{display:flex;height:100%;background:#fff;color:#1d1d1f}
   .ct-side{width:172px;flex:0 0 172px;background:#f6f5f3;border-right:.5px solid rgba(0,0,0,.08);padding:10px 0}
   .ct-side .grp{font-size:11px;text-transform:uppercase;color:#9b9b9f;padding:10px 16px 3px;font-weight:600}
@@ -300,7 +301,7 @@
 
   @media (max-width:760px){
     body{overflow:auto}
-    .appwin{width:100vw!important;height:calc(100dvh - 26px)!important;left:0!important;top:26px!important;transform:none!important;border-radius:0}
+    .appwin{width:100vw!important;height:calc(100dvh - var(--mb) - var(--dz))!important;left:0!important;top:var(--mb)!important;transform:none!important;border-radius:0}
     .banner-card{width:94vw}
     #win-editor .stage{flex-direction:column}
     .inspector{flex:0 0 auto;max-width:none;border-left:0;border-top:.5px solid var(--line)}
@@ -705,6 +706,14 @@ function buildMenus(){
   document.addEventListener("click",closeMenus);
 }
 buildMenus();
+/* ---------- scale the desktop cluster to fit between menu bar and dock ---------- */
+function fitDesk(){
+  const d=document.getElementById("desktop"), w=d&&d.querySelector(".deskwrap"); if(!w)return;
+  const pad=20, s=Math.min(1,(d.clientWidth-pad*2)/w.offsetWidth,(d.clientHeight-pad*2)/w.offsetHeight);
+  w.style.setProperty("--ds",Math.max(.3,s).toFixed(3));
+}
+fitDesk(); addEventListener("resize",()=>{fitDesk();sizeEditor();}); addEventListener("load",fitDesk);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitDesk);
 
 /* ---------- dock magnification (macOS-style fisheye) ---------- */
 (function(){
@@ -765,7 +774,8 @@ function sizeEditor(){
   if(getComputedStyle(win).display==="none")return;
   if(innerWidth<=760)return;                 // mobile is full-screen
   const insp=280, vpad=16, titlebar=40, extra=64; // viewer paddings + transport
-  const maxW=Math.round(innerWidth*0.96), maxH=Math.round(innerHeight*0.95);
+  const cs=getComputedStyle(document.documentElement), MB=parseFloat(cs.getPropertyValue("--mb"))||26, DZ=parseFloat(cs.getPropertyValue("--dz"))||96;
+  const bandH=innerHeight-MB-DZ, maxW=Math.round(innerWidth*0.96), maxH=Math.round(bandH-20);
   const tlEl=win.querySelector(".timeline");
   const tlH=tlEl?tlEl.offsetHeight:200;
   let winW=Math.min(1200,maxW);
@@ -774,15 +784,16 @@ function sizeEditor(){
   let winH=titlebar+monH+extra+tlH;
   if(winH>maxH){
     let availMonH=maxH-titlebar-extra-tlH;
-    monH=Math.max(150,availMonH); monW=Math.round(monH*16/9);
+    monH=Math.max(80,availMonH); monW=Math.round(monH*16/9);
     winW=monW+insp+vpad*2;
     if(winW>maxW){winW=maxW;monW=winW-insp-vpad*2;monH=Math.round(monW*9/16);}
     winH=titlebar+monH+extra+tlH;
   }
+  winH=Math.min(winH,maxH);
   win.style.transform="none";
   win.style.width=winW+"px"; win.style.height=winH+"px";
   win.style.left=Math.round((innerWidth-winW)/2)+"px";
-  win.style.top=Math.round((innerHeight-winH)/2)+"px";
+  win.style.top=Math.round(MB+Math.max(10,(bandH-winH)/2))+"px";
 }
 function launchEditor(){
   const ed=document.getElementById("win-editor");
