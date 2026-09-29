@@ -113,17 +113,17 @@
   .t-sm{background:#67a5f3;border-radius:23%;overflow:hidden}
 
   /* ===== dock ===== */
-  .dock{--dk:clamp(24px,1.8vw,40px);position:fixed;bottom:6px;left:50%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:calc(var(--dk)*.3);height:calc(var(--dk)*1.6);padding:calc(var(--dk)*.3);background:rgba(255,255,255,.5);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:.5px solid rgba(0,0,0,.10);border-radius:calc(var(--dk)*.5);z-index:8000;box-shadow:0 12px 40px rgba(10,40,90,.20)}
-  .dock-app{position:relative;flex:0 0 auto;width:var(--dk);height:var(--dk);cursor:pointer;will-change:width,height}
-  .dock-app svg{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:23%}
+  .dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:12px;height:68px;padding:8px 12px;background:rgba(255,255,255,.5);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:.5px solid rgba(0,0,0,.10);border-radius:20px;z-index:8000;box-shadow:0 12px 40px rgba(10,40,90,.20)}
+  .dock-app{position:relative;flex:0 0 auto;width:52px;height:52px;cursor:pointer;will-change:width,height}
+  .dock-app svg{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:12px}
   .dock-app img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;height:100%;object-fit:contain}
   .dock-app img.full{width:116%;height:116%;object-fit:contain;border-radius:0}
   .dock-app.t-sm img{width:100%;height:100%;object-fit:cover}
-  .dock-app::before{content:"";position:absolute;bottom:calc(var(--dk)*-.2);left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
+  .dock-app::before{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
   .dock-app.active::before{opacity:1}
   .dock-app::after{content:attr(data-label);position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);background:rgba(40,40,46,.94);color:#fff;font-size:12px;padding:4px 11px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;box-shadow:0 4px 14px rgba(0,0,0,.35)}
   .dock-app:hover::after{opacity:1}
-  @media (max-width:760px){.dock{--dk:44px}}
+  @media (max-width:760px){.dock{gap:8px;height:60px;padding:7px 9px}.dock-app{width:46px;height:46px}}
 
   /* ===== generic app window ===== */
   .appwin{position:fixed;display:none;flex-direction:column;background:var(--bg);border-radius:12px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.10);z-index:10;min-width:380px;min-height:280px}
@@ -711,7 +711,7 @@ buildMenus();
   const dock=document.querySelector(".dock");
   if(!dock||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
   const apps=[...dock.querySelectorAll(".dock-app")];
-  const MAX=2.15, RANGE=2.2;                 // peak scale; reach in icon-widths either side
+  const MAX=1.5, RANGE=2.2;                 // peak scale; reach in icon-widths either side
   let mouseX=null, cur=apps.map(()=>1), raf=0;
   const px=v=>parseFloat(v)||0;
   function frame(){
