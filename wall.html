@@ -314,80 +314,47 @@
 <canvas id="wallcanvas" aria-hidden="true"></canvas>
 <style>#wallcanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}</style>
 <script>
-/* ---------- interactive halftone wallpaper (WebGL) ---------- */
+/* ---------- animated halftone wallpaper (WebGL): the clouds drift, the halftone stays put ---------- */
 (function(){
   const cv=document.getElementById("wallcanvas");
   const gl=cv.getContext("webgl",{antialias:false,alpha:false,preserveDrawingBuffer:false});
   if(!gl){cv.remove();return;}                      // fallback: static image stays as the body background
-  const NT=16, NR=6;
   const vs="attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}";
   const fs=`precision highp float;
-  uniform vec2 R;uniform float T;uniform vec2 M;uniform float MA;uniform float SPD;uniform float D;
-  uniform vec3 TR[${NT}];uniform vec4 RP[${NR}];
+  uniform vec2 R;uniform float T;uniform float D;
   float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
   float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
   float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p*=2.03;a*=.5;}return v;}
   void main(){
-    vec2 fc=gl_FragCoord.xy;float t=T*.03;
-    vec2 m=vec2(M.x,R.y-M.y),dv=fc-m;float L=160.*D,g=exp(-dot(dv,dv)/(2.*L*L))*MA;
-    vec2 w=m+dv*(1.-.25*g);                                     // magnifying lens under the cursor
-    float energy=g*(.4+.2*SPD);
-    for(int i=0;i<${NR};i++){vec4 r=RP[i];if(r.z>=0.){vec2 c=vec2(r.x,R.y-r.y);float dd=distance(fc,c),rad=r.z*620.*D;
-      float ring=exp(-pow((dd-rad)/(40.*D),2.))*max(0.,1.-r.z/1.7)*r.w;
-      w+=normalize(fc-c+.001)*ring*5.*D;energy+=ring*.5;}}   // ripples push the dots outward
-    for(int i=0;i<${NT};i++){vec3 p=TR[i];if(p.z<1.){float dd=distance(fc,vec2(p.x,R.y-p.y)),rr=(40.+80.*p.z)*D;
-      energy+=.28*(1.-p.z)*exp(-dd*dd/(2.*rr*rr));}}              // glowing wake behind the cursor
-    vec2 uv=w/R;float asp=R.x/R.y;vec2 p=vec2(uv.x*asp,uv.y);
+    vec2 fc=gl_FragCoord.xy,uv=fc/R;float asp=R.x/R.y;vec2 p=vec2(uv.x*asp,uv.y);
+    vec2 pc=p-vec2(.9,.5)*T*.022;                                         // clouds drift diagonally
+    vec2 q=vec2(fbm(pc*1.1+vec2(0.,T*.006)),fbm(pc*1.1+vec2(5.2,1.3)-vec2(T*.006,0.)));
+    vec2 pr=mat2(.82,-.57,.57,.82)*pc;pr.x*=.5;
+    float f=fbm(pr*1.9+q*1.7+vec2(0.,T*.008));                              // and slowly change shape
     float diag=dot(uv-vec2(.5),normalize(vec2(1.,.62)));
-    vec2 q=vec2(fbm(p*1.1+vec2(t,0.)),fbm(p*1.1+vec2(5.2,1.3)-t));
-    vec2 pr=mat2(.82,-.57,.57,.82)*p;pr.x*=.5;
-    float f=fbm(pr*1.9+q*1.9+vec2(0.,t*.8));
     float lum=.43-diag*.5+(f-.5)*.95;
     float sd=dot(uv-vec2(.64,.36),normalize(vec2(1.,-.55)));
-    lum+=.26*exp(-sd*sd*70.)-.14*exp(-(sd-.09)*(sd-.09)*90.);
-    lum=clamp(lum+energy*.6,0.,1.);
+    lum=clamp(lum+.26*exp(-sd*sd*70.)-.14*exp(-(sd-.09)*(sd-.09)*90.),0.,1.);
     vec3 deep=vec3(.02,.52,.93),soft=vec3(.34,.57,.83),dotc=vec3(.86,.97,1.);
     vec3 base=mix(deep,soft,smoothstep(.12,.88,lum));
-    base=mix(base,vec3(.18,.78,1.),clamp(energy*.35,0.,.3));     // energy shifts toward bright cyan
-    float cell=3.6*D;vec2 c=mod(w,cell)-cell*.5;
-    float cov=clamp(lum*.78-.12,0.,.82),rad=cell*.5*sqrt(cov)*1.13;
-    float dm=1.-smoothstep(rad-.6,rad+.6,length(c));
-    vec3 col=mix(base,mix(dotc,vec3(1.),clamp(energy,0.,1.)),dm);
-    float gx=step(mod(w.x,53.*D),D)*step(.42,n(vec2(floor(w.x/(53.*D)),3.)));
-    float gy=step(mod(w.y,47.*D),D)*step(.42,n(vec2(floor(w.y/(47.*D))+9.,7.)));
-    col=mix(col,dotc,(.24+.15*clamp(energy,0.,1.))*max(gx,gy));
-    gl_FragColor=vec4(col,1.);
+    float cell=3.6*D;vec2 c=mod(fc,cell)-cell*.5;
+    float cov=clamp(lum*.78-.12,0.,.7),rad=cell*.5*sqrt(cov)*1.13;
+    vec3 col=mix(base,dotc,1.-smoothstep(rad-.6,rad+.6,length(c)));
+    float gx=step(mod(fc.x,53.*D),D)*step(.42,n(vec2(floor(fc.x/(53.*D)),3.)));
+    float gy=step(mod(fc.y,47.*D),D)*step(.42,n(vec2(floor(fc.y/(47.*D))+9.,7.)));
+    gl_FragColor=vec4(mix(col,dotc,.24*max(gx,gy)),1.);
   }`;
   function sh(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.warn(gl.getShaderInfoLog(s));return null;}return s;}
   const v=sh(gl.VERTEX_SHADER,vs),f=sh(gl.FRAGMENT_SHADER,fs);if(!v||!f){cv.remove();return;}
   const pr=gl.createProgram();gl.attachShader(pr,v);gl.attachShader(pr,f);gl.linkProgram(pr);gl.useProgram(pr);
   const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   const al=gl.getAttribLocation(pr,"a");gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
-  const U={};["R","T","M","MA","SPD","D","TR","RP"].forEach(k=>U[k]=gl.getUniformLocation(pr,k));
+  const uR=gl.getUniformLocation(pr,"R"),uT=gl.getUniformLocation(pr,"T"),uD=gl.getUniformLocation(pr,"D");
   let dpr=1;function resize(){dpr=Math.min(devicePixelRatio||1,2);cv.width=Math.round(innerWidth*dpr);cv.height=Math.round(innerHeight*dpr);gl.viewport(0,0,cv.width,cv.height);}
   resize();addEventListener("resize",resize);
-  const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mx=innerWidth/2,my=innerHeight/2,tx=mx,ty=my,ma=0,tma=0,spd=0,lx=null,ly=null,lt=0,lastMove=0,lastAuto=0,lastAmbient=performance.now();
-  const trail=[],rips=[];const trArr=new Float32Array(NT*3),rpArr=new Float32Array(NR*4);
-  function addRip(x,y,s){rips.push({x,y,t:performance.now(),s});if(rips.length>NR)rips.shift();}
-  addEventListener("pointermove",e=>{
-    const now=performance.now();tx=e.clientX;ty=e.clientY;tma=1;lastMove=now;
-    if(lx!==null){const d=Math.hypot(tx-lx,ty-ly),dt=Math.max(1,now-lt);spd=spd*.8+.2*Math.min(1,(d/dt)/2.2);
-      if(d>7){trail.push({x:tx,y:ty,t:now});if(trail.length>NT)trail.shift();lx=tx;ly=ty;lt=now;}
-}
-    else{lx=tx;ly=ty;lt=now;}
-  },{passive:true});
-  document.documentElement.addEventListener("pointerleave",()=>{tma=0;});
-  addEventListener("pointerdown",e=>{const d=document.getElementById("desktop");if(e.target===d||e.target===document.body)addRip(e.clientX,e.clientY,.8);});
-  const t0=performance.now();
+  const still=matchMedia("(prefers-reduced-motion: reduce)").matches,t0=performance.now();
   (function frame(){
-    const now=performance.now();mx+=(tx-mx)*.18;my+=(ty-my)*.18;ma+=(tma-ma)*.08;
-    if(now-lastMove>120)spd*=.93;
-    for(let i=0;i<NT;i++){const p=trail[trail.length-1-i];const age=p?(now-p.t)/600:2;trArr[i*3]=p?p.x*dpr:0;trArr[i*3+1]=p?p.y*dpr:0;trArr[i*3+2]=age;}
-    for(let i=0;i<NR;i++){const r=rips[i];const tt=r?(now-r.t)/1000:-1;rpArr[i*4]=r?r.x*dpr:0;rpArr[i*4+1]=r?r.y*dpr:0;rpArr[i*4+2]=(r&&tt<1.7)?tt:-1;rpArr[i*4+3]=r?r.s:0;}
-    gl.uniform2f(U.R,cv.width,cv.height);gl.uniform1f(U.T,still?0:(now-t0)/1000);
-    gl.uniform2f(U.M,mx*dpr,my*dpr);gl.uniform1f(U.MA,ma);gl.uniform1f(U.SPD,spd);gl.uniform1f(U.D,dpr);
-    gl.uniform3fv(U.TR,trArr);gl.uniform4fv(U.RP,rpArr);
+    gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,still?0:(performance.now()-t0)/1000);gl.uniform1f(uD,dpr);
     gl.drawArrays(gl.TRIANGLES,0,3);requestAnimationFrame(frame);
   })();
 })();
