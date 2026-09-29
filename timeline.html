@@ -113,18 +113,17 @@
   .t-sm{background:#67a5f3;border-radius:23%;overflow:hidden}
 
   /* ===== dock ===== */
-  .dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:12px;padding:8px 12px;background:rgba(255,255,255,.5);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:.5px solid rgba(0,0,0,.10);border-radius:20px;z-index:8000;box-shadow:0 12px 40px rgba(10,40,90,.20)}
-  .dock-app{position:relative;width:52px;height:52px;transition:transform .18s cubic-bezier(.2,.8,.3,1.4);cursor:pointer}
-  .dock-app:hover{transform:translateY(-12px) scale(1.14)}
+  .dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:flex-end;gap:12px;height:68px;padding:8px 12px;background:rgba(255,255,255,.5);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:.5px solid rgba(0,0,0,.10);border-radius:20px;z-index:8000;box-shadow:0 12px 40px rgba(10,40,90,.20)}
+  .dock-app{position:relative;flex:0 0 auto;width:52px;height:52px;cursor:pointer;will-change:width,height}
   .dock-app svg{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:12px}
   .dock-app img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;height:100%;object-fit:contain}
   .dock-app img.full{width:116%;height:116%;object-fit:contain;border-radius:0}
   .dock-app.t-sm img{width:100%;height:100%;object-fit:cover}
   .dock-app::before{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
   .dock-app.active::before{opacity:1}
-  .dock-app::after{content:attr(data-label);position:absolute;bottom:64px;left:50%;transform:translateX(-50%);background:rgba(40,40,46,.94);color:#fff;font-size:12px;padding:4px 11px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+  .dock-app::after{content:attr(data-label);position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);background:rgba(40,40,46,.94);color:#fff;font-size:12px;padding:4px 11px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;box-shadow:0 4px 14px rgba(0,0,0,.35)}
   .dock-app:hover::after{opacity:1}
-  @media (max-width:760px){.dock{gap:8px;padding:7px 9px}.dock-app{width:46px;height:46px}}
+  @media (max-width:760px){.dock{gap:8px;height:60px;padding:7px 9px}.dock-app{width:46px;height:46px}}
 
   /* ===== generic app window ===== */
   .appwin{position:fixed;display:none;flex-direction:column;background:var(--bg);border-radius:12px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.10);z-index:10;min-width:380px;min-height:280px}
@@ -519,7 +518,7 @@
   <div class="dock-app t-notes" data-open="notes" data-label="Notes" id="art-notes"></div>
   <div class="dock-app t-safari" data-open="browser" data-label="Browser" id="art-safari"></div>
   <div class="dock-app t-editor" data-open="editor" data-label="Editor" id="art-editor"></div>
-  <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="icons/supermemory-128.png?v=1" alt="Supermemory"></div>
+  <div class="dock-app t-sm" data-open="supermemory" data-label="Supermemory"><img src="icons/supermemory-256.png?v=1" alt="Supermemory"></div>
   <div class="dock-app t-mail" data-open="mail" data-label="Mail" id="art-mail"></div>
   <div class="dock-app t-contacts" data-open="contacts" data-label="Contacts" id="art-contacts"></div>
 </div>
@@ -706,6 +705,38 @@ function buildMenus(){
   document.addEventListener("click",closeMenus);
 }
 buildMenus();
+
+/* ---------- dock magnification (macOS-style fisheye) ---------- */
+(function(){
+  const dock=document.querySelector(".dock");
+  if(!dock||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
+  const apps=[...dock.querySelectorAll(".dock-app")];
+  const MAX=2.0, RANGE=2.6;                 // peak scale; reach in icon-widths either side
+  let mouseX=null, cur=apps.map(()=>1), raf=0;
+  const px=v=>parseFloat(v)||0;
+  function frame(){
+    const cs=getComputedStyle(dock), base=px(getComputedStyle(apps[0]).minWidth)||52;
+    const B=dock.dataset.base?+dock.dataset.base:base, gap=px(cs.columnGap||cs.gap), padL=px(cs.paddingLeft), padR=px(cs.paddingRight);
+    const n=apps.length, w0=padL+padR+n*B+(n-1)*gap, left0=innerWidth/2-w0/2;
+    let moving=false;
+    apps.forEach((a,i)=>{
+      let t=1;
+      if(mouseX!==null){
+        const c=left0+padL+i*(B+gap)+B/2, d=Math.abs(mouseX-c)/(B+gap);
+        if(d<RANGE)t=1+(MAX-1)*(Math.cos(d/RANGE*Math.PI)+1)/2;
+      }
+      cur[i]+=(t-cur[i])*0.28;
+      if(Math.abs(t-cur[i])>0.002)moving=true; else cur[i]=t;
+      const s=(B*cur[i]).toFixed(2)+"px"; a.style.width=s; a.style.height=s;
+    });
+    raf=moving||mouseX!==null?requestAnimationFrame(frame):0;
+  }
+  function kick(){if(!raf)raf=requestAnimationFrame(frame);}
+  dock.dataset.base=px(getComputedStyle(apps[0]).width)||52;
+  dock.addEventListener("mousemove",e=>{mouseX=e.clientX;kick();});
+  dock.addEventListener("mouseleave",()=>{mouseX=null;kick();});
+  addEventListener("resize",()=>{apps.forEach(a=>{a.style.width=a.style.height="";});dock.dataset.base=px(getComputedStyle(apps[0]).width)||52;});
+})();
 tickClock(); setInterval(tickClock,15000); buildCalendar(); buildClocks();
 document.getElementById("banner-img").addEventListener("error",function(){this.remove();document.getElementById("banner-right").classList.add("noimg");});
 
