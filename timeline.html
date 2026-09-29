@@ -584,9 +584,9 @@ document.getElementById("ver").textContent="Version "+Y;
 document.getElementById("yr").textContent=Y;
 function tickClock(){
   const d=new Date();
-  document.getElementById("mb-clock").textContent=
-    d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})+"  "+
-    d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+  const tm=d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+  document.getElementById("mb-clock").textContent=innerWidth<=760?tm:
+    d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})+"  "+tm;
   const wt=document.getElementById("wc-time");
   if(wt)wt.textContent=d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",hour12:false});
 }
@@ -712,7 +712,7 @@ function fitDesk(){
   const pad=20, s=Math.min(1,(d.clientWidth-pad*2)/w.offsetWidth,(d.clientHeight-pad*2)/w.offsetHeight);
   w.style.setProperty("--ds",Math.max(.3,s).toFixed(3));
 }
-fitDesk(); addEventListener("resize",()=>{fitDesk();sizeEditor();}); addEventListener("load",fitDesk);
+fitDesk(); addEventListener("resize",()=>{fitDesk();sizeEditor();tickClock();}); addEventListener("load",fitDesk);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitDesk);
 
 /* ---------- dock magnification (macOS-style fisheye) ---------- */
